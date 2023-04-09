@@ -1,6 +1,7 @@
 # Projekt PROI - “Angry Birds Remake”:
 
 ## Spis treści
+* [Ostatni update](#ostatni-update)
 * [Ogólne informacje](#ogólne-informacje)
 * [Założenia gry](#założenia-gry)
 * [Założenia edytora poziomów](#założenia-edytora-poziomów)
@@ -8,6 +9,16 @@
 * [Klasy poboczne](#klasy-poboczne)
 
 ---
+## Ostatni update
+Ostatnie rzeczy, która została zmieniona w projekcie to:
+* dodanie do repo bibliotek Box2D i SFML
+* stworzenie pliku `Makefile` umożliwiającego kompilację kodu wraz z linkowaniem bibliotek (plik Makefile z domyślnymi ścieżkami do bibliotek Box2D i SFML w systemach Linux oraz macOS)
+* stworzenie prostej struktury z folderów na kod źródłowy, tekstury, testy itp.
+* stworzenie testowych klas dla "ptaków" (testy fizyki Box2D dla kół)
+* dodanie prostych tekstur do testowania fizyki
+* stworzenie pliku `main.cpp` z pętlą gry - wyświetlana jest plansza z trzema "ptakami", które odbijają się od siebie i od granic okna
+* [WAŻNE!] stworzenie pliku `README.m` z dokumentacją wstępną + skrypt pushujący i commitujący go
+
 
 ## Ogólne informacje
 Autorzy:
@@ -45,7 +56,7 @@ Możliwość dodawania różnych materiałów - drewno, kamień, szkło itp. Ka�
 System przyznawania punktów na podstawie zniszczeń i ilości niewystrzelonych ptaków.
 
 ## Założenia edytora poziomów:
-Edytor umożliwia tworzenie poziomów. Przy tworzeniu poziomu ustawiamy bloki, świnie, pozycję początkową gracza, a także wybieramy jakie ptaki są dostępne dla gracza na danym poziomie.
+Edytor poziomów będzie dostępny jako osobna aplikacja lub jako zintegrowana część głównej aplikacji. Będzie w nim możliwe tworzenie nowych poziomów lub edycja aktualnie istniejących poziomów. Całość będzie działała w graficznym interfejsie użytkownika. Planujemy dać możliwość wyboru kilku bazowych map na których będą uprzednio umieszczone elementy statyczne (skały, granice, itp.), natomiast użytkownik będzie miał możliwość ustawiania bloków i obiektów dynamicznych takich jak miejsce pojawiania się procy z ptakami, rozmieszczenie świń, rozmieszczenie bloków z różnych materiałów itd. Ponadto możliwe będzie ustawienie dostępnych ptaków na danej mapie. Całość ustawień będzie prawdopodobnie zapisywana do pliku z rozszerzeniem `.csv`.
 
 ## Główne klasy:
 - `class Game` - główna klasa Gry
