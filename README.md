@@ -55,119 +55,119 @@ Edytor umożliwia tworzenie poziomów. Przy tworzeniu poziomu ustawiamy bloki, �
 ---
 
 ## Główne klasy:
-`class Game` - główna klasa Gry </br>
+- `class Game` - główna klasa Gry
 
-metody: </br>
+metody:
 
-`game.run(...)` </br>
+- `game.run(...)`
 
-`game.setup(...)` </br>
+- `game.setup(...)`
 
-... </br>
+- ...
 
-`class LevelEditor` - główna klasa Edytora Poziomów </br>
+- `class LevelEditor` - główna klasa Edytora Poziomów
 
 
 ---
 
 ## Klasy poboczne:
-`class Interface` - obsługująca SFML, rendering, user I/O </br>
+- `class Interface` - obsługująca SFML, rendering, user I/O
 
-`class UserIO` - klasa działająca w ramach interfejsu </br>
+- `class UserIO` - klasa działająca w ramach interfejsu
 
-`class Graphics` - klasa działająca w ramach interfejsu </br>
+- `class Graphics` - klasa działająca w ramach interfejsu
 
-`class File` - obsługuje zapis do pliku, odczyt z pliku (może będzie strukturą?) </br>
+- `class File` - obsługuje zapis do pliku, odczyt z pliku (może będzie strukturą?)
 
-metody: </br>
+    metody:
 
-`file.load(...)` </br>
+    - `file.load(...)`
 
-`file.write(...)` </br>
+    - `file.write(...)`
 
-... </br>
+    - ...
 
-`class Level` - logika gry i poziomu, Box2D, wczytywania z pliku </br>
+- `class Level` - logika gry i poziomu, Box2D, wczytywania z pliku
 
-funkcja `create_level(...)` </br>
+    - funkcja `create_level(...)`
 
-metoda `calculate_damage(...)` </br>
+    - metoda `calculate_damage(...)`
 
-... </br>
-
-
-`class Bird` - ogólna klasa dla ptaków </br>
-
-parametry: </br>
-
-`speed` </br>
-
-`health` </br>
-
-`mass` </br>
-
-`size` </br>
-
-... </br>
+    - ...
 
 
-### Plus klasy dla innych typów ptaków, różniące się umiejętnościami specjalnymi </br>
+- `class Bird` - ogólna klasa dla ptaków
+
+    parametry:
+
+    - `speed`
+
+    - `health`
+
+    - `mass`
+
+    - `size`
+
+    - ...
 
 
-`class Pig` - ogólna klasa dla świń </br>
-
-parametry: </br>
-
-`position` </br>
-
-`health` </br>
-
-`armor` </br>
-
-`mass` </br>
-
-`size` </br>
-
-... </br>
+Plus klasy dla innych typów ptaków, różniące się umiejętnościami specjalnymi
 
 
-### Plus klasy dla innych typów świń </br>
+- `class Pig` - ogólna klasa dla świń
+
+    parametry:
+
+    - `position`
+
+    - `health`
+
+    - `armor`
+
+    - `mass`
+
+    - `size`
+
+    - ...
 
 
-`class DynamicBlock` - ogólne właściwości bloków dynamicznych (!) </br>
-
-parametry: </br>
-
-`position` </br>
-
-`material` </br>
-
-`health` </br>
-
-`mass` </br>
-
-`size` </br>
-
-... </br>
-
-`class StaticBlock` - ogólne właściwości dla bloków statycznych </br>
-
-parametry: </br>
-
-`position` </br>
-
-`size` </br>
-
-... </br>
-
-`class Slingshot` - klasa dla procy (?) </br>
-
-parametry: </br>
-
-`position` </br>
-
-... </br>
+Plus klasy dla innych typów świń
 
 
-`class/method ScoringSystem` (?) </br>
+- `class DynamicBlock` - ogólne właściwości bloków dynamicznych (!)
+
+    parametry:
+
+    - `position`
+
+    - `material`
+
+    - `health`
+
+    - `mass`
+
+    - `size`
+
+    - ...
+
+- `class StaticBlock` - ogólne właściwości dla bloków statycznych
+
+    parametry:
+
+    - `position`
+
+    - `size`
+
+    - ...
+
+- `class Slingshot` - klasa dla procy (?)
+
+    parametry:
+
+    - `position`
+
+    - ...
+
+
+- `class/method ScoringSystem` (?)
 
