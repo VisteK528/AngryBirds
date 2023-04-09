@@ -56,68 +56,118 @@ Edytor umożliwia tworzenie poziomów. Przy tworzeniu poziomu ustawiamy bloki, �
 
 ## Główne klasy:
 `class Game` - główna klasa Gry </br>
+
 metody: </br>
+
 `game.run(...)` </br>
+
 `game.setup(...)` </br>
+
 ... </br>
+
 `class LevelEditor` - główna klasa Edytora Poziomów </br>
+
 
 ---
 
 ## Klasy poboczne:
 `class Interface` - obsługująca SFML, rendering, user I/O </br>
+
 `class UserIO` - klasa działająca w ramach interfejsu </br>
+
 `class Graphics` - klasa działająca w ramach interfejsu </br>
+
 `class File` - obsługuje zapis do pliku, odczyt z pliku (może będzie strukturą?) </br>
+
 metody: </br>
+
 `file.load(...)` </br>
+
 `file.write(...)` </br>
+
 ... </br>
 
 `class Level` - logika gry i poziomu, Box2D, wczytywania z pliku </br>
+
 funkcja `create_level(...)` </br>
+
 metoda `calculate_damage(...)` </br>
+
 ... </br>
 
+
 `class Bird` - ogólna klasa dla ptaków </br>
+
 parametry: </br>
+
 `speed` </br>
+
 `health` </br>
+
 `mass` </br>
+
 `size` </br>
+
 ... </br>
+
 
 ### Plus klasy dla innych typów ptaków, różniące się umiejętnościami specjalnymi </br>
 
+
 `class Pig` - ogólna klasa dla świń </br>
+
 parametry: </br>
+
 `position` </br>
+
 `health` </br>
+
 `armor` </br>
+
 `mass` </br>
+
 `size` </br>
+
 ... </br>
+
 
 ### Plus klasy dla innych typów świń </br>
 
+
 `class DynamicBlock` - ogólne właściwości bloków dynamicznych (!) </br>
+
 parametry: </br>
+
 `position` </br>
+
 `material` </br>
+
 `health` </br>
+
 `mass` </br>
+
 `size` </br>
+
 ... </br>
 
 `class StaticBlock` - ogólne właściwości dla bloków statycznych </br>
+
 parametry: </br>
+
 `position` </br>
+
 `size` </br>
+
 ... </br>
 
 `class Slingshot` - klasa dla procy (?) </br>
+
 parametry: </br>
+
 `position` </br>
+
 ... </br>
 
+
 `class/method ScoringSystem` (?) </br>
+
