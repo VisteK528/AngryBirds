@@ -63,39 +63,37 @@ int main()
         }
         World.Step(1/120.0f, 8, 3);
         window.draw(sBackground);
-        int j = 0;
         for(b2Body *it = World.GetBodyList(); it != 0; it = it->GetNext())
         {
             b2Vec2 pos = it->GetPosition();
             float angle = it->GetAngle();
 
             uintptr_t data = it->GetUserData().pointer;
-            Data *i = reinterpret_cast<Data *>(data);
-            if(j < 3)
+            if(data != 0)
             {
-            if(i->text == "ball")
-            {
-                sBall.setRotation(angle*DEG);
-                sBall.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
-                window.draw(sBall);
+                Data *i = reinterpret_cast<Data *>(data);
+                if(i->text == "ball")
+                {
+                    sBall.setRotation(angle*DEG);
+                    sBall.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
+                    window.draw(sBall);
 
-            }
-            else if(i->text == "ball2")
-            {
-                sBall2.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
-                sBall2.setRotation(angle*DEG);
-                window.draw(sBall2);
+                }
+                else if(i->text == "ball2")
+                {
+                    sBall2.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
+                    sBall2.setRotation(angle*DEG);
+                    window.draw(sBall2);
 
-            }
-             else if(i->text == "ball3")
-            {
-                sBall3.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
-                sBall3.setRotation(angle*DEG);
-                window.draw(sBall3);
+                }
+                else if(i->text == "ball3")
+                {
+                    sBall3.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
+                    sBall3.setRotation(angle*DEG);
+                    window.draw(sBall3);
 
+                }
             }
-            }
-            j++;
         }
         window.display();
     }
