@@ -39,9 +39,9 @@ int main()
     sf::Sprite sBall2(t3);
     sf::Sprite sBall3(t4);
 
-    sBall.setOrigin(0, 0);
-    sBall2.setOrigin(0, 0);
-    sBall3.setOrigin(0, 0);
+    sBall.setOrigin(20, 20);
+    sBall2.setOrigin(20, 20);
+    sBall3.setOrigin(20, 20);
 
     // Podłoże
     setWall(580, 590, 2000, 10);
@@ -67,7 +67,7 @@ int main()
         for(b2Body *it = World.GetBodyList(); it != 0; it = it->GetNext())
         {
             b2Vec2 pos = it->GetPosition();
-            //float angle = it->GetAngle();
+            float angle = it->GetAngle();
 
             uintptr_t data = it->GetUserData().pointer;
             Data *i = reinterpret_cast<Data *>(data);
@@ -75,22 +75,22 @@ int main()
             {
             if(i->text == "ball")
             {
-                sBall.setPosition(pos.x*SCALE, pos.y*SCALE);
-                // sBall.setRotation(angle*DEG);
+                sBall.setRotation(angle*DEG);
+                sBall.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
                 window.draw(sBall);
 
             }
             else if(i->text == "ball2")
             {
-                sBall2.setPosition(pos.x*SCALE, pos.y*SCALE);
-                // sBall2.setRotation(angle*DEG);
+                sBall2.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
+                sBall2.setRotation(angle*DEG);
                 window.draw(sBall2);
 
             }
              else if(i->text == "ball3")
             {
-                sBall3.setPosition(pos.x*SCALE, pos.y*SCALE);
-                // sBall3.setRotation(angle*DEG);
+                sBall3.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
+                sBall3.setRotation(angle*DEG);
                 window.draw(sBall3);
 
             }
