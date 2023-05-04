@@ -30,6 +30,9 @@ void GameState::init() {
 void GameState::initWorld() {
     this->gravity = b2Vec2(0.0f, 9.81f);
     this->world = std::make_shared<b2World>(this->gravity);
+    this->contact_listener = ContactListener();
+
+    this->world->SetContactListener(&contact_listener);
 
     // INFORMACJE O ŚWIECIE
     // 1 metr = 10 pikseli
@@ -38,9 +41,9 @@ void GameState::initWorld() {
     // Świat ma wymiary 128x72 metry
 
     background = sf::Sprite(textures[0]);
-    bird = Bird(this->world, 0.2f, 60.f, 1.f, b2Vec2(-10,0), "ball", textures[1]);
-    bird2 = Bird(this->world, 0.2f, 65.f, 0.5f, b2Vec2(3, 5), "ball2", textures[2]);
-    bird3 = Bird(this->world, 0.2f, 70.f, 0.5f, b2Vec2(0, 0), "ball3", textures[3]);
+    bird = std::make_unique<Bird>(this->world, 0.2f, 5.f, 1.f, b2Vec2(-20,0), textures[1]);
+    bird2 = std::make_unique<Bird>(this->world, 0.2f, 20.f, 0.5f, b2Vec2(3, 5), textures[2]);
+    bird3 = std::make_unique<Bird>(this->world, 0.2f, 10.f, 0.5f, b2Vec2(0, 0), textures[3]);
 
     // Ustawienie boxów
     box1 = Box(this->world, 0.2f, 3.f, 60.f, "box1", textures[4]);
@@ -60,11 +63,9 @@ void GameState::initWorld() {
 
 void GameState::update(const float &dt) {
     world->Step(dt, 8, 3);
-
-    // Ustawienie pozycji ptaków
-    bird.update();
-    bird2.update();
-    bird3.update();
+    bird->update();
+    bird2->update();
+    bird3->update();
 
     // Ustawienie pozycji boxów
     box1.update();
@@ -78,11 +79,9 @@ void GameState::update(const float &dt) {
 
 void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(background);
-
-    // Rysowanie ptaków
-    target->draw(bird);
-    target->draw(bird2);
-    target->draw(bird3);
+    target->draw(*bird);
+    target->draw(*bird2);
+    target->draw(*bird3);
 
     // Rysowanie boxów
     target->draw(box1);
