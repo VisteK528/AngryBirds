@@ -27,13 +27,14 @@ else
 	LIBS = $(LINUX_LIBS)
 endif
 
+SRC = ${wildcard src/*.cpp}
+
 
 
 # -- Targets --
-
-main: build/main.o build/bird.o
+all: build/main.o build/bird.o build/game.o build/state.o build/game_state.o
 	@echo "* Building main *"
-	$(CXX) $(CXX_FLAGS) $(INCLUDES) -o build/main build/main.o build/bird.o $(LIBS)
+	$(CXX) $(CXX_FLAGS) $(INCLUDES) -o build/main build/main.o build/bird.o build/game.o build/state.o build/game_state.o $(LIBS)
 
 main.o: main.cpp
 	@echo "* Building main.o *"
@@ -48,8 +49,9 @@ build/%.o: src/%.cpp
 	@echo "* Building ",$<
 	$(CXX) $(INCLUDES) $(CXX_FLAGS) -c $< -o $@
 
-run:
-	./build/main
+build/%.o: src/states/%.cpp
+	@echo "* Building ",$<
+	$(CXX) $(INCLUDES) $(CXX_FLAGS) -c $< -o $@
 
 clean:
 	rm -f build/main build/*.o
