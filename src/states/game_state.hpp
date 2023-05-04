@@ -7,15 +7,17 @@
 
 #include "state.hpp"
 #include "../../box2d/include/box2d/box2d.h"
-#include "../bird.hpp"
-#include "../box.hpp"
+#include "../entities/bird.hpp"
+#include "../entities/box.hpp"
 #include <iostream>
 #include <string>
+#include "../contact_listener.hpp"
 
 class GameState: public State {
 private:
     b2Vec2 gravity;
     std::shared_ptr<b2World> world;
+    ContactListener contact_listener;
 
     // Ptaki
     Bird bird;
@@ -23,7 +25,7 @@ private:
     Bird bird3;
 
     // Boxy
-    Box box1;
+    //Box box1;
 
     sf::Sprite background;
     std::vector<sf::Texture> textures;
@@ -32,8 +34,6 @@ private:
     const float DEG = 57.29577f;
 
     void setWall(int x, int y, int w, int h);
-    void setBox(int x, int y, std::string type);
-
     void initWorld();
 public:
     GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states);

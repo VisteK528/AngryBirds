@@ -22,14 +22,17 @@ void GameState::init() {
 void GameState::initWorld() {
     this->gravity = b2Vec2(0.0f, 9.81f);
     this->world = std::make_shared<b2World>(this->gravity);
+    this->contact_listener = ContactListener();
+
+    this->world->SetContactListener(&contact_listener);
 
     background = sf::Sprite(textures[0]);
-    bird = Bird(this->world, 0.2f, 5.f, 1.f, b2Vec2(-10,0), "ball", textures[1]);
-    bird2 = Bird(this->world, 0.2f, 20.f, 0.5f, b2Vec2(3, 5), "ball2", textures[2]);
-    bird3 = Bird(this->world, 0.2f, 10.f, 0.5f, b2Vec2(0, 0), "ball3", textures[3]);
+    bird = Bird(this->world, 0.2f, 5.f, 1.f, b2Vec2(-20,0), textures[1]);
+    bird2 = Bird(this->world, 0.2f, 20.f, 0.5f, b2Vec2(3, 5), textures[2]);
+    bird3 = Bird(this->world, 0.2f, 10.f, 0.5f, b2Vec2(0, 0), textures[3]);
 
     // Ustawienie boxów
-    box1 = Box(this->world, 0.2f, 10.f, 0.5f, "box", textures[4]);
+    //box1 = Box(this->world, 0.2f, 10.f, 0.5f, textures[4]);
 
     // Podłoże
     setWall(580, 590, 2000, 10);
@@ -45,7 +48,7 @@ void GameState::update(const float &dt) {
     bird2.update();
     bird3.update();
 
-    box1.update();
+   // box1.update();
 }
 
 void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
@@ -54,7 +57,7 @@ void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(bird2);
     target->draw(bird3);
 
-    target->draw(box1);
+    //target->draw(box1);
 }
 
 void GameState::setWall(int x, int y, int w, int h)

@@ -27,7 +27,7 @@ else
 	LIBS = $(LINUX_LIBS)
 endif
 
-SRC = ${wildcard src/*.cpp src/states/*.cpp}
+SRC = ${wildcard src/*.cpp src/states/*.cpp src/entities/*.cpp}
 
 # -- Targets --
 all:

@@ -2,26 +2,22 @@
 
 
 
-Bird::Bird(std::shared_ptr<b2World> world, float density, float coord_x, float coord_y, b2Vec2 velocity, std::string name, const sf::Texture& t)
-{
-    this->sprite = sf::Sprite(t);
+Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, float coord_y, b2Vec2 velocity, const sf::Texture& t): Entity(world, t){
+    this->sprite = sf::Sprite(*this->texture);
     this->sprite.setOrigin((float)t.getSize().x/2, (float)t.getSize().y/2);
 
     b2BodyDef bdef;
+    bdef.userData.pointer = (uintptr_t)this;
 
-    data.number = 6;
-    data.text = name;
-    bdef.userData.pointer = reinterpret_cast<uintptr_t>(&data);
-
-    std::unique_ptr<float> ptr = std::make_unique<float>(30);
+    float ptr = 30;
     b2PolygonShape shape;
-    shape.SetAsBox(20/(*ptr), 20/(*ptr));
+    shape.SetAsBox(20/ptr, 20/ptr);
 
     bdef.type=b2_dynamicBody;
     ////ball///
     bdef.position.Set(coord_x,coord_y);
     b2CircleShape circle;
-    circle.m_radius=20/(*ptr);
+    circle.m_radius=20/ptr;
 
     this->m_body = world->CreateBody(&bdef);
     b2FixtureDef fdef;
@@ -44,6 +40,10 @@ void Bird::update() {
     sprite.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
 }
 
-void Bird::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    target.draw(sprite, states);
+void Bird::startCollision(){
+    std::cout<<"Wow"<<std::endl;
+}
+
+void Bird::endCollision(){
+
 }
