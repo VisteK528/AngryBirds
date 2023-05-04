@@ -12,9 +12,9 @@ GameState::~GameState() {
 void GameState::init() {
     sf::Texture t1, t2, t3, t4, t5;
     t1.loadFromFile("textures/background.png");
-    t2.loadFromFile("textures/bird_50x50.png");
+    t2.loadFromFile("textures/bird_red.png");
     t3.loadFromFile("textures/bird_blue.png");
-    t4.loadFromFile("textures/bird_green.png");
+    t4.loadFromFile("textures/bird_yellow.png");
     t5.loadFromFile("textures/wood_1x1.png");
     textures = {t1, t2, t3, t4, t5};
 }
