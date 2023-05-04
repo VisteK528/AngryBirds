@@ -10,13 +10,15 @@ GameState::~GameState() {
 }
 
 void GameState::init() {
-    sf::Texture t1, t2, t3, t4, t5;
+    sf::Texture t1, t2, t3, t4, t5, t6, t7;
     t1.loadFromFile("textures/background.png");
-    t2.loadFromFile("textures/bird_red.png");
-    t3.loadFromFile("textures/bird_blue.png");
-    t4.loadFromFile("textures/bird_yellow.png");
-    t5.loadFromFile("textures/wood_1x1.png");
-    textures = {t1, t2, t3, t4, t5};
+    t2.loadFromFile("textures/birds/bird_red.png");
+    t3.loadFromFile("textures/birds/bird_blue.png");
+    t4.loadFromFile("textures/birds/bird_yellow.png");
+    t5.loadFromFile("textures/boxes/wood/wood_1x1.png");
+    t6.loadFromFile("textures/boxes/stone/stone_1x1.png");
+    t7.loadFromFile("textures/boxes/glass/glass_1x1.png");
+    textures = {t1, t2, t3, t4, t5, t6, t7};
 }
 
 void GameState::initWorld() {
@@ -37,10 +39,10 @@ void GameState::initWorld() {
     // Ustawienie boxów
     box1 = Box(this->world, 0.2f, 3.f, 60.f, "box1", textures[4]);
     box2 = Box(this->world, 0.2f, 7.f, 60.f, "box2", textures[4]);
-    box3 = Box(this->world, 0.2f, 11.f, 60.f, "box3", textures[4]);
-    box4 = Box(this->world, 0.2f, 7.f, 56.f, "box4", textures[4]);
-    box5 = Box(this->world, 0.2f, 7.f, 52.f, "box5", textures[4]);
-    box6 = Box(this->world, 0.2f, 7.f, 48.f, "box6", textures[4]);
+    box3 = Box(this->world, 0.2f, 11.f, 60.f, "box3", textures[6]);
+    box4 = Box(this->world, 0.2f, 7.f, 56.f, "box4", textures[6]);
+    box5 = Box(this->world, 0.2f, 7.f, 52.f, "box5", textures[5]);
+    box6 = Box(this->world, 0.2f, 7.f, 48.f, "box6", textures[5]);
 
     // Podłoże
     setWall(640, 630, 1280, 10);
