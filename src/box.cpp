@@ -22,6 +22,7 @@ Box::Box(std::shared_ptr<b2World> world, float density, float coord_x, float coo
     shape.SetAsBox(20/(*ptr), 20/(*ptr));
 
     b2FixtureDef fdef;
+    fdef.shape = &shape;
     fdef.restitution = 0.9f;
     fdef.density = density;
     fdef.friction=0.9f;
