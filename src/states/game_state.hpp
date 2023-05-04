@@ -20,9 +20,9 @@ private:
     ContactListener contact_listener;
 
     // Ptaki
-    Bird bird;
-    Bird bird2;
-    Bird bird3;
+    std::shared_ptr<Bird> bird;
+    std::shared_ptr<Bird> bird2;
+    std::shared_ptr<Bird> bird3;
 
     // Boxy
     //Box box1;

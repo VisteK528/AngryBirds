@@ -6,6 +6,7 @@
 
 Game::Game() {
     this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode(window_dimensions.x, window_dimensions.y), "AngryBirds");
+    this->window->setVerticalSyncEnabled(false);
     this->window->setFramerateLimit(120);
     this->view = std::make_unique<sf::View>(this->window->getDefaultView());
 

@@ -27,9 +27,9 @@ void GameState::initWorld() {
     this->world->SetContactListener(&contact_listener);
 
     background = sf::Sprite(textures[0]);
-    bird = Bird(this->world, 0.2f, 5.f, 1.f, b2Vec2(-20,0), textures[1]);
-    bird2 = Bird(this->world, 0.2f, 20.f, 0.5f, b2Vec2(3, 5), textures[2]);
-    bird3 = Bird(this->world, 0.2f, 10.f, 0.5f, b2Vec2(0, 0), textures[3]);
+    bird = std::make_unique<Bird>(this->world, 0.2f, 5.f, 1.f, b2Vec2(-20,0), textures[1]);
+    bird2 = std::make_unique<Bird>(this->world, 0.2f, 20.f, 0.5f, b2Vec2(3, 5), textures[2]);
+    bird3 = std::make_unique<Bird>(this->world, 0.2f, 10.f, 0.5f, b2Vec2(0, 0), textures[3]);
 
     // Ustawienie boxów
     //box1 = Box(this->world, 0.2f, 10.f, 0.5f, textures[4]);
@@ -44,18 +44,18 @@ void GameState::initWorld() {
 
 void GameState::update(const float &dt) {
     world->Step(dt, 8, 3);
-    bird.update();
-    bird2.update();
-    bird3.update();
+    bird->update();
+    bird2->update();
+    bird3->update();
 
    // box1.update();
 }
 
 void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(background);
-    target->draw(bird);
-    target->draw(bird2);
-    target->draw(bird3);
+    target->draw(*bird);
+    target->draw(*bird2);
+    target->draw(*bird3);
 
     //target->draw(box1);
 }

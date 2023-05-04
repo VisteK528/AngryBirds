@@ -5,7 +5,6 @@
 #include "entity.hpp"
 
 Entity::Entity() {
-    this->name = "Jojo";
     this->coliding = false;
 }
 

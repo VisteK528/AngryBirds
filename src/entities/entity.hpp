@@ -13,7 +13,6 @@
 
 class Entity: public sf::Drawable {
 protected:
-    std::string name;
     std::shared_ptr<b2World> world;
     b2Body* m_body;
     sf::Sprite sprite;

@@ -8,6 +8,7 @@
 #include "../box2d/include/box2d/box2d.h"
 #include "entities/entity.hpp"
 #include "entities/bird.hpp"
+#include <iostream>
 
 
 class ContactListener: public b2ContactListener {

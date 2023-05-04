@@ -9,6 +9,8 @@
 
 class Bird: public Entity
 {
+private:
+    sf::Texture t2;
     public:
         void startCollision() override;
         void endCollision() override;

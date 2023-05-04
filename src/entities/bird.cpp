@@ -7,7 +7,8 @@ Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, 
     this->sprite.setOrigin((float)t.getSize().x/2, (float)t.getSize().y/2);
 
     b2BodyDef bdef;
-    bdef.userData.pointer = (uintptr_t)this;
+    bdef.userData.pointer = reinterpret_cast<uintptr_t>(this);
+
 
     float ptr = 30;
     b2PolygonShape shape;
@@ -27,6 +28,8 @@ Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, 
     fdef.friction=0.9f;
     m_body->CreateFixture(&fdef);
     m_body->SetLinearVelocity(velocity);
+
+    t2.loadFromFile("textures/wood_1x1.png");
 }
 
 void Bird::update() {
@@ -41,7 +44,7 @@ void Bird::update() {
 }
 
 void Bird::startCollision(){
-    std::cout<<"Wow"<<std::endl;
+    sprite.setTexture(t2);
 }
 
 void Bird::endCollision(){

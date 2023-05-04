@@ -12,19 +12,23 @@ ContactListener::~ContactListener(){
 }
 
 void ContactListener::BeginContact(b2Contact* contact){
-    b2BodyUserData& data = contact->GetFixtureA()->GetBody()->GetUserData();
-    if(data.pointer != 0){
-        Entity *entity = reinterpret_cast<Entity *>(data.pointer);
-        entity->startCollision();
+    uintptr_t data = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+
+    if(data != 0){
+        Entity *i = reinterpret_cast<Entity *>(data);
+        i->startCollision();
     }
 
-    uintptr_t data2 = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+    b2Body* body2 = contact->GetFixtureB()->GetBody();
+    uintptr_t data2 = body2->GetUserData().pointer;
+
     if(data2 != 0){
-        reinterpret_cast<Entity*>(data2)->startCollision();
+        Entity *i2 = reinterpret_cast<Entity *>(data2);
+        i2->startCollision();
     }
 }
 void ContactListener::EndContact(b2Contact* contact){
-    uintptr_t data = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+    /*uintptr_t data = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
     if(data != 0){
         reinterpret_cast<Entity*>(data)->endCollision();
     }
@@ -32,5 +36,5 @@ void ContactListener::EndContact(b2Contact* contact){
     uintptr_t data2 = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
     if(data2 != 0){
         reinterpret_cast<Entity*>(data2)->endCollision();
-    }
+    }*/
 }
