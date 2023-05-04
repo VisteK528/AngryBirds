@@ -3,7 +3,7 @@
 
 # -- Compiler --
 CXX = g++
-CXX_VERSION = c++20
+CXX_VERSION = c++2a
 CXX_FLAGS = -std=$(CXX_VERSION) -g -Wall -Wextra
 OS := $(shell uname)
 
@@ -27,31 +27,12 @@ else
 	LIBS = $(LINUX_LIBS)
 endif
 
-SRC = ${wildcard src/*.cpp}
-
-
+SRC = ${wildcard src/*.cpp src/states/*.cpp}
 
 # -- Targets --
-all: build/main.o build/bird.o build/game.o build/state.o build/game_state.o
+all:
 	@echo "* Building main *"
-	$(CXX) $(CXX_FLAGS) $(INCLUDES) -o build/main build/main.o build/bird.o build/game.o build/state.o build/game_state.o $(LIBS)
-
-main.o: main.cpp
-	@echo "* Building main.o *"
-	$(CXX) $(INCLUDES) $(CXX_FLAGS) -c $< -o $@ $(LFLAGS) $(LIBS)
-
-# general .o is made from .cpp file ; might encounter because of -c flag above (recursive)
-build/%.o: %.cpp
-	@echo "* Building ",$<
-	$(CXX) $(INCLUDES) $(CXX_FLAGS) -c $< -o $@
-
-build/%.o: src/%.cpp
-	@echo "* Building ",$<
-	$(CXX) $(INCLUDES) $(CXX_FLAGS) -c $< -o $@
-
-build/%.o: src/states/%.cpp
-	@echo "* Building ",$<
-	$(CXX) $(INCLUDES) $(CXX_FLAGS) -c $< -o $@
+	$(CXX) $(CXX_FLAGS) $(INCLUDES) $(SRC) main.cpp -o build/main $(LIBS)
 
 clean:
 	rm -f build/main build/*.o
