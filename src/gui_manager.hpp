@@ -2,8 +2,8 @@
 // Created by piotr on 5/3/23.
 //
 
-#ifndef MINESWEEPER_GUI_MANAGER_HPP
-#define MINESWEEPER_GUI_MANAGER_HPP
+#ifndef ANGRYBIRDS_GUI_MANAGER_HPP
+#define ANGRYBIRDS_GUI_MANAGER_HPP
 
 #include "widgets.hpp"
 #include <SFML/Graphics.hpp>
@@ -33,4 +33,4 @@ public:
 };
 
 
-#endif //MINESWEEPER_GUI_MANAGER_HPP
+#endif //ANGRYBIRDS_GUI_MANAGER_HPP

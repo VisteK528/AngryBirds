@@ -24,11 +24,16 @@ private:
 
     // Boxy
     Box box1;
+    Box box2;
+    Box box3;
+    Box box4;
+    Box box5;
+    Box box6;
 
     sf::Sprite background;
     std::vector<sf::Texture> textures;
 
-    const float SCALE = 30.0f;
+    const float SCALE = 10.0f;
     const float DEG = 57.29577f;
 
     void setWall(int x, int y, int w, int h);

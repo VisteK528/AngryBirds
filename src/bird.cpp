@@ -13,7 +13,7 @@ Bird::Bird(std::shared_ptr<b2World> world, float density, float coord_x, float c
     data.text = name;
     bdef.userData.pointer = reinterpret_cast<uintptr_t>(&data);
 
-    std::unique_ptr<float> ptr = std::make_unique<float>(30);
+    std::unique_ptr<float> ptr = std::make_unique<float>(10);
     b2PolygonShape shape;
     shape.SetAsBox(20/(*ptr), 20/(*ptr));
 
@@ -26,15 +26,15 @@ Bird::Bird(std::shared_ptr<b2World> world, float density, float coord_x, float c
     this->m_body = world->CreateBody(&bdef);
     b2FixtureDef fdef;
     fdef.shape = &circle;
-    fdef.restitution = 0.9f;
+    fdef.restitution = 0.5f;
     fdef.density = density;
-    fdef.friction=0.9f;
+    fdef.friction=1;
     m_body->CreateFixture(&fdef);
     m_body->SetLinearVelocity(velocity);
 }
 
 void Bird::update() {
-    const float SCALE = 30.0f;
+    const float SCALE = 10.0f;
     const float DEG = 57.29577f;
 
     float angle = m_body->GetAngle();

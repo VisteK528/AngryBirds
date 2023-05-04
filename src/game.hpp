@@ -27,7 +27,7 @@ private:
     std::pair<sf::Color, sf::Color> widget_background_color;
     std::pair<sf::Color, sf::Color> widget_text_color;
 
-    const sf::Vector2u window_dimensions = {1280, 720};     // 21:9 aspect ratio
+    const sf::Vector2u window_dimensions = {1280, 720};     // Full HD
 
     float dt;
     sf::Clock dt_clock;
