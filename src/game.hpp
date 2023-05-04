@@ -10,18 +10,24 @@
 #include <memory>
 #include "states//state.hpp"
 #include "states/game_state.hpp"
+#include "states/menu.hpp"
+#include "gui_manager.hpp"
+#include <exception>
 
 class Game {
 private:
     std::shared_ptr<sf::RenderWindow> window;
+    std::shared_ptr<GuiManager> gui_manager;
     std::shared_ptr<std::stack<std::unique_ptr<State>>> states;
     std::unique_ptr<sf::View> view;
     sf::Event e;
 
     sf::Font font;
     sf::Texture app_icon_texture;
+    std::pair<sf::Color, sf::Color> widget_background_color;
+    std::pair<sf::Color, sf::Color> widget_text_color;
 
-    const sf::Vector2u window_dimensions = {1400, 600};     // 21:9 aspect ratio
+    const sf::Vector2u window_dimensions = {1280, 720};     // 21:9 aspect ratio
 
     float dt;
     sf::Clock dt_clock;
