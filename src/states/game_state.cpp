@@ -18,7 +18,13 @@ void GameState::init() {
     t5.loadFromFile("textures/boxes/wood/wood_1x1.png");
     t6.loadFromFile("textures/boxes/stone/stone_1x1.png");
     t7.loadFromFile("textures/boxes/glass/glass_1x1.png");
+
     textures = {t1, t2, t3, t4, t5, t6, t7};
+
+    // Wygładzanie tekstur
+    for(auto &t: textures){
+        t.setSmooth(true);
+    }
 }
 
 void GameState::initWorld() {
