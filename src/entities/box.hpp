@@ -2,22 +2,18 @@
 #define BOX_HPP
 
 #include <SFML/Graphics.hpp>
-#include "../../box2d/include/box2d/box2d.h"
-#include "../../box2d/include/box2d/b2_settings.h"
+#include "entity.hpp"
 #include "bird.hpp"
 #include <memory>
 #include <string>
 
 
-class Box: public sf::Drawable
+class Box: public Entity
 {
-    private:
-        b2Body* m_body;
-        sf::Sprite sprite;
-
-        void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     public:
-        void update();
+        void startCollision() override;
+        void endCollision() override;
+        void update() override;
         Box(){};
         Box(std::shared_ptr<b2World> world, float density, float coord_x, float coord_y, const sf::Texture& t);
 };

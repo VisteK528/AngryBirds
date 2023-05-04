@@ -25,12 +25,12 @@ private:
     std::shared_ptr<Bird> bird3;
 
     // Boxy
-    Box box1;
-    Box box2;
-    Box box3;
-    Box box4;
-    Box box5;
-    Box box6;
+    std::shared_ptr<Box> box1;
+    std::shared_ptr<Box> box2;
+    std::shared_ptr<Box> box3;
+    std::shared_ptr<Box> box4;
+    std::shared_ptr<Box> box5;
+    std::shared_ptr<Box> box6;
 
     sf::Sprite background;
     std::vector<sf::Texture> textures;

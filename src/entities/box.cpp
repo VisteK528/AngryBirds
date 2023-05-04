@@ -2,9 +2,9 @@
 
 
 
-Box::Box(std::shared_ptr<b2World> world, float density, float coord_x, float coord_y, const sf::Texture& t)
+Box::Box(std::shared_ptr<b2World> world, float density, float coord_x, float coord_y, const sf::Texture& t): Entity(world, t)
 {
-    this->sprite = sf::Sprite(t);
+    this->sprite = sf::Sprite(*this->texture);
     this->sprite.setOrigin((float)t.getSize().x/2, (float)t.getSize().y/2);
 
     b2BodyDef bdef;
@@ -13,7 +13,7 @@ Box::Box(std::shared_ptr<b2World> world, float density, float coord_x, float coo
     bdef.position.Set(coord_x,coord_y);
     this->m_body = world->CreateBody(&bdef);
 
-    float ptr = 30;
+    float ptr = 10;
 
     b2PolygonShape shape;
     shape.SetAsBox(20/ptr, 20/ptr);
@@ -37,6 +37,10 @@ void Box::update() {
     sprite.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
 }
 
-void Box::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    target.draw(sprite, states);
+void Box::startCollision() {
+
+}
+
+void Box::endCollision() {
+
 }

@@ -10,7 +10,7 @@ Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, 
     bdef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
 
-    float ptr = 30;
+    float ptr = 10;
     b2PolygonShape shape;
     shape.SetAsBox(20/ptr, 20/ptr);
 
@@ -29,7 +29,7 @@ Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, 
     m_body->CreateFixture(&fdef);
     m_body->SetLinearVelocity(velocity);
 
-    t2.loadFromFile("textures/wood_1x1.png");
+    t2.loadFromFile("textures/boxes/wood/wood_1x1.png");
 }
 
 void Bird::update() {
