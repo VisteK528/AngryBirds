@@ -8,6 +8,7 @@
 #include "state.hpp"
 #include "../../box2d/include/box2d/box2d.h"
 #include "../bird.hpp"
+#include <iostream>
 
 class GameState: public State {
 private:

@@ -31,7 +31,7 @@ void Game::render() {
 }
 
 void Game::updateDt() {
-    this->dt = dt_clock.getElapsedTime().asSeconds();
+    this->dt = dt_clock.restart().asSeconds();
 }
 
 void Game::updateEvents() {

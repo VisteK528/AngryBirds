@@ -36,7 +36,7 @@ void GameState::initWorld() {
 }
 
 void GameState::update(const float &dt) {
-    world->Step(1/120., 8, 3);
+    world->Step(dt, 8, 3);
     bird.update();
     bird2.update();
     bird3.update();
