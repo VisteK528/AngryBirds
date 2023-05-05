@@ -8,7 +8,7 @@ Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, 
 
     b2BodyDef bdef;
     bdef.userData.pointer = reinterpret_cast<uintptr_t>(this);
-
+    this->health = 3000;
 
     float ptr = 10;
     b2PolygonShape shape;
@@ -44,7 +44,14 @@ void Bird::update() {
 }
 
 void Bird::startCollision(){
-    sprite.setTexture(t2);
+    //sprite.setTexture(t2);
+    double linear_velocity = sqrt(pow(this->m_body->GetLinearVelocity().x, 2)+pow(this->m_body->GetLinearVelocity().y, 2));
+    double mass = this->m_body->GetMass();
+    this->health -= (mass*pow(linear_velocity, 2))/2;
+    std::cout<<this->health<<std::endl;
+    if(this->health <= 0){
+        destroyed = true;
+    }
 }
 
 void Bird::endCollision(){

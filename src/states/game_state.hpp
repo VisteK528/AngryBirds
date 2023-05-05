@@ -12,25 +12,14 @@
 #include <iostream>
 #include <string>
 #include "../contact_listener.hpp"
+#include "../entities/entity_manager.hpp"
 
 class GameState: public State {
 private:
     b2Vec2 gravity;
     std::shared_ptr<b2World> world;
+    std::unique_ptr<EntityManager> entity_manager;
     ContactListener contact_listener;
-
-    // Ptaki
-    std::shared_ptr<Bird> bird;
-    std::shared_ptr<Bird> bird2;
-    std::shared_ptr<Bird> bird3;
-
-    // Boxy
-    std::shared_ptr<Box> box1;
-    std::shared_ptr<Box> box2;
-    std::shared_ptr<Box> box3;
-    std::shared_ptr<Box> box4;
-    std::shared_ptr<Box> box5;
-    std::shared_ptr<Box> box6;
 
     sf::Sprite background;
     std::vector<sf::Texture> textures;

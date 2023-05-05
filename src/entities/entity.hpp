@@ -19,9 +19,12 @@ protected:
     std::unique_ptr<sf::Texture> texture;
 
     bool coliding;
+    bool destroyed;
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
+    b2Body* getBody();
+    bool getDestroyed() const;
     virtual void startCollision()=0;
     virtual void endCollision()=0;
     virtual void update()=0;

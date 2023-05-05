@@ -15,7 +15,7 @@ void ContactListener::BeginContact(b2Contact* contact){
     uintptr_t data = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
 
     if(data != 0){
-        Entity *i = reinterpret_cast<Entity *>(data);
+        auto *i = reinterpret_cast<Entity *>(data);
         i->startCollision();
     }
 
@@ -23,7 +23,7 @@ void ContactListener::BeginContact(b2Contact* contact){
     uintptr_t data2 = body2->GetUserData().pointer;
 
     if(data2 != 0){
-        Entity *i2 = reinterpret_cast<Entity *>(data2);
+        auto *i2 = reinterpret_cast<Entity *>(data2);
         i2->startCollision();
     }
 }
