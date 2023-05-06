@@ -1,17 +1,17 @@
-#include "wood.hpp"
+#include "glass.hpp"
 
 #include <utility>
 
 #include <iostream>
 
-Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(std::move(world)) {
+Glass::Glass(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(std::move(world)) {
     this->coliding = false;
     this->destroyed = false;
-    this->type.sub_type = TYPE_DATA::WOOD;
+    this->type.sub_type = TYPE_DATA::GLASS;
 
-    this->t_intact.loadFromFile("textures/boxes/wood/wood_1x1.png");
-    this->t_damaged.loadFromFile("textures/boxes/wood/wood_1x1_damaged.png");
-    this->t_destroyed.loadFromFile("textures/boxes/wood/wood_1x1_destroyed.png");
+    this->t_intact.loadFromFile("textures/boxes/glass/glass_1x1.png");
+    this->t_damaged.loadFromFile("textures/boxes/glass/glass_1x1_damaged.png");
+    this->t_destroyed.loadFromFile("textures/boxes/glass/glass_1x1_destroyed.png");
 
     this->texture = std::make_unique<sf::Texture>(this->t_intact);
     this->sprite.setTexture(*this->texture);
@@ -19,9 +19,9 @@ Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(st
 
     this->health = 100;
 
-    this->density = 0.7f;
-    this->friction = 0.5f;
-    this->restitution = 0.5f;
+    this->density = 0.6f;
+    this->friction = 0.1f;
+    this->restitution = 0.1f;
 
     b2BodyDef bodyDef;
     bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
@@ -40,7 +40,7 @@ Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(st
     this->m_body->CreateFixture(&fixtureDef);
 }
 
-void Wood::setTexture() {
+void Glass::setTexture() {
     if (health > 66){
         this->texture = std::make_unique<sf::Texture>(this->t_intact);
     } else if (health > 33){
@@ -51,7 +51,7 @@ void Wood::setTexture() {
     this->texture->setSmooth(true);
 }
 
-void Wood::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+void Glass::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
     // this->setTexture();
     // this->sprite.setTexture(*this->texture);
@@ -59,11 +59,11 @@ void Wood::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(this->sprite, states);
 }
 
-void Wood::startCollision(b2Body* body_b) {
+void Glass::startCollision(b2Body* body_b) {
 
     // Calculate damage based on the velocity of the bird
     b2Vec2 vel = body_b->GetLinearVelocity();
-    float damage = sqrt(vel.x*vel.x + vel.y*vel.y) * 0.3;
+    float damage = sqrt(vel.x*vel.x + vel.y*vel.y) * 0.1;
 
     // Reduce health
     this->health -= damage;
@@ -73,7 +73,7 @@ void Wood::startCollision(b2Body* body_b) {
     }
 }
 
-void Wood::endCollision(b2Body* body_b) {
+void Glass::endCollision(b2Body* body_b) {
     this->setTexture();
     this->sprite.setTexture(*this->texture);
 }

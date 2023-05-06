@@ -10,6 +10,8 @@
 #include "../entities/bird.hpp"
 #include "../entities/box.hpp"
 #include "../entities/wood.hpp"
+#include "../entities/stone.hpp"
+#include "../entities/glass.hpp"
 #include <iostream>
 #include <string>
 #include "../contact_listener.hpp"
