@@ -40,15 +40,19 @@ void Bird::update() {
 
     sprite.setRotation(angle*DEG);
     sprite.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
+
+    if(countdown){
+        if(despawn_clock.getElapsedTime().asSeconds() >= 10){
+            destroyed = true;
+        }
+        std::cout<<despawn_clock.getElapsedTime().asSeconds()<<std::endl;
+    }
 }
 
 void Bird::startCollision(b2Body* body_b){
-    double linear_velocity = sqrt(pow(this->m_body->GetLinearVelocity().x, 2)+pow(this->m_body->GetLinearVelocity().y, 2));
-    double mass = this->m_body->GetMass();
-    this->health -= (mass*pow(linear_velocity, 2))/2;
-    // std::cout<<this->health<<std::endl;
-    if(this->health <= 0){
-        destroyed = true;
+    if(!countdown){
+        despawn_clock.restart();
+        countdown = true;
     }
 }
 

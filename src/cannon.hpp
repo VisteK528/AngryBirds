@@ -24,8 +24,10 @@ private:
 
     float angle = 0;
     float power = 0;
-    float power_gain = 2;
-    float max_power = 300;
+    float power_gain = 10;
+    float max_power = 500;
+
+    bool active = true;
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:

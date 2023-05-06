@@ -20,16 +20,12 @@ void ContactListener::BeginContact(b2Contact* contact){
 
     if(dataA != 0){
         auto *i = reinterpret_cast<Entity *>(dataA);
-        if(dataB != 0){
-            i->startCollision(bodyB);
-        }
+        i->startCollision(bodyB);
     }
 
     if(dataB != 0){
         auto *i2 = reinterpret_cast<Entity *>(dataB);
-        if(dataA != 0){
-            i2->startCollision(bodyA);
-        }
+        i2->startCollision(bodyA);
     }
 }
 void ContactListener::EndContact(b2Contact* contact){

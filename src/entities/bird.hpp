@@ -10,6 +10,8 @@ class Bird: public Entity
 private:
     sf::Texture t2;
     double health;
+    bool countdown = false;
+    sf::Clock despawn_clock;
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:

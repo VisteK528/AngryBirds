@@ -31,7 +31,11 @@ void Cannon::update(sf::Vector2f mouse_position){
     angle = std::atan2(mouse_position.y - cannon_sprite.getPosition().y, mouse_position.x - cannon_sprite.getPosition().x);
     cannon_sprite.setRotation(angle * 57.29577);
 
-    if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)){
+    if(!this->manager->isBirdActive()){
+        active = true;
+    }
+
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && active){
         if(power < max_power){
             power += power_gain;
         }
@@ -40,14 +44,15 @@ void Cannon::update(sf::Vector2f mouse_position){
 }
 
 void Cannon::handleInput(const sf::Event e){
-    if(e.type == sf::Event::MouseButtonReleased){
+    if(e.type == sf::Event::MouseButtonReleased && active){
         if(e.mouseButton.button == sf::Mouse::Left){
             b2Vec2 velocity(power*std::cos(angle), power*std::sin(angle));
-            sf::Vector2f position = {cannon_sprite.getPosition().x + (cannon_texture.getSize().x / 2) * std::cos(angle), cannon_sprite.getPosition().y + (cannon_texture.getSize().x / 2) * std::sin(angle)};
+            sf::Vector2f position = {cannon_sprite.getPosition().x-20 + (cannon_texture.getSize().x / 2 + 20) * std::cos(angle), cannon_sprite.getPosition().y-20 + (cannon_texture.getSize().x / 2 + 20) * std::sin(angle)};
 
 
             this->manager->pushEntity(std::make_unique<Bird>(this->manager->getWorld(), 0.2f, position.x/10, position.y/10, velocity, *bird_texture));
             power = 0;
+            active = false;
         }
     }
 }

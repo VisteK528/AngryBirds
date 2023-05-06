@@ -12,16 +12,16 @@
 class EntityManager {
 private:
     std::shared_ptr<b2World> world;
-public:
-    const std::shared_ptr<b2World> &getWorld() const;
-
-private:
     std::vector<std::unique_ptr<Entity>> entities;
+    bool bird_active = false;
+
 public:
     EntityManager(std::shared_ptr<b2World> world);
+    bool isBirdActive() const;
     void update();
     void render(std::shared_ptr<sf::RenderTarget> target);
     void pushEntity(std::unique_ptr<Entity> entity);
+    const std::shared_ptr<b2World> &getWorld() const;
 
 };
 
