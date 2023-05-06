@@ -45,8 +45,8 @@ protected:
 public:
     b2Body* getBody();
     bool getDestroyed() const;
-    virtual void startCollision()=0;
-    virtual void endCollision()=0;
+    virtual void startCollision(b2Body* body_b)=0;
+    virtual void endCollision(b2Body* body_b)=0;
     virtual void update()=0;
     Entity();
     Entity(std::shared_ptr<b2World> world);

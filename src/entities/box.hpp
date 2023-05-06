@@ -10,8 +10,8 @@ class Box: public Entity
 {
     public:
         void update() override;
-        void startCollision() override;
-        void endCollision() override;
+        void startCollision(b2Body* body_b) override;
+        void endCollision(b2Body* body_b) override;
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states)=0;
         Box(){};
         virtual ~Box(){};

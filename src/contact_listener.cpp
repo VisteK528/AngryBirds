@@ -12,19 +12,24 @@ ContactListener::~ContactListener(){
 }
 
 void ContactListener::BeginContact(b2Contact* contact){
-    uintptr_t data = contact->GetFixtureA()->GetBody()->GetUserData().pointer;
+    b2Body* bodyA = contact->GetFixtureA()->GetBody();
+    uintptr_t dataA = bodyA->GetUserData().pointer;
 
-    if(data != 0){
-        auto *i = reinterpret_cast<Entity *>(data);
-        i->startCollision();
+    b2Body* bodyB = contact->GetFixtureB()->GetBody();
+    uintptr_t dataB = bodyB->GetUserData().pointer;
+
+    if(dataA != 0){
+        auto *i = reinterpret_cast<Entity *>(dataA);
+        if(dataB != 0){
+            i->startCollision(bodyB);
+        }
     }
 
-    b2Body* body2 = contact->GetFixtureB()->GetBody();
-    uintptr_t data2 = body2->GetUserData().pointer;
-
-    if(data2 != 0){
-        auto *i2 = reinterpret_cast<Entity *>(data2);
-        i2->startCollision();
+    if(dataB != 0){
+        auto *i2 = reinterpret_cast<Entity *>(dataB);
+        if(dataA != 0){
+            i2->startCollision(bodyA);
+        }
     }
 }
 void ContactListener::EndContact(b2Contact* contact){

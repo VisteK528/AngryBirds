@@ -43,7 +43,7 @@ void Bird::update() {
     sprite.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
 }
 
-void Bird::startCollision(){
+void Bird::startCollision(b2Body* body_b){
     //sprite.setTexture(t2);
     double linear_velocity = sqrt(pow(this->m_body->GetLinearVelocity().x, 2)+pow(this->m_body->GetLinearVelocity().y, 2));
     double mass = this->m_body->GetMass();
@@ -54,7 +54,7 @@ void Bird::startCollision(){
     }
 }
 
-void Bird::endCollision(){
+void Bird::endCollision(b2Body* body_b){
 
 }
 

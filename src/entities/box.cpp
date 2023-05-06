@@ -20,10 +20,10 @@ void Box::update() {
     sprite.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
 }
 
-void Box::startCollision() {
+void Box::startCollision(b2Body* body_b) {
 
 }
 
-void Box::endCollision() {
+void Box::endCollision(b2Body* body_b) {
 
 }
