@@ -12,7 +12,7 @@
 #include <string>
 
 struct TYPE_DATA{
-    typedef enum{BIRD, BOX, ENEMY} TYPE;
+    typedef enum{BIRD, BOX, PIG} TYPE;
     typedef enum{
         RED_BIRD,
         YELLOW_BIRD,

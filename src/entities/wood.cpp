@@ -1,8 +1,5 @@
 #include "wood.hpp"
-
 #include <utility>
-
-#include <iostream>
 
 Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(std::move(world)) {
     this->coliding = false;
