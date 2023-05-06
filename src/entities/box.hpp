@@ -15,7 +15,7 @@ class Box: public Entity
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states)=0;
         Box(){};
         virtual ~Box(){};
-        Box(std::shared_ptr<b2World> world, float coord_x, float coord_y);
+        Box(std::shared_ptr<b2World> world);
 
     protected:
         sf::Texture t_intact;

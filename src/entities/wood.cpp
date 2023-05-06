@@ -1,10 +1,11 @@
 #include "wood.hpp"
 
-Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y) {
-    this->world = std::move(world);
+#include <utility>
+
+Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(std::move(world)) {
     this->coliding = false;
     this->destroyed = false;
-    this->type = BOX;
+    this->type.sub_type = TYPE_DATA::WOOD;
 
     this->t_intact.loadFromFile("textures/boxes/wood/wood_1x1.png");
     this->t_damaged.loadFromFile("textures/boxes/wood/wood_1x1_t_damaged.png");

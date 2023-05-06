@@ -4,9 +4,9 @@
 
 
 
-Box::Box(std::shared_ptr<b2World> world, float coord_x, float coord_y): Entity(std::move(world))
+Box::Box(std::shared_ptr<b2World> world): Entity(std::move(world))
 {
-    this->type = BOX;
+    this->type.main_type = TYPE_DATA::BOX;
 }
 
 void Box::update() {

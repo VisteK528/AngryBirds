@@ -11,7 +11,21 @@
 #include <memory>
 #include <string>
 
-typedef enum{BIRD, BOX, ENEMY} TYPE;
+struct TYPE_DATA{
+    typedef enum{BIRD, BOX, ENEMY} TYPE;
+    typedef enum{
+        RED_BIRD,
+        YELLOW_BIRD,
+        BLACK_BIRD,
+        WOOD,
+        STONE,
+        GLASS,
+        BASIC_PIG
+    } SUBTYPE;
+
+    TYPE main_type;
+    SUBTYPE sub_type;
+};
 
 class Entity: public sf::Drawable {
 protected:
@@ -25,7 +39,7 @@ protected:
 
     bool coliding;
     bool destroyed;
-    TYPE type;
+    TYPE_DATA type;
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:

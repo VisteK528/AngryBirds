@@ -5,7 +5,7 @@
 Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, float coord_y, b2Vec2 velocity, const sf::Texture& t): Entity(world){
     //General information
     this->health = 3000;
-    this->type = BIRD;
+    this->type.main_type = TYPE_DATA::BIRD;
 
     this->sprite = sf::Sprite(t);
     this->sprite.setOrigin((float)t.getSize().x/2, (float)t.getSize().y/2);
