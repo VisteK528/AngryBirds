@@ -63,7 +63,7 @@ void Wood::startCollision(b2Body* body_b) {
 
     // Calculate damage based on the velocity of the bird
     b2Vec2 vel = body_b->GetLinearVelocity();
-    float damage = sqrt(vel.x*vel.x + vel.y*vel.y) * 0.3;
+    float damage = sqrt(vel.x*vel.x + vel.y*vel.y) * 0.2;
 
     // Reduce health
     this->health -= damage;

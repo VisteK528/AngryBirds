@@ -48,9 +48,15 @@ void GameState::initWorld() {
     // entity_manager->pushEntity(std::make_unique<Bird>(this->world, 0.2f, 10.f, 0.5f, b2Vec2(0, 0), textures[3]));
 
     // Ustawienie boxów
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 3.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Stone>(this->world, 7.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 7.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 60.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 52.f));
+    entity_manager->pushEntity(std::make_unique<Stone>(this->world, 105.f, 60.f));
+    entity_manager->pushEntity(std::make_unique<Stone>(this->world, 105.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Stone>(this->world, 105.f, 52.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 110.f, 60.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 110.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 110.f, 52.f));
 
     // Podłoże
     setWall(640, 630, 1280, 10);
