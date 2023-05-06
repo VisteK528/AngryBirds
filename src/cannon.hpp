@@ -27,6 +27,8 @@ private:
     float power_gain = 10;
     float max_power = 500;
 
+    bool active = true;
+
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
     Cannon(sf::Vector2f position, std::shared_ptr<EntityManager> manager);

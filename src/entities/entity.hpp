@@ -44,6 +44,7 @@ protected:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
     b2Body* getBody();
+    const TYPE_DATA &getType() const;
     bool getDestroyed() const;
     virtual void startCollision(b2Body* body_b)=0;
     virtual void endCollision(b2Body* body_b)=0;
