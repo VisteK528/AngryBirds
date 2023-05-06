@@ -31,6 +31,9 @@ BasicPig::BasicPig(std::shared_ptr<b2World> world, float coord_x, float coord_y)
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &circle;
+    fixtureDef.density = this->density;
+    fixtureDef.friction = this->friction;
+    fixtureDef.restitution = this->restitution;
     m_body->CreateFixture(&fixtureDef);
 }
 
