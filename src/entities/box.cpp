@@ -4,6 +4,9 @@
 
 Box::Box(std::shared_ptr<b2World> world, float density, float coord_x, float coord_y, const sf::Texture& t): Entity(world, t)
 {
+    //General information
+    this->type = BIRD;
+
     this->sprite = sf::Sprite(*this->texture);
     this->sprite.setOrigin((float)t.getSize().x/2, (float)t.getSize().y/2);
 

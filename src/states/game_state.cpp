@@ -67,6 +67,10 @@ void GameState::update(const float &dt) {
     entity_manager->update();
 }
 
+void GameState::handleEvent(const sf::Event &e) {
+
+}
+
 void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(background);
     entity_manager->render(target);

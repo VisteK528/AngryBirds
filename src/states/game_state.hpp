@@ -35,6 +35,7 @@ public:
 
     void init() override;
     void update(const float& dt) override;
+    void handleEvent(const sf::Event& e) override;
     void render(std::shared_ptr<sf::RenderTarget> target) override;
 };
 

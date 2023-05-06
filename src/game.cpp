@@ -47,6 +47,9 @@ void Game::updateEvents() {
             view->setSize(view_size);
             window->setView(*view);
         }
+        if(!this->states->empty()){
+            this->states->top()->handleEvent(e);
+        }
     }
 }
 

@@ -46,6 +46,10 @@ void Menu::update(const float &dt) {
     }
 }
 
+void Menu::handleEvent(const sf::Event &e) {
+
+}
+
 void Menu::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(*title);
     target->draw(*start_btn);

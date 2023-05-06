@@ -11,6 +11,8 @@
 #include <memory>
 #include <string>
 
+typedef enum{BIRD, BOX, ENEMY} TYPE;
+
 class Entity: public sf::Drawable {
 protected:
     std::shared_ptr<b2World> world;
@@ -20,6 +22,7 @@ protected:
 
     bool coliding;
     bool destroyed;
+    TYPE type;
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
