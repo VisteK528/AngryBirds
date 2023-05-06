@@ -10,7 +10,9 @@ Cannon::Cannon(sf::Vector2f position, std::shared_ptr<EntityManager> manager){
 
     sf::Image image;
     image.create(200, 50, sf::Color(255, 0, 0, 255));
-    texture.loadFromImage(image);
+    // texture.loadFromImage(image);
+    texture.loadFromFile("textures/cannon/cannon.png");
+    texture.setSmooth(true);
     sprite.setOrigin(texture.getSize().x/2, texture.getSize().y/2);
     sprite.setPosition(position);
     sprite.setTexture(texture);
