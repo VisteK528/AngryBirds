@@ -46,6 +46,7 @@ void Bird::startCollision(b2Body* body_b){
     double linear_velocity = sqrt(pow(this->m_body->GetLinearVelocity().x, 2)+pow(this->m_body->GetLinearVelocity().y, 2));
     double mass = this->m_body->GetMass();
     this->health -= (mass*pow(linear_velocity, 2))/2;
+    // std::cout<<this->health<<std::endl;
     if(this->health <= 0){
         destroyed = true;
     }
