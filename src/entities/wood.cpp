@@ -48,6 +48,7 @@ void Wood::draw(sf::RenderTarget &target, sf::RenderStates states)  {
         this->texture = std::make_unique<sf::Texture>(this->t_destroyed);
     }
 
+    this->texture->setSmooth(true);
     this->sprite.setTexture(*this->texture);
 
     target.draw(this->sprite, states);
