@@ -9,6 +9,7 @@
 #include "../../box2d/include/box2d/box2d.h"
 #include "../entities/bird.hpp"
 #include "../entities/box.hpp"
+#include "../entities/wood.hpp"
 #include <iostream>
 #include <string>
 #include "../contact_listener.hpp"

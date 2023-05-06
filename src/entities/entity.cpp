@@ -11,15 +11,10 @@ Entity::Entity() {
     this->destroyed = false;
 }
 
-Entity::Entity(std::shared_ptr<b2World> world, const sf::Texture& t){
+Entity::Entity(std::shared_ptr<b2World> world){
     this->world = std::move(world);
-    this->texture = std::make_unique<sf::Texture>(t);
     this->coliding = false;
     this->destroyed = false;
-}
-
-void Entity::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    target.draw(sprite, states);
 }
 
 bool Entity::getDestroyed() const {

@@ -1,21 +1,31 @@
 #ifndef BOX_HPP
 #define BOX_HPP
 
-#include <SFML/Graphics.hpp>
 #include "entity.hpp"
 #include "bird.hpp"
-#include <memory>
-#include <string>
+#include <math.h>
 
 
 class Box: public Entity
 {
     public:
+        void update() override;
         void startCollision() override;
         void endCollision() override;
-        void update() override;
+        virtual void draw(sf::RenderTarget &target, sf::RenderStates states)=0;
         Box(){};
-        Box(std::shared_ptr<b2World> world, float density, float coord_x, float coord_y, const sf::Texture& t);
+        virtual ~Box(){};
+        Box(std::shared_ptr<b2World> world, float coord_x, float coord_y);
+
+    protected:
+        sf::Texture t_intact;
+        sf::Texture t_damaged;
+        sf::Texture t_destroyed;
+        double health;
+
+        float density;
+        float friction;
+        float restitution;
 };
 
 #endif

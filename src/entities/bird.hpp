@@ -1,10 +1,7 @@
 #ifndef BIRD_HPP
 #define BIRD_HPP
 
-#include <SFML/Graphics.hpp>
-#include "../../box2d/include/box2d/b2_settings.h"
 #include "entity.hpp"
-#include <string>
 #include <iostream>
 #include <math.h>
 
@@ -17,7 +14,9 @@ public:
     void startCollision() override;
     void endCollision() override;
     void update() override;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) override;
     Bird(){};
+    virtual ~Bird(){};
     Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, float coord_y, b2Vec2 velocity, const sf::Texture& t);
 };
 

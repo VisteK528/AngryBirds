@@ -11,6 +11,8 @@
 #include <memory>
 #include <string>
 
+float SCALE = 10;
+
 typedef enum{BIRD, BOX, ENEMY} TYPE;
 
 class Entity: public sf::Drawable {
@@ -24,15 +26,15 @@ protected:
     bool destroyed;
     TYPE type;
 
-    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
     b2Body* getBody();
     bool getDestroyed() const;
     virtual void startCollision()=0;
     virtual void endCollision()=0;
     virtual void update()=0;
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states)=0;
     Entity();
-    Entity(std::shared_ptr<b2World> world, const sf::Texture& t);
+    Entity(std::shared_ptr<b2World> world);
 };
 
 

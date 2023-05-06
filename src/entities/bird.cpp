@@ -2,7 +2,7 @@
 
 
 
-Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, float coord_y, b2Vec2 velocity, const sf::Texture& t): Entity(world, t){
+Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, float coord_y, b2Vec2 velocity, const sf::Texture& t): Entity(world){
     //General information
     this->health = 3000;
     this->type = BIRD;
@@ -59,4 +59,8 @@ void Bird::startCollision(){
 
 void Bird::endCollision(){
 
+}
+
+void Bird::draw(sf::RenderTarget& target, sf::RenderStates states){
+    target.draw(this->sprite, states);
 }
