@@ -10,9 +10,6 @@ Box::Box(std::shared_ptr<b2World> world): Entity(std::move(world))
 }
 
 void Box::update() {
-    const float SCALE = 10.0f;
-    const float DEG = 57.29577f;
-
     float angle = m_body->GetAngle();
     b2Vec2 pos = m_body->GetPosition();
 
@@ -22,8 +19,23 @@ void Box::update() {
 
 void Box::startCollision(b2Body* body_b) {
 
+    // Calculate damage based on the velocity of the bird
+    b2Vec2 vel = body_b->GetLinearVelocity();
+    float damage = sqrt(vel.x*vel.x + vel.y*vel.y) * 0.1;
+
+    // Reduce health
+    this->health -= damage;
+
+
+    if(this->health <= 0){
+        destroyed = true;
+    }
 }
 
 void Box::endCollision(b2Body* body_b) {
 
+}
+
+void Box::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    target.draw(sprite, states);
 }

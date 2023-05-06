@@ -2,13 +2,15 @@
 
 #include <utility>
 
+#include <iostream>
+
 Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(std::move(world)) {
     this->coliding = false;
     this->destroyed = false;
     this->type.sub_type = TYPE_DATA::WOOD;
 
     this->t_intact.loadFromFile("textures/boxes/wood/wood_1x1.png");
-    this->t_damaged.loadFromFile("textures/boxes/wood/wood_1x1_t_damaged.png");
+    this->t_damaged.loadFromFile("textures/boxes/wood/wood_1x1_damaged.png");
     this->t_destroyed.loadFromFile("textures/boxes/wood/wood_1x1_destroyed.png");
 
     this->texture = std::make_unique<sf::Texture>(this->t_intact);
@@ -38,18 +40,40 @@ Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(st
     this->m_body->CreateFixture(&fixtureDef);
 }
 
-void Wood::draw(sf::RenderTarget &target, sf::RenderStates states)  {
-
-    if (health > 66) {
+void Wood::setTexture() {
+    if (health > 66){
         this->texture = std::make_unique<sf::Texture>(this->t_intact);
-    } else if (health > 33) {
+    } else if (health > 33){
         this->texture = std::make_unique<sf::Texture>(this->t_damaged);
     } else {
         this->texture = std::make_unique<sf::Texture>(this->t_destroyed);
     }
-
     this->texture->setSmooth(true);
-    this->sprite.setTexture(*this->texture);
+}
+
+void Wood::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+
+    // this->setTexture();
+    // this->sprite.setTexture(*this->texture);
 
     target.draw(this->sprite, states);
+}
+
+void Wood::startCollision(b2Body* body_b) {
+
+    // Calculate damage based on the velocity of the bird
+    b2Vec2 vel = body_b->GetLinearVelocity();
+    float damage = sqrt(vel.x*vel.x + vel.y*vel.y) * 0.3;
+
+    // Reduce health
+    this->health -= damage;
+
+    if (this->health <= 0){
+        destroyed = true;
+    }
+}
+
+void Wood::endCollision(b2Body* body_b) {
+    this->setTexture();
+    this->sprite.setTexture(*this->texture);
 }

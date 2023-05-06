@@ -6,7 +6,10 @@
 class Wood: public Box
 {
 private:
-    void draw(sf::RenderTarget &target, sf::RenderStates states) override;
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    void setTexture();
+    void startCollision(b2Body* body_b) override;
+    void endCollision(b2Body* body_b) override;
 public:
     Wood(){};
     Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y);

@@ -10,9 +10,9 @@ class Box: public Entity
 {
     public:
         void update() override;
-        void startCollision(b2Body* body_b) override;
-        void endCollision(b2Body* body_b) override;
-        virtual void draw(sf::RenderTarget &target, sf::RenderStates states)=0;
+        virtual void startCollision(b2Body* body_b) override;
+        virtual void endCollision(b2Body* body_b) override;
+        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
         Box(){};
         virtual ~Box(){};
         Box(std::shared_ptr<b2World> world);
