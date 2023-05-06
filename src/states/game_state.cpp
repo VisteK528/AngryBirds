@@ -34,7 +34,7 @@ void GameState::initWorld() {
     this->world->SetContactListener(&contact_listener);
 
     this->entity_manager = std::make_shared<EntityManager>(this->world);
-    this->cannon = std::make_unique<Cannon>(sf::Vector2f(600, 600), this->entity_manager);
+    this->cannon = std::make_unique<Cannon>(sf::Vector2f(100, 600), this->entity_manager);
 
     // INFORMACJE O ŚWIECIE
     // 1 metr = 10 pikseli
@@ -64,7 +64,7 @@ void GameState::update(const float &dt) {
     world->Step(dt, 8, 3);
     entity_manager->update();
 
-    sf::Vector2i mouse_position = sf::Mouse::getPosition(*this->window);
+    sf::Vector2f mouse_position = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), this->window->getView());
     cannon->update(mouse_position);
 }
 
