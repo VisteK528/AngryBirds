@@ -11,12 +11,13 @@
 #include <memory>
 #include <string>
 
-float SCALE = 10;
-
 typedef enum{BIRD, BOX, ENEMY} TYPE;
 
 class Entity: public sf::Drawable {
 protected:
+    const float SCALE = 10.0f;
+    const float DEG = 57.29577f;
+
     std::shared_ptr<b2World> world;
     b2Body* m_body;
     sf::Sprite sprite;
@@ -26,13 +27,13 @@ protected:
     bool destroyed;
     TYPE type;
 
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
     b2Body* getBody();
     bool getDestroyed() const;
     virtual void startCollision()=0;
     virtual void endCollision()=0;
     virtual void update()=0;
-    virtual void draw(sf::RenderTarget &target, sf::RenderStates states)=0;
     Entity();
     Entity(std::shared_ptr<b2World> world);
 };

@@ -12,6 +12,10 @@
 class EntityManager {
 private:
     std::shared_ptr<b2World> world;
+public:
+    const std::shared_ptr<b2World> &getWorld() const;
+
+private:
     std::vector<std::unique_ptr<Entity>> entities;
 public:
     EntityManager(std::shared_ptr<b2World> world);

@@ -24,3 +24,8 @@ bool Entity::getDestroyed() const {
 b2Body* Entity::getBody(){
     return this->m_body;
 }
+
+
+void Entity::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    target.draw(sprite, states);
+}

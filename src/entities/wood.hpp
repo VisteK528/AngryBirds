@@ -5,10 +5,11 @@
 
 class Wood: public Box
 {
-    public:
-        Wood(){};
-        Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y);
-        void draw(sf::RenderTarget &target, sf::RenderStates states) override;
+private:
+    void draw(sf::RenderTarget &target, sf::RenderStates states) override;
+public:
+    Wood(){};
+    Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y);
 };
 
 #endif

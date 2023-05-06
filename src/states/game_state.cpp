@@ -31,10 +31,11 @@ void GameState::initWorld() {
     this->gravity = b2Vec2(0.0f, 9.81f);
     this->world = std::make_shared<b2World>(this->gravity);
     this->contact_listener = ContactListener();
-
     this->world->SetContactListener(&contact_listener);
 
-    this->entity_manager = std::make_unique<EntityManager>(this->world);
+    this->entity_manager = std::make_shared<EntityManager>(this->world);
+    this->cannon = std::make_unique<Cannon>(sf::Vector2f(600, 600), this->entity_manager);
+    
     // INFORMACJE O ŚWIECIE
     // 1 metr = 10 pikseli
     // 1 stopień = 57.29577 radiana
@@ -49,13 +50,6 @@ void GameState::initWorld() {
     // Ustawienie boxów
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 3.f, 60.f));
 
-    // entity_manager->pushEntity(std::make_unique<Box>(this->world, 0.2f, 3.f, 60.f, textures[4]));
-    // entity_manager->pushEntity(std::make_unique<Box>(this->world, 0.2f, 7.f, 60.f, textures[4]));
-    // entity_manager->pushEntity(std::make_unique<Box>(this->world, 0.2f, 11.f, 60.f, textures[6]));
-    // entity_manager->pushEntity(std::make_unique<Box>(this->world, 0.2f, 7.f, 56.f, textures[6]));
-    // entity_manager->pushEntity(std::make_unique<Box>(this->world, 0.2f, 7.f, 52.f, textures[5]));
-    // entity_manager->pushEntity(std::make_unique<Box>(this->world, 0.2f, 7.f, 48.f, textures[5]));
-
     // Podłoże
     setWall(640, 630, 1280, 10);
     // Prawa ściana
@@ -67,14 +61,18 @@ void GameState::initWorld() {
 void GameState::update(const float &dt) {
     world->Step(dt, 8, 3);
     entity_manager->update();
+
+    sf::Vector2i mouse_position = sf::Mouse::getPosition(*this->window);
+    cannon->update(mouse_position);
 }
 
 void GameState::handleEvent(const sf::Event &e) {
-
+    cannon->handleInput(e);
 }
 
 void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(background);
+    target->draw(*cannon);
     entity_manager->render(target);
 }
 

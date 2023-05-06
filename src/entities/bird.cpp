@@ -7,7 +7,7 @@ Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, 
     this->health = 3000;
     this->type = BIRD;
 
-    this->sprite = sf::Sprite(*this->texture);
+    this->sprite = sf::Sprite(t);
     this->sprite.setOrigin((float)t.getSize().x/2, (float)t.getSize().y/2);
 
     b2BodyDef bdef;
@@ -36,9 +36,6 @@ Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, 
 }
 
 void Bird::update() {
-    const float SCALE = 10.0f;
-    const float DEG = 57.29577f;
-
     float angle = m_body->GetAngle();
     b2Vec2 pos = m_body->GetPosition();
 
@@ -61,6 +58,6 @@ void Bird::endCollision(){
 
 }
 
-void Bird::draw(sf::RenderTarget& target, sf::RenderStates states){
+void Bird::draw(sf::RenderTarget &target, sf::RenderStates states) const{
     target.draw(this->sprite, states);
 }

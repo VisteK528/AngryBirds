@@ -1,8 +1,10 @@
 #include "box.hpp"
 
+#include <utility>
 
 
-Box::Box(std::shared_ptr<b2World> world, float coord_x, float coord_y): Entity(world)
+
+Box::Box(std::shared_ptr<b2World> world, float coord_x, float coord_y): Entity(std::move(world))
 {
     this->type = BOX;
 }

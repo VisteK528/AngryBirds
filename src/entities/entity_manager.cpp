@@ -27,3 +27,7 @@ void EntityManager::render(std::shared_ptr<sf::RenderTarget> target) {
         target->draw(*entity);
     }
 }
+
+const std::shared_ptr<b2World> &EntityManager::getWorld() const {
+    return world;
+}

@@ -14,12 +14,14 @@
 #include <string>
 #include "../contact_listener.hpp"
 #include "../entities/entity_manager.hpp"
+#include "../cannon.hpp"
 
 class GameState: public State {
 private:
     b2Vec2 gravity;
     std::shared_ptr<b2World> world;
-    std::unique_ptr<EntityManager> entity_manager;
+    std::shared_ptr<EntityManager> entity_manager;
+    std::unique_ptr<Cannon> cannon;
     ContactListener contact_listener;
 
     sf::Sprite background;
