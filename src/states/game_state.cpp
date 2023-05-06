@@ -58,6 +58,11 @@ void GameState::initWorld() {
     entity_manager->pushEntity(std::make_unique<Glass>(this->world, 110.f, 56.f));
     entity_manager->pushEntity(std::make_unique<Glass>(this->world, 110.f, 52.f));
 
+    // Ustawienie świń
+    entity_manager->pushEntity(std::make_unique<BasicPig>(this->world, 105.f, 48.f));
+    entity_manager->pushEntity(std::make_unique<BasicPig>(this->world, 105.f, 44.f));
+    entity_manager->pushEntity(std::make_unique<BasicPig>(this->world, 105.f, 40.f));
+
     // Podłoże
     setWall(640, 630, 1280, 10);
     // Prawa ściana
