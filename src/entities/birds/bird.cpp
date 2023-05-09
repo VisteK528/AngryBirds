@@ -29,6 +29,7 @@ Bird::Bird(const std::shared_ptr<b2World>& world, float coord_x, float coord_y):
     fdef.density = 0.2f;
     fdef.friction=1;
     m_body->CreateFixture(&fdef);
+    m_body->SetEnabled(false);
 }
 
 void Bird::update() {
@@ -52,7 +53,7 @@ void Bird::startCollision(b2Body* body_b){
         despawn_clock.restart();
         countdown = true;
     }
-
+    action_available = false;
     float m1 = this->m_body->GetMass();
     float m2 = body_b->GetMass();
 
@@ -95,6 +96,10 @@ void Bird::applyForce(b2Vec2 force) {
     this->m_body->ApplyForceToCenter(force, true);
 }
 
+void Bird::applyLinearVelocity(b2Vec2 velocity){
+    this->m_body->SetLinearVelocity(velocity);
+}
+
 void Bird::initVariables() {
     loadTextures();
 }
@@ -102,4 +107,12 @@ void Bird::initVariables() {
 void Bird::loadTextures() {
     this->texture = std::make_unique<sf::Texture>();
     this->texture->loadFromFile("textures/birds/bird_red.png");
+}
+
+void Bird::setPosition(b2Vec2 position) {
+    this->m_body->SetTransform(position, this->m_body->GetAngle());
+}
+
+void Bird::setActive(bool active) {
+    this->m_body->SetEnabled(active);
 }

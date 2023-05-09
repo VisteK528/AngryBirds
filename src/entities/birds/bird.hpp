@@ -9,7 +9,7 @@ class Bird: public Entity
 {
 protected:
     b2Vec2 new_velocity;
-    bool action_done = false;
+    bool action_available = true;
     bool countdown = false;
     sf::Clock despawn_clock;
 
@@ -18,6 +18,9 @@ protected:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
     virtual void makeAction(){};
+    void setActive(bool active);
+    void setPosition(b2Vec2 position);
+    void applyLinearVelocity(b2Vec2 velocity);
     void applyForce(b2Vec2 force);
     void startCollision(b2Body* body_b) override;
     void endCollision(b2Body* body_b) override;

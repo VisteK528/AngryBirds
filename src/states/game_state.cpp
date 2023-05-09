@@ -34,7 +34,18 @@ void GameState::initWorld() {
     this->world->SetContactListener(&contact_listener);
 
     this->entity_manager = std::make_shared<EntityManager>(this->world);
+
+    std::unique_ptr<Bird> bird1 = std::make_unique<YellowBird>(this->entity_manager->getWorld(), 40, 50);
+    std::unique_ptr<Bird> bird2 = std::make_unique<YellowBird>(this->entity_manager->getWorld(), 50, 50);
+    std::unique_ptr<Bird> bird3 = std::make_unique<FatRedBird>(this->entity_manager->getWorld(), 60, 50);
+
+    std::vector<std::unique_ptr<Bird>> birds = {};
+    birds.push_back(std::move(bird1));
+    birds.push_back(std::move(bird2));
+    birds.push_back(std::move(bird3));
+
     this->cannon = std::make_unique<Cannon>(sf::Vector2f(100, 600), this->entity_manager);
+    this->cannon->setBirds(birds);
 
     // INFORMACJE O ŚWIECIE
     // 1 metr = 10 pikseli

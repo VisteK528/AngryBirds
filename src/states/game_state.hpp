@@ -19,6 +19,9 @@
 #include "../contact_listener.hpp"
 #include "../entities/entity_manager.hpp"
 #include "../cannon.hpp"
+#include "../entities/birds/yellow_bird.hpp"
+#include "../entities/birds/fat_red_bird.hpp"
+#include "../entities/birds/grey_bird.hpp"
 
 class GameState: public State {
 private:

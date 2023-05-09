@@ -9,12 +9,15 @@
 #include "entities/entity_manager.hpp"
 #include "entities/birds/bird.hpp"
 #include "entities/birds/yellow_bird.hpp"
+#include "entities/birds/fat_red_bird.hpp"
+#include "entities/birds/grey_bird.hpp"
 #include "../box2d/include/box2d/box2d.h"
 #include <iostream>
 
 class Cannon: public sf::Drawable {
 private:
     std::shared_ptr<EntityManager> manager;
+    std::vector<std::unique_ptr<Bird>> birds = {};
 
     sf::Texture hull_texture;
     sf::Texture cannon_texture;
@@ -22,16 +25,19 @@ private:
     sf::Sprite hull_sprite;
     sf::Vector2f cannon_position;
 
+    unsigned int bird_index = 0;
+
     float angle = 0;
     float power = 0;
-    float power_gain = 4000;
-    float max_power = 20000;
-
+    float power_gain = 4;
+    float max_power = 100;
     bool active = true;
 
+    void setBirdsVisualPosition();
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
-    Cannon(sf::Vector2f position, std::shared_ptr<EntityManager> manager);
+    Cannon(sf::Vector2f position, std::shared_ptr<EntityManager>);
+    void setBirds(std::vector<std::unique_ptr<Bird>>& birds);
     void update(sf::Vector2f mouse_position);
     void handleInput(const sf::Event e);
 };

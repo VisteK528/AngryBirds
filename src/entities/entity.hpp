@@ -16,6 +16,8 @@ struct TYPE_DATA{
     typedef enum{
         RED_BIRD,
         YELLOW_BIRD,
+        FAT_RED_BIRD,
+        GREY_BIRD,
         BLACK_BIRD,
         WOOD,
         STONE,
