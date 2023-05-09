@@ -2,7 +2,7 @@
 #define BOX_HPP
 
 #include "entity.hpp"
-#include "bird.hpp"
+#include "birds/bird.hpp"
 #include <math.h>
 
 

@@ -7,7 +7,7 @@
 
 #include "state.hpp"
 #include "../../box2d/include/box2d/box2d.h"
-#include "../entities/bird.hpp"
+#include "../entities/birds/bird.hpp"
 #include "../entities/box.hpp"
 #include "../entities/wood.hpp"
 #include <iostream>
