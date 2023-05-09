@@ -29,3 +29,11 @@ b2Body* Entity::getBody(){
 void Entity::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(sprite, states);
 }
+
+const TYPE_DATA &Entity::getType() const {
+    return type;
+}
+
+double Entity::getHealth() const {
+    return health;
+}
