@@ -58,22 +58,3 @@ void Stone::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
     target.draw(this->sprite, states);
 }
-
-void Stone::startCollision(b2Body* body_b) {
-
-    // Calculate damage based on the velocity of the bird
-    b2Vec2 vel = body_b->GetLinearVelocity();
-    float damage = sqrt(vel.x*vel.x + vel.y*vel.y) * 0.1;
-
-    // Reduce health
-    this->health -= damage;
-
-    if (this->health <= 0){
-        destroyed = true;
-    }
-}
-
-void Stone::endCollision(b2Body* body_b) {
-    this->setTexture();
-    this->sprite.setTexture(*this->texture);
-}

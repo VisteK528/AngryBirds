@@ -39,7 +39,6 @@ void Cannon::update(sf::Vector2f mouse_position){
         if(power < max_power){
             power += power_gain;
         }
-        std::cout << power << std::endl;
     }
 }
 
@@ -49,10 +48,13 @@ void Cannon::handleInput(const sf::Event e){
             b2Vec2 velocity(power*std::cos(angle), power*std::sin(angle));
             sf::Vector2f position = {cannon_sprite.getPosition().x-20 + (cannon_texture.getSize().x / 2 + 20) * std::cos(angle), cannon_sprite.getPosition().y-20 + (cannon_texture.getSize().x / 2 + 20) * std::sin(angle)};
 
-
-            this->manager->pushEntity(std::make_unique<Bird>(this->manager->getWorld(), 0.2f, position.x/10, position.y/10, velocity, *bird_texture));
+            std::unique_ptr<Bird> bird = std::make_unique<Bird>(this->manager->getWorld(), 0.2f, position.x/10, position.y/10, b2Vec2(0,0), *bird_texture);
+            bird->applyForce(velocity);
+            this->manager->pushEntity(std::move(bird));
             power = 0;
-            active = false;
+
+            // TODO Commented only for testing purposes, uncomment before release
+            //active = false;
         }
     }
 }

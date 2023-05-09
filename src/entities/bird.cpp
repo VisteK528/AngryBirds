@@ -4,7 +4,6 @@
 
 Bird::Bird(const std::shared_ptr<b2World>& world, float density, float coord_x, float coord_y, b2Vec2 velocity, const sf::Texture& t): Entity(world){
     //General information
-    this->health = 3000;
     this->type.main_type = TYPE_DATA::BIRD;
 
     this->sprite = sf::Sprite(t);
@@ -45,7 +44,7 @@ void Bird::update() {
         if(despawn_clock.getElapsedTime().asSeconds() >= 10){
             destroyed = true;
         }
-        std::cout<<despawn_clock.getElapsedTime().asSeconds()<<std::endl;
+        //std::cout<<despawn_clock.getElapsedTime().asSeconds()<<std::endl;
     }
 }
 
@@ -54,12 +53,45 @@ void Bird::startCollision(b2Body* body_b){
         despawn_clock.restart();
         countdown = true;
     }
+
+    float m1 = this->m_body->GetMass();
+    float m2 = body_b->GetMass();
+
+    b2Vec2 v1 = this->m_body->GetLinearVelocity();
+    b2Vec2 v2 = body_b->GetLinearVelocity();
+
+    float u_x = (m1*v1.x+m2*v2.x)/(m1+m2);
+    float u_y = (m1*v1.y+m2*v2.y)/(m1+m2);
+    this->new_velocity = b2Vec2(u_x, u_y);
+
+    uintptr_t dataB = body_b->GetUserData().pointer;
+    if(dataB != 0){
+        auto *i = reinterpret_cast<Entity *>(dataB);
+        float damage = m1*std::pow(sqrt(new_velocity.x*new_velocity.x + new_velocity.y*new_velocity.y), 2) * 0.5;
+        if(damage > i->getHealth()){
+            float actual_kinetic_energy = damage-i->getHealth();
+            float velocity = sqrt(2*actual_kinetic_energy/m1);
+            float angle = this->m_body->GetAngle();
+            this->new_velocity = b2Vec2(std::cos(angle)*velocity, std::sin(angle)*velocity);
+
+        }
+    }
 }
 
 void Bird::endCollision(b2Body* body_b){
-
+    uintptr_t dataB = body_b->GetUserData().pointer;
+    if(dataB != 0){
+        auto *i = reinterpret_cast<Entity *>(dataB);
+        if(i->getDestroyed()){
+            this->m_body->SetLinearVelocity(new_velocity);
+        }
+    }
 }
 
 void Bird::draw(sf::RenderTarget &target, sf::RenderStates states) const{
     target.draw(this->sprite, states);
+}
+
+void Bird::applyForce(b2Vec2 force) {
+    this->m_body->ApplyForceToCenter(force, true);
 }

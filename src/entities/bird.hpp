@@ -9,12 +9,13 @@ class Bird: public Entity
 {
 private:
     sf::Texture t2;
-    double health;
+    b2Vec2 new_velocity;
     bool countdown = false;
     sf::Clock despawn_clock;
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
+    void applyForce(b2Vec2 force);
     void startCollision(b2Body* body_b) override;
     void endCollision(b2Body* body_b) override;
     void update() override;

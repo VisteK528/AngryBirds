@@ -36,6 +36,7 @@ protected:
     b2Body* m_body;
     sf::Sprite sprite;
     std::unique_ptr<sf::Texture> texture;
+    double health=0;
 
     bool coliding;
     bool destroyed;
@@ -46,6 +47,7 @@ public:
     b2Body* getBody();
     const TYPE_DATA &getType() const;
     bool getDestroyed() const;
+    double getHealth() const;
     virtual void startCollision(b2Body* body_b)=0;
     virtual void endCollision(b2Body* body_b)=0;
     virtual void update()=0;

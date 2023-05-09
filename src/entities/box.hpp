@@ -26,6 +26,8 @@ class Box: public Entity
         float density;
         float friction;
         float restitution;
+
+        virtual void setTexture()=0;
 };
 
 #endif

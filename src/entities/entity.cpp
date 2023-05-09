@@ -33,3 +33,7 @@ void Entity::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 const TYPE_DATA &Entity::getType() const {
     return type;
 }
+
+double Entity::getHealth() const {
+    return health;
+}

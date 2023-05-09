@@ -43,11 +43,21 @@ void GameState::initWorld() {
     // Świat ma wymiary 128x72 metry
 
     background = sf::Sprite(textures[0]);
-    // entity_manager->pushEntity(std::make_unique<Bird>(this->world, 0.2f, 5.f, 1.f, b2Vec2(-20,0), textures[1]));
-    // entity_manager->pushEntity(std::make_unique<Bird>(this->world, 0.2f, 20.f, 0.5f, b2Vec2(3, 5), textures[2]));
-    // entity_manager->pushEntity(std::make_unique<Bird>(this->world, 0.2f, 10.f, 0.5f, b2Vec2(0, 0), textures[3]));
 
     // Ustawienie boxów
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 80.f, 10.f));
+
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 50.f, 60.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 50.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 50.f, 52.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 52.f, 60.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 52.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 52.f, 52.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 54.f, 60.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 54.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 54.f, 52.f));
+
+
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 60.f));
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 56.f));
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 52.f));
