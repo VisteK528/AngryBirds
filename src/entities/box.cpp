@@ -74,7 +74,7 @@ void Box::startCollision(b2Body* body_b) {
 }
 
 
-void Box::endCollision(b2Body* body_b) {
+void Box::endCollision(b2Body*) {
     this->setTexture();
     this->sprite.setTexture(*this->texture);
 }

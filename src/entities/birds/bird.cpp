@@ -48,7 +48,7 @@ void Bird::update() {
     }
 }
 
-void Bird::startCollision(b2Body* body_b) {
+void Bird::startCollision(b2Body*) {
     this->action_available = false;
 }
 
@@ -89,7 +89,8 @@ void Bird::endCollision(b2Body* body_b){
     float impulse = force / (m1 + m2);
     b2Vec2 impulseVector(impulse * cos(angle), impulse * sin(angle));
     // Obliczenie obrażeń na podstawie masy obiektu body_b i prędkości względnej
-    float damage = m2 * dv2.LengthSquared() / 2.0;
+    //float damage = m2 * dv2.LengthSquared() / 2.0;
+
     // Zastosowanie impulsu dla obu obiektów
 
     uintptr_t dataB = body_b->GetUserData().pointer;

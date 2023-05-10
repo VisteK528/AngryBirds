@@ -65,7 +65,7 @@ void BasicPig::startCollision(b2Body* body_b) {
     }
 }
 
-void BasicPig::endCollision(b2Body* body_b) {
+void BasicPig::endCollision(b2Body*) {
     this->setTexture();
     this->sprite.setTexture(*this->texture);
 }

@@ -28,7 +28,7 @@ void Pig::startCollision(b2Body* body_b) {
     }
 }
 
-void Pig::endCollision(b2Body* body_b) {
+void Pig::endCollision(b2Body*) {
 
 }
 

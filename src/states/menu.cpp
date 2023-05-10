@@ -26,7 +26,7 @@ void Menu::initVariables() {
     this->exit_btn = gui_manager->createButton("> Exit",20, sf::Vector2f(640, 640), sf::Vector2f(250, 60), ui::ORIGIN::C);
 }
 
-void Menu::update(const float &dt) {
+void Menu::update(const float &) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
     this->start_btn->update(position);
     this->editor_btn->update(position);

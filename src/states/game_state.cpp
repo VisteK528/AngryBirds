@@ -134,5 +134,5 @@ void GameState::setWall(int x, int y, int w, int h)
     fixtureDef.density = 1000;
     fixtureDef.friction = 0.5;
     fixtureDef.restitution = 0.5;
-    *b_ground->CreateFixture(&fixtureDef);
+    b_ground->CreateFixture(&fixtureDef);
 }
