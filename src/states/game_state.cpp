@@ -131,8 +131,4 @@ void GameState::setWall(int x, int y, int w, int h)
     fixtureDef.friction = 0.5;
     fixtureDef.restitution = 0.5;
     *b_ground->CreateFixture(&fixtureDef);
-
-    // Print wall mass
-    std::cout << "Wall mass: " << b_ground->GetMass() << std::endl;
-
 }

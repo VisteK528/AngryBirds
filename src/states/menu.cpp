@@ -28,26 +28,30 @@ void Menu::initVariables() {
 
 void Menu::update(const float &dt) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
-
-    if(this->start_btn->update(position)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states));
-    }
-
-    if(this->editor_btn->update(position)){
-
-    }
-
-    if(this->about_btn->update(position)){
-
-    }
-
-    if(this->exit_btn->update(position)){
-        quit = true;
-    }
+    this->start_btn->update(position);
+    this->editor_btn->update(position);
+    this->about_btn->update(position);
+    this->exit_btn->update(position);
 }
 
 void Menu::handleEvent(const sf::Event &e) {
+    sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
 
+    if(this->start_btn->handleInput(position, e)){
+        this->states->push(std::make_unique<GameState>(this->window, this->states));
+    }
+
+    if(this->editor_btn->handleInput(position, e)){
+
+    }
+
+    if(this->about_btn->handleInput(position, e)){
+
+    }
+
+    if(this->exit_btn->handleInput(position, e)){
+        quit = true;
+    }
 }
 
 void Menu::render(std::shared_ptr<sf::RenderTarget> target) {
