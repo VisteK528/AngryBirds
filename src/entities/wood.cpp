@@ -14,7 +14,8 @@ Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(st
     this->sprite.setTexture(*this->texture);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width/2, this->sprite.getGlobalBounds().height/2);
 
-    this->health = 100;
+    this->health = 1000;
+    this->base_health = 1000;
 
     this->density = 0.7f;
     this->friction = 0.5f;
@@ -38,9 +39,9 @@ Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(st
 }
 
 void Wood::setTexture() {
-    if (health > 66){
+    if (health > (base_health*(2./3.))){
         this->texture = std::make_unique<sf::Texture>(this->t_intact);
-    } else if (health > 33){
+    } else if (health > (base_health*(1./3.))){
         this->texture = std::make_unique<sf::Texture>(this->t_damaged);
     } else {
         this->texture = std::make_unique<sf::Texture>(this->t_destroyed);

@@ -17,7 +17,8 @@ Stone::Stone(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(
     this->sprite.setTexture(*this->texture);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width/2, this->sprite.getGlobalBounds().height/2);
 
-    this->health = 100;
+    this->health = 3000;
+    this->base_health = 3000;
 
     this->density = 1.f;
     this->friction = 1.f;
@@ -41,9 +42,9 @@ Stone::Stone(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(
 }
 
 void Stone::setTexture() {
-    if (health > 66){
+    if (health > base_health*(2./3.)){
         this->texture = std::make_unique<sf::Texture>(this->t_intact);
-    } else if (health > 33){
+    } else if (health > base_health*(1./3.)){
         this->texture = std::make_unique<sf::Texture>(this->t_damaged);
     } else {
         this->texture = std::make_unique<sf::Texture>(this->t_destroyed);

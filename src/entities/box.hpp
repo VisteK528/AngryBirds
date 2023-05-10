@@ -21,6 +21,7 @@ class Box: public Entity
         sf::Texture t_intact;
         sf::Texture t_damaged;
         sf::Texture t_destroyed;
+        double base_health;
         double health;
 
         float density;

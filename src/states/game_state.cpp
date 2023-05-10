@@ -56,7 +56,10 @@ void GameState::initWorld() {
     background = sf::Sprite(textures[0]);
 
     // Ustawienie boxów
-    /*entity_manager->pushEntity(std::make_unique<Wood>(this->world, 80.f, 10.f));
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 90.f, 10.f));
+
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 80.f, 50.f));
+    // entity_manager->pushEntity(std::make_unique<Wood>(this->world, 80.f, 60.f));
 
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 50.f, 60.f));
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 50.f, 56.f));
@@ -66,7 +69,7 @@ void GameState::initWorld() {
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 52.f, 52.f));
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 54.f, 60.f));
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 54.f, 56.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 54.f, 52.f));*/
+    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 54.f, 52.f));
 
 
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 60.f));
@@ -117,7 +120,17 @@ void GameState::setWall(int x, int y, int w, int h)
 
     b2BodyDef bdef;
     bdef.position.Set(x/SCALE, y/SCALE);
-
+    bdef.type=b2_staticBody;
     b2Body *b_ground = this->world->CreateBody(&bdef);
-    b_ground->CreateFixture(&gr, 1);
+
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &gr;
+    fixtureDef.density = 1000;
+    fixtureDef.friction = 0.5;
+    fixtureDef.restitution = 0.5;
+    *b_ground->CreateFixture(&fixtureDef);
+
+    // Print wall mass
+    std::cout << "Wall mass: " << b_ground->GetMass() << std::endl;
+
 }

@@ -21,6 +21,7 @@ void YellowBird::makeAction(){
         if(sf::Mouse::isButtonPressed(sf::Mouse::Right) && !dash_stared){
             action_clock.restart();
             dash_stared = true;
+            this->m_body->GetFixtureList()->SetDensity(1.f);
         }
         if(action_clock.getElapsedTime().asSeconds() < 3 && !dash_ended && dash_stared){
             float angle = m_body->GetAngle();
