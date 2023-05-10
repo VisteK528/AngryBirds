@@ -38,11 +38,13 @@ void GameState::initWorld() {
     std::unique_ptr<Bird> bird1 = std::make_unique<YellowBird>(this->entity_manager->getWorld(), 40, 50);
     std::unique_ptr<Bird> bird2 = std::make_unique<YellowBird>(this->entity_manager->getWorld(), 50, 50);
     std::unique_ptr<Bird> bird3 = std::make_unique<FatRedBird>(this->entity_manager->getWorld(), 60, 50);
+    std::unique_ptr<Bird> bird4 = std::make_unique<GreyBird>(this->entity_manager->getWorld(), 60, 50);
 
     std::vector<std::unique_ptr<Bird>> birds = {};
     birds.push_back(std::move(bird1));
     birds.push_back(std::move(bird2));
     birds.push_back(std::move(bird3));
+    birds.push_back(std::move(bird4));
 
     this->cannon = std::make_unique<Cannon>(sf::Vector2f(100, 600), this->entity_manager);
     this->cannon->setBirds(birds);
@@ -61,15 +63,15 @@ void GameState::initWorld() {
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 80.f, 50.f));
     // entity_manager->pushEntity(std::make_unique<Wood>(this->world, 80.f, 60.f));
 
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 50.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 50.f, 56.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 50.f, 52.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 52.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 52.f, 56.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 52.f, 52.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 54.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 54.f, 56.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 54.f, 52.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 50.f, 60.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 50.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 52.f, 60.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 52.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 50.f, 52.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 52.f, 52.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 54.f, 60.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 54.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 54.f, 52.f));
 
 
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 60.f));

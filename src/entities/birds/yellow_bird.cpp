@@ -18,14 +18,13 @@ void YellowBird::loadTextures() {
 
 void YellowBird::makeAction(){
     if(action_available){
-        if(sf::Mouse::isButtonPressed(sf::Mouse::Right) && !dash_stared){
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Right) && !dash_started){
             action_clock.restart();
-            dash_stared = true;
-            this->m_body->GetFixtureList()->SetDensity(1.f);
+            dash_started = true;
         }
-        if(action_clock.getElapsedTime().asSeconds() < 3 && !dash_ended && dash_stared){
+        if(action_clock.getElapsedTime().asSeconds() < 3 && !dash_ended && dash_started){
             float angle = m_body->GetAngle();
-            m_body->ApplyForceToCenter(b2Vec2(100000*std::cos(angle), 100000*std::sin(angle)), false);
+            m_body->ApplyForceToCenter(b2Vec2(200000.f*std::cos(angle), 200000.f*std::sin(angle)), false);
             dash_ended = true;
         }
     }

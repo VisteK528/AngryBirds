@@ -24,7 +24,7 @@ void GreyBird::makeAction(){
             dash_stared = true;
         }
         if(action_clock.getElapsedTime().asSeconds() < 3 && !dash_ended && dash_stared){
-            m_body->ApplyForceToCenter(b2Vec2(0, 50000), false);
+            m_body->ApplyForceToCenter(b2Vec2(0, 500000), false);
             dash_ended = true;
         }
     }

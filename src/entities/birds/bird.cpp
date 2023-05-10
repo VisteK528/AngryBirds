@@ -26,7 +26,7 @@ Bird::Bird(const std::shared_ptr<b2World>& world, float coord_x, float coord_y):
     b2FixtureDef fdef;
     fdef.shape = &circle;
     fdef.restitution = 0.5f;
-    fdef.density = 0.2f;
+    fdef.density = 2.f;
     fdef.friction=1;
     m_body->CreateFixture(&fdef);
     m_body->SetEnabled(false);
@@ -48,43 +48,61 @@ void Bird::update() {
     }
 }
 
-void Bird::startCollision(b2Body* body_b){
-    if(!countdown){
-        despawn_clock.restart();
-        countdown = true;
-    }
-    action_available = false;
-    float m1 = this->m_body->GetMass();
-    float m2 = body_b->GetMass();
-
-    b2Vec2 v1 = this->m_body->GetLinearVelocity();
-    b2Vec2 v2 = body_b->GetLinearVelocity();
-
-    float u_x = (m1*v1.x+m2*v2.x)/(m1+m2);
-    float u_y = (m1*v1.y+m2*v2.y)/(m1+m2);
-    this->new_velocity = b2Vec2(u_x, u_y);
-
-    uintptr_t dataB = body_b->GetUserData().pointer;
-    if(dataB != 0){
-        auto *i = reinterpret_cast<Entity *>(dataB);
-        float damage = m1*std::pow(sqrt(new_velocity.x*new_velocity.x + new_velocity.y*new_velocity.y), 2) * 0.5;
-        if(damage > i->getHealth()){
-            float actual_kinetic_energy = damage-i->getHealth();
-            float velocity = sqrt(2*actual_kinetic_energy/m1);
-            float angle = this->m_body->GetAngle();
-            this->new_velocity = b2Vec2(std::cos(angle)*velocity, std::sin(angle)*velocity);
-
-        }
-    }
+void Bird::startCollision(b2Body* body_b) {
+    this->action_available = false;
 }
 
 void Bird::endCollision(b2Body* body_b){
+
+    // Obliczenie prędkości początkowych obu obiektów
+    b2Vec2 v1_ini = this->m_body->GetLinearVelocity();
+    b2Vec2 v2_ini = body_b->GetLinearVelocity();
+    // Obliczenie prędkości ostatecznych obu obiektów
+    float m1 = this->m_body->GetMass();
+    float m2 = body_b->GetMass();
+
+    this->action_available = false;
+
+    // Jeśli masa obiektu body_b jest równa 0,
+    // to przyjmuje się, że jest on ścianą
+    // i nadajemy mu parametry obiektu pierwszego
+    if (m2 == 0) {
+        m2 = m1;
+        v2_ini = v1_ini;
+    }
+
+    b2Vec2 v1 = this->m_body->GetLinearVelocity();
+    b2Vec2 v2 = body_b->GetLinearVelocity();
+    b2Vec2 vel((m1*v1.x+m2*v2.x)/(m1+m2), (m1*v1.y+m2*v2.y)/(m1+m2));
+    // Obliczenie wektorów zmiany prędkości dla obu obiektów
+    b2Vec2 dv1 = vel - v1_ini;
+    b2Vec2 dv2 = vel - v2_ini;
+    // Obliczenie kąta zderzenia
+    float angle = 0;
+    if (vel.LengthSquared() > 0) {
+        angle = atan2f(vel.y, vel.x);
+    }
+    // Obliczenie siły uderzenia
+    float force = dv1.Length() * m1 + dv2.Length() * m2;
+    force *= 2; // korekta
+    // Obliczenie impulsu dla obu obiektów
+    float impulse = force / (m1 + m2);
+    b2Vec2 impulseVector(impulse * cos(angle), impulse * sin(angle));
+    // Obliczenie obrażeń na podstawie masy obiektu body_b i prędkości względnej
+    float damage = m2 * dv2.LengthSquared() / 2.0;
+    // Zastosowanie impulsu dla obu obiektów
+
     uintptr_t dataB = body_b->GetUserData().pointer;
     if(dataB != 0){
         auto *i = reinterpret_cast<Entity *>(dataB);
         if(i->getDestroyed()){
-            this->m_body->SetLinearVelocity(new_velocity);
+            this->m_body->ApplyLinearImpulse(impulseVector, this->m_body->GetWorldCenter(), true);
         }
+    }
+    else {
+        // Zastosowanie impulsu dla obu obiektów
+        body_b->ApplyLinearImpulse(impulseVector, body_b->GetWorldCenter(), true);
+        this->m_body->ApplyLinearImpulse(-impulseVector, this->m_body->GetWorldCenter(), true);
     }
 }
 

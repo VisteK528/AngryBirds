@@ -10,7 +10,7 @@
 class YellowBird: public Bird {
 private:
     sf::Clock action_clock;
-    bool dash_stared = false;
+    bool dash_started = false;
     bool dash_ended = false;
 
     void makeAction() override;
