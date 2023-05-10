@@ -29,6 +29,7 @@ private:
     std::shared_ptr<b2World> world;
     std::shared_ptr<EntityManager> entity_manager;
     std::unique_ptr<Cannon> cannon;
+    CannonPowerWidget cannon_power_widget;
     ContactListener contact_listener;
 
     sf::Sprite background;

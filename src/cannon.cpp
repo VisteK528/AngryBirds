@@ -103,3 +103,38 @@ void Cannon::setBirdsVisualPosition() {
         i++;
     }
 }
+
+float Cannon::getPower() const {
+    return power;
+}
+
+float Cannon::getMaxPower() const {
+    return max_power;
+}
+
+float Cannon::getPowerGain() const {
+    return power_gain;
+}
+
+CannonPowerWidget::CannonPowerWidget(float coord_x, float coord_y, float cannon_max_power, float cannon_power_gain) {
+    this->outline_rectangle_widget = sf::RectangleShape({300, 30});
+    this->outline_rectangle_widget.setPosition({coord_x, coord_y});
+
+    this->outline_rectangle_widget.setOutlineColor(sf::Color::Black);
+
+    this->fill_rectangle_widget = sf::RectangleShape({0, 30});
+    this->fill_rectangle_widget.setPosition({coord_x, coord_y});
+    this->fill_rectangle_widget.setFillColor(sf::Color::Yellow);
+
+    this->cannon_max_power = cannon_max_power;
+    this->cannon_power_gain = cannon_power_gain;
+}
+
+void CannonPowerWidget::update(float cannon_power) {
+    this->fill_rectangle_widget.setSize({(cannon_power/this->cannon_max_power)*300, 30});
+}
+
+void CannonPowerWidget::draw(sf::RenderTarget &target, sf::RenderStates states) const{
+   target.draw(outline_rectangle_widget, states);
+   target.draw(fill_rectangle_widget, states);
+}
