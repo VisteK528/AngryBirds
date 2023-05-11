@@ -35,10 +35,14 @@ void GameState::initWorld() {
 
     this->entity_manager = std::make_shared<EntityManager>(this->world);
 
-    std::unique_ptr<Bird> bird1 = std::make_unique<YellowBird>(this->entity_manager->getWorld(), 40, 50);
-    std::unique_ptr<Bird> bird2 = std::make_unique<YellowBird>(this->entity_manager->getWorld(), 50, 50);
-    std::unique_ptr<Bird> bird3 = std::make_unique<FatRedBird>(this->entity_manager->getWorld(), 60, 50);
-    std::unique_ptr<Bird> bird4 = std::make_unique<GreyBird>(this->entity_manager->getWorld(), 60, 50);
+    std::vector<std::shared_ptr<sf::Texture>> red_bird_t = {std::make_shared<sf::Texture>(textures[1])};
+    std::vector<std::shared_ptr<sf::Texture>> yellow_bird_t = {std::make_shared<sf::Texture>(textures[3])};
+    std::vector<std::shared_ptr<sf::Texture>> grey_bird_t = {std::make_shared<sf::Texture>(textures[2])};
+
+    std::unique_ptr<Bird> bird1 = std::make_unique<Bird>(this->entity_manager->getWorld(), yellow_bird_t, 40, 50);
+    std::unique_ptr<Bird> bird2 = std::make_unique<YellowBird>(this->entity_manager->getWorld(), yellow_bird_t,50, 50);
+    std::unique_ptr<Bird> bird3 = std::make_unique<FatRedBird>(this->entity_manager->getWorld(), red_bird_t, 60, 50);
+    std::unique_ptr<Bird> bird4 = std::make_unique<GreyBird>(this->entity_manager->getWorld(), grey_bird_t, 60, 50);
 
     std::vector<std::unique_ptr<Bird>> birds = {};
     birds.push_back(std::move(bird1));

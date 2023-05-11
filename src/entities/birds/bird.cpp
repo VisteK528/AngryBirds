@@ -2,13 +2,13 @@
 
 
 
-Bird::Bird(const std::shared_ptr<b2World>& world, float coord_x, float coord_y): Entity(world){
-    initVariables();
+Bird::Bird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x, float coord_y): Entity(world){
+    this->bird_textures = bird_textures;
 
     //General information
     this->type.main_type = TYPE_DATA::BIRD;
-    this->sprite = sf::Sprite(*this->texture);
-    this->sprite.setOrigin((float)(*this->texture).getSize().x/2, (float)(*this->texture).getSize().y/2);
+    this->sprite = sf::Sprite(*bird_textures[0]);
+    this->sprite.setOrigin((float)(*bird_textures[0]).getSize().x/2, (float)(*bird_textures[0]).getSize().y/2);
 
     b2BodyDef bdef;
     bdef.userData.pointer = reinterpret_cast<uintptr_t>(this);
@@ -44,7 +44,6 @@ void Bird::update() {
         if(despawn_clock.getElapsedTime().asSeconds() >= 10){
             destroyed = true;
         }
-        //std::cout<<despawn_clock.getElapsedTime().asSeconds()<<std::endl;
     }
 }
 
@@ -88,8 +87,7 @@ void Bird::endCollision(b2Body* body_b){
     // Obliczenie impulsu dla obu obiektów
     float impulse = force / (m1 + m2);
     b2Vec2 impulseVector(impulse * cos(angle), impulse * sin(angle));
-    // Obliczenie obrażeń na podstawie masy obiektu body_b i prędkości względnej
-    float damage = m2 * dv2.LengthSquared() / 2.0;
+
     // Zastosowanie impulsu dla obu obiektów
 
     uintptr_t dataB = body_b->GetUserData().pointer;
@@ -116,15 +114,6 @@ void Bird::applyForce(b2Vec2 force) {
 
 void Bird::applyLinearVelocity(b2Vec2 velocity){
     this->m_body->SetLinearVelocity(velocity);
-}
-
-void Bird::initVariables() {
-    loadTextures();
-}
-
-void Bird::loadTextures() {
-    this->texture = std::make_unique<sf::Texture>();
-    this->texture->loadFromFile("textures/birds/bird_red.png");
 }
 
 void Bird::setPosition(b2Vec2 position) {
