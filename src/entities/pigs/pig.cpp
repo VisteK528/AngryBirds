@@ -1,15 +1,13 @@
-#include "box.hpp"
-
+#include "pig.hpp"
 #include <utility>
+#include <iostream>
 
-
-
-Box::Box(std::shared_ptr<b2World> world): Entity(std::move(world))
+Pig::Pig(std::shared_ptr<b2World> world): Entity(std::move(world))
 {
-    this->type.main_type = TYPE_DATA::BOX;
+    this->type.main_type = TYPE_DATA::PIG;
 }
 
-void Box::update() {
+void Pig::update() {
     float angle = m_body->GetAngle();
     b2Vec2 pos = m_body->GetPosition();
 
@@ -17,7 +15,7 @@ void Box::update() {
     sprite.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
 }
 
-void Box::startCollision(b2Body* body_b) {
+void Pig::startCollision(b2Body* body_b) {
     // Obliczenie prędkości początkowych obu obiektów
     b2Vec2 v1_ini = this->m_body->GetLinearVelocity();
     b2Vec2 v2_ini = body_b->GetLinearVelocity();
@@ -55,7 +53,7 @@ void Box::startCollision(b2Body* body_b) {
     body_b->ApplyLinearImpulse(impulseVector, body_b->GetWorldCenter(), true);
     // Obliczenie obrażeń na podstawie masy obiektu body_b i prędkości względnej
     float damage = m2 * dv2.LengthSquared() / 2.0;
-    // Redukcja zdrowia obiektu Box
+    // Redukcja zdrowia obiektu Pig
 
 
     // Próg wykrywania obrażeń
@@ -63,22 +61,19 @@ void Box::startCollision(b2Body* body_b) {
         damage = 0;
     }
     else {
-        std::cout << "Damage: " << damage << std::endl;
+        std::cout << "Pig hit: " << damage << std::endl;
         this->health -= damage;
         if (this->health <= 0) {
         destroyed = true;
         }
     }
-
-
 }
 
-
-void Box::endCollision(b2Body*) {
+void Pig::endCollision(b2Body*) {
     this->setTexture();
     this->sprite.setTexture(*this->texture);
 }
 
-void Box::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+void Pig::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(sprite, states);
 }

@@ -1,28 +1,26 @@
-#include "glass.hpp"
-
+#include "wood.hpp"
 #include <utility>
 
-#include <iostream>
-
-Glass::Glass(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(std::move(world)) {
+Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(std::move(world))
+{
     this->coliding = false;
     this->destroyed = false;
-    this->type.sub_type = TYPE_DATA::GLASS;
+    this->type.sub_type = TYPE_DATA::WOOD;
 
-    this->t_intact.loadFromFile("textures/boxes/glass/glass_1x1.png");
-    this->t_damaged.loadFromFile("textures/boxes/glass/glass_1x1_damaged.png");
-    this->t_destroyed.loadFromFile("textures/boxes/glass/glass_1x1_destroyed.png");
+    this->t_intact.loadFromFile("textures/boxes/wood/wood_1x1.png");
+    this->t_damaged.loadFromFile("textures/boxes/wood/wood_1x1_damaged.png");
+    this->t_destroyed.loadFromFile("textures/boxes/wood/wood_1x1_destroyed.png");
 
     this->texture = std::make_unique<sf::Texture>(this->t_intact);
     this->sprite.setTexture(*this->texture);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width/2, this->sprite.getGlobalBounds().height/2);
 
-    this->health = 500;
-    this->base_health = 500;
+    this->health = 1000;
+    this->base_health = 1000;
 
-    this->density = 0.6f;
-    this->friction = 0.1f;
-    this->restitution = 0.1f;
+    this->density = 0.7f;
+    this->friction = 0.5f;
+    this->restitution = 0.5f;
 
     b2BodyDef bodyDef;
     bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
@@ -41,10 +39,10 @@ Glass::Glass(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(
     this->m_body->CreateFixture(&fixtureDef);
 }
 
-void Glass::setTexture() {
-    if (health > base_health*(2./3.)){
+void Wood::setTexture() {
+    if (health > (base_health*(2./3.))){
         this->texture = std::make_unique<sf::Texture>(this->t_intact);
-    } else if (health > base_health*(1./3.)){
+    } else if (health > (base_health*(1./3.))){
         this->texture = std::make_unique<sf::Texture>(this->t_damaged);
     } else {
         this->texture = std::make_unique<sf::Texture>(this->t_destroyed);
@@ -52,10 +50,6 @@ void Glass::setTexture() {
     this->texture->setSmooth(true);
 }
 
-void Glass::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-
-    // this->setTexture();
-    // this->sprite.setTexture(*this->texture);
-
+void Wood::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(this->sprite, states);
 }

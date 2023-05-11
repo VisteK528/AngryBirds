@@ -1,15 +1,13 @@
 #ifndef BASIC_PIG_HPP
 #define BASIC_PIG_HPP
 
-#include "pig.hpp"
+#include "../pig.hpp"
 
 class BasicPig: public Pig
 {
 private:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void setTexture();
-    void startCollision(b2Body* body_b) override;
-    void endCollision(b2Body* body_b) override;
 public:
     BasicPig(){};
     BasicPig(std::shared_ptr<b2World> world, float coord_x, float coord_y);

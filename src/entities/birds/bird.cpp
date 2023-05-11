@@ -26,7 +26,7 @@ Bird::Bird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf
     b2FixtureDef fdef;
     fdef.shape = &circle;
     fdef.restitution = 0.5f;
-    fdef.density = 2.f;
+    fdef.density = 0.5f;
     fdef.friction=1;
     m_body->CreateFixture(&fdef);
     m_body->SetEnabled(false);
