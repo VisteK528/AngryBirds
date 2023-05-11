@@ -4,16 +4,12 @@
 
 #include "grey_bird.hpp"
 
-GreyBird::GreyBird(const std::shared_ptr<b2World> &world, float coord_x, float coord_y): Bird(world, coord_x, coord_y){
-    initVariables();
-    this->sprite.setTexture(*this->texture);
+#include <utility>
+
+GreyBird::GreyBird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x, float coord_y): Bird(world, bird_textures, coord_x, coord_y){
+    this->sprite.setTexture(*bird_textures[0]);
     this->type.main_type = TYPE_DATA::BIRD;
     this->type.sub_type = TYPE_DATA::GREY_BIRD;
-}
-
-void GreyBird::loadTextures() {
-    this->texture = std::make_unique<sf::Texture>();
-    this->texture->loadFromFile("textures/birds/bird_blue.png");
 }
 
 void GreyBird::makeAction(){

@@ -8,13 +8,11 @@
 class Bird: public Entity
 {
 protected:
-    b2Vec2 new_velocity;
+    std::vector<std::shared_ptr<sf::Texture>> bird_textures;
     bool action_available = true;
     bool countdown = false;
     sf::Clock despawn_clock;
 
-    void initVariables();
-    virtual void loadTextures();
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
     virtual void makeAction(){};
@@ -25,8 +23,8 @@ public:
     void startCollision(b2Body* body_b) override;
     void endCollision(b2Body* body_b) override;
     void update() override;
-    Bird(){};
-    Bird(const std::shared_ptr<b2World>& world, float coord_x, float coord_y);
+    Bird()=default;
+    Bird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x=0, float coord_y=0);
 };
 
 #endif

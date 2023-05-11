@@ -4,15 +4,16 @@
 
 #include "fat_red_bird.hpp"
 
-FatRedBird::FatRedBird(const std::shared_ptr<b2World>& world, float coord_x, float coord_y){
-    initVariables();
+FatRedBird::FatRedBird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x, float coord_y){
+    this->bird_textures = bird_textures;
+    this->world = world;
 
     //General information
     this->type.main_type = TYPE_DATA::BIRD;
     this->type.sub_type = TYPE_DATA::FAT_RED_BIRD;
 
-    this->sprite = sf::Sprite(*this->texture);
-    this->sprite.setOrigin((float)(*this->texture).getSize().x/2, (float)(*this->texture).getSize().y/2);
+    this->sprite = sf::Sprite(*bird_textures[0]);
+    this->sprite.setOrigin((float)(*bird_textures[0]).getSize().x/2, (float)(*bird_textures[0]).getSize().y/2);
     this->sprite.scale(2, 2);
 
     b2BodyDef bdef;
@@ -35,9 +36,4 @@ FatRedBird::FatRedBird(const std::shared_ptr<b2World>& world, float coord_x, flo
     fdef.friction=1;
     m_body->CreateFixture(&fdef);
     m_body->SetEnabled(false);
-}
-
-void FatRedBird::loadTextures() {
-    this->texture = std::make_unique<sf::Texture>();
-    this->texture->loadFromFile("textures/birds/bird_red.png");
 }
