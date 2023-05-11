@@ -65,7 +65,7 @@ void GameState::initWorld() {
     this->cannon = std::make_unique<Cannon>(sf::Vector2f(100, 600), this->entity_manager);
     this->cannon->setBirds(birds);
 
-    this->cannon_power_widget = CannonPowerWidget(10, 10, this->cannon->getMaxPower(), this->cannon->getPowerGain());
+    this->cannon_power_widget = CannonPowerWidget(10, 10, this->cannon->getMaxPower());
 
     // INFORMACJE O ŚWIECIE
     // 1 metr = 10 pikseli
@@ -121,7 +121,7 @@ void GameState::update(const float &dt) {
 
     sf::Vector2f mouse_position = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), this->window->getView());
     cannon->update(mouse_position);
-    cannon_power_widget.update(cannon->getPower());
+    cannon_power_widget.update(cannon->getPower(), cannon->isActive());
 }
 
 void GameState::handleEvent(const sf::Event &e) {
