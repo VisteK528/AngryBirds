@@ -50,7 +50,7 @@ void GameState::loadTextures() {
             {GLASS3x1, {"textures/boxes/glass/glass_3x1.png", "textures/boxes/glass/glass_3x1_damaged.png", "textures/boxes/glass/glass_3x1_damaged.png"}},
             {STONE, {"textures/boxes/stone/stone_1x1.png", "textures/boxes/stone/stone_1x1_damaged.png", "textures/boxes/stone/stone_1x1_destroyed.png"}},
             {STONE3x1, {"textures/boxes/stone/stone_3x1.png", "textures/boxes/stone/stone_3x1_damaged.png", "textures/boxes/stone/stone_3x1_damaged.png"}},
-            {PIG, {"textures/pigs/basic/basic_pig.png", "textures/pigs/basic/basic_pig_damaged.png", "textures/pigs/basic/basic_pig_destroyed.png"}},
+            {BASIC_PIG, {"textures/pigs/basic/basic_pig.png", "textures/pigs/basic/basic_pig_damaged.png", "textures/pigs/basic/basic_pig_destroyed.png"}},
             {RED_BIRD, {"textures/birds/bird_red.png"}},
             {YELLOW_BIRD, {"textures/birds/bird_yellow.png"}},
             {GREY_BIRD, {"textures/birds/bird_blue.png"}},
@@ -119,18 +119,20 @@ void GameState::initWorld() {
     BoxFactory<Stone> stone_fact(world, makeShared(entities_textures[STONE]));
     BoxFactory<Stone3x1> stone3x1_fact(world, makeShared(entities_textures[STONE3x1]));
 
+    PigFactory<BasicPig> basic_pig_fact(world, makeShared(entities_textures[BASIC_PIG]));
+
     // Ustawienie boxów
     entity_manager->pushEntity(wood3x1_fact.createBoxRotated(90.f, 50.f));
     entity_manager->pushEntity(wood3x1_fact.createBox(80.f, 50.f));
 
-    entity_manager->pushEntity(glass3x1_fact.createBoxRotated(50.f, 56.f));
+    /*entity_manager->pushEntity(glass3x1_fact.createBoxRotated(50.f, 56.f));
     entity_manager->pushEntity(glass_fact.createBox(52.f, 60.f));
     entity_manager->pushEntity(glass_fact.createBox(52.f, 56.f));
     entity_manager->pushEntity(glass_fact.createBox(52.f, 52.f));
     entity_manager->pushEntity(glass_fact.createBox(54.f, 60.f));
     entity_manager->pushEntity(glass_fact.createBox(54.f, 56.f));
     entity_manager->pushEntity(glass_fact.createBox(54.f, 52.f));
-    entity_manager->pushEntity(glass3x1_fact.createBox(52.f, 48.f));
+    entity_manager->pushEntity(glass3x1_fact.createBox(52.f, 48.f));*/
 
     entity_manager->pushEntity(stone3x1_fact.createBoxRotated(95.f, 60.f));
     entity_manager->pushEntity(wood_fact.createBox(100.f, 60.f));
@@ -144,9 +146,9 @@ void GameState::initWorld() {
     entity_manager->pushEntity(glass_fact.createBox(110.f, 52.f));
 
     // Ustawienie świń
-    entity_manager->pushEntity(std::make_unique<BasicPig>(this->world, 105.f, 48.f));
-    entity_manager->pushEntity(std::make_unique<BasicPig>(this->world, 105.f, 44.f));
-    entity_manager->pushEntity(std::make_unique<BasicPig>(this->world, 105.f, 40.f));
+    entity_manager->pushEntity(basic_pig_fact.createPig(105.f, 48.f));
+    entity_manager->pushEntity(basic_pig_fact.createPig(105.f, 44.f));
+    entity_manager->pushEntity(basic_pig_fact.createPig(105.f, 40.f));
 
     // Podłoże
     setWall(640, 630, 1280, 10);

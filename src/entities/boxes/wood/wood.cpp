@@ -8,7 +8,7 @@ Wood::Wood(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Textu
     this->type.sub_type = TYPE_DATA::WOOD;
 
     this->textures[INTACT] = textures[0];
-    this->textures[DESTROYED] = textures[1];
+    this->textures[DAMAGED] = textures[1];
     this->textures[DESTROYED] = textures[2];
 
     this->texture = textures[INTACT];

@@ -28,6 +28,7 @@
 #include "../exceptions.hpp"
 #include "../entities/factories/bird_factory.hpp"
 #include "../entities/factories/box_factory.hpp"
+#include "../entities/factories/pig_factory.hpp"
 
 typedef enum{
     WOOD,
@@ -36,7 +37,7 @@ typedef enum{
     STONE3x1,
     GLASS,
     GLASS3x1,
-    PIG,
+    BASIC_PIG,
     RED_BIRD,
     YELLOW_BIRD,
     FAT_RED_BIRD,
