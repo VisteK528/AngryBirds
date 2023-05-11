@@ -27,6 +27,7 @@
 #include "../entities/birds/grey_bird.hpp"
 #include "../exceptions.hpp"
 #include "../entities/factories/bird_factory.hpp"
+#include "../entities/factories/box_factory.hpp"
 
 typedef enum{
     WOOD,

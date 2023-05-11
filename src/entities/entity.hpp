@@ -37,7 +37,7 @@ protected:
     std::shared_ptr<b2World> world;
     b2Body* m_body;
     sf::Sprite sprite;
-    std::unique_ptr<sf::Texture> texture;
+    std::shared_ptr<sf::Texture> texture;
     double health=0;
 
     bool coliding;
