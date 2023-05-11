@@ -10,18 +10,29 @@ GameState::~GameState() {
 }
 
 void GameState::init() {
-    sf::Texture t1, t2, t3, t4, t5, t6, t7;
-    t1.loadFromFile("textures/background.png");
-    t2.loadFromFile("textures/birds/bird_red.png");
-    t3.loadFromFile("textures/birds/bird_blue.png");
-    t4.loadFromFile("textures/birds/bird_yellow.png");
-    t5.loadFromFile("textures/boxes/wood/wood_1x1.png");
-    t6.loadFromFile("textures/boxes/stone/stone_1x1.png");
-    t7.loadFromFile("textures/boxes/glass/glass_1x1.png");
+    loadTextures();
+}
 
-    textures = {t1, t2, t3, t4, t5, t6, t7};
+void GameState::loadTextures() {
+    std::vector<std::string> textures_paths = {
+            "textures/background.png",
+            "textures/birds/bird_red.png",
+            "textures/birds/bird_blue.png",
+            "textures/birds/bird_yellow.png",
+            "textures/boxes/wood/wood_1x1.png",
+            "textures/boxes/stone/stone_1x1.png",
+            "textures/boxes/glass/glass_1x1.png",
+    };
 
-    // Wygładzanie tekstur
+    for(const std::string& path: textures_paths){
+        sf::Texture t;
+        if(!t.loadFromFile(path)){
+            throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
+        }
+        textures.push_back(t);
+    }
+
+    // Smoothing the textures
     for(auto &t: textures){
         t.setSmooth(true);
     }
