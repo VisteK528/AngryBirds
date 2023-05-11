@@ -5,7 +5,7 @@
 #ifndef ANGRYBIRDS_ENTITY_FACTORY_HPP
 #define ANGRYBIRDS_ENTITY_FACTORY_HPP
 
-#include "entity.hpp"
+#include "../entity.hpp"
 
 
 class EntityFactory {
