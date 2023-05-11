@@ -53,9 +53,5 @@ void Glass::setTexture() {
 }
 
 void Glass::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-
-    // this->setTexture();
-    // this->sprite.setTexture(*this->texture);
-
     target.draw(this->sprite, states);
 }

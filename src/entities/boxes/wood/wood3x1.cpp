@@ -56,9 +56,5 @@ void Wood3x1::setTexture() {
 }
 
 void Wood3x1::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-
-    // this->setTexture();
-    // this->sprite.setTexture(*this->texture);
-
     target.draw(this->sprite, states);
 }
