@@ -1,7 +1,7 @@
 #ifndef STONE_HPP
 #define STONE_HPP
 
-#include "box.hpp"
+#include "../box.hpp"
 
 class Stone: public Box
 {

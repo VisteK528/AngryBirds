@@ -1,21 +1,20 @@
-#ifndef BOX_HPP
-#define BOX_HPP
+#ifndef PIG_HPP
+#define PIG_HPP
 
-#include "entity.hpp"
-#include "birds/bird.hpp"
+#include "../entity.hpp"
+#include "../birds/bird.hpp"
 #include <math.h>
 
-
-class Box: public Entity
+class Pig: public Entity
 {
     public:
         void update() override;
         virtual void startCollision(b2Body* body_b) override;
         virtual void endCollision(b2Body* body_b) override;
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-        Box(){};
-        virtual ~Box(){};
-        Box(std::shared_ptr<b2World> world);
+        Pig(){};
+        virtual ~Pig(){};
+        Pig(std::shared_ptr<b2World> world);
 
     protected:
         sf::Texture t_intact;
