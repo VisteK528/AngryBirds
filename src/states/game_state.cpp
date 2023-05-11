@@ -112,7 +112,7 @@ void GameState::initWorld() {
     // Prawa ściana
     setWall(1280, 360, 10, 640);
     // Lewa ściana
-    setWall(0, 360, 10, 640);
+    setWall(-30, 360, 10, 640);
 }
 
 void GameState::update(const float &dt) {
