@@ -1,5 +1,14 @@
 #include "game_state.hpp"
 
+std::vector<std::shared_ptr<sf::Texture>> makeShared(std::vector<sf::Texture> &textures) {
+    std::vector<std::shared_ptr<sf::Texture>> shared_vector;
+    shared_vector.reserve(textures.size());
+    for(const sf::Texture& texture: textures){
+        shared_vector.push_back(std::make_shared<sf::Texture>(texture));
+    }
+    return shared_vector;
+}
+
 GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states): State(window, states) {
     init();
     initWorld();
@@ -13,18 +22,14 @@ void GameState::init() {
     loadTextures();
 }
 
+// std::unordered_map<TEXTURE_TYPE, std::vector<sf::Texture>> table
 void GameState::loadTextures() {
-    std::vector<std::string> textures_paths = {
+    // Paths for all textures
+    std::vector<std::string> other_textures_paths = {
             "textures/background.png",
-            "textures/birds/bird_red.png",
-            "textures/birds/bird_blue.png",
-            "textures/birds/bird_yellow.png",
-            "textures/boxes/wood/wood_1x1.png",
-            "textures/boxes/stone/stone_1x1.png",
-            "textures/boxes/glass/glass_1x1.png",
     };
 
-    for(const std::string& path: textures_paths){
+    for(const std::string& path: other_textures_paths){
         sf::Texture t;
         if(!t.loadFromFile(path)){
             throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
@@ -36,6 +41,38 @@ void GameState::loadTextures() {
     for(auto &t: textures){
         t.setSmooth(true);
     }
+
+    // Paths for entities' textures to be loaded
+    std::unordered_map<TEXTURE_TYPE, std::vector<std::string>> textures_paths = {
+            {WOOD, {"textures/boxes/wood/wood_1x1.png", "textures/boxes/wood/wood_1x1_damaged.png", "textures/boxes/wood/wood_1x1_destroyed.png"}},
+            {WOOD3x1, {"textures/boxes/wood/wood_3x1.png", "textures/boxes/wood/wood_3x1_damaged.png", "textures/boxes/wood/wood_3x1_damaged.png"}},
+            {GLASS, {"textures/boxes/glass/glass_1x1.png", "textures/boxes/glass/glass_1x1_damaged.png", "textures/boxes/glass/glass_1x1_destroyed.png"}},
+            {GLASS3x1, {"textures/boxes/glass/glass_3x1.png", "textures/boxes/glass/glass_3x1_damaged.png", "textures/boxes/glass/glass_3x1_damaged.png"}},
+            {STONE, {"textures/boxes/stone/stone_1x1.png", "textures/boxes/stone/stone_1x1_damaged.png", "textures/boxes/stone/stone_1x1_destroyed.png"}},
+            {STONE3x1, {"textures/boxes/stone/stone_3x1.png", "textures/boxes/stone/stone_3x1_damaged.png", "textures/boxes/stone/stone_3x1_damaged.png"}},
+            {PIG, {"textures/pigs/basic/basic_pig.png", "textures/pigs/basic/basic_pig_damaged.png", "textures/pigs/basic/basic_pig_destroyed.png"}},
+            {RED_BIRD, {"textures/birds/bird_red.png"}},
+            {YELLOW_BIRD, {"textures/birds/bird_yellow.png"}},
+            {GREY_BIRD, {"textures/birds/bird_blue.png"}},
+            {FAT_RED_BIRD, {"textures/birds/bird_red.png"}},
+            };
+    
+    for(const auto& pair: textures_paths){
+        TEXTURE_TYPE type = pair.first;
+        std::vector<sf::Texture> loaded_textures;
+        for(const std::string& path: pair.second){
+            sf::Texture t;
+            if(!t.loadFromFile(path)){
+                throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
+            }
+            loaded_textures.push_back(t);
+        }
+        // Smoothing the textures
+        for(auto &t: loaded_textures){
+            t.setSmooth(true);
+        }
+        entities_textures[type] = loaded_textures;
+    }
 }
 
 void GameState::initWorld() {
@@ -46,9 +83,9 @@ void GameState::initWorld() {
 
     this->entity_manager = std::make_shared<EntityManager>(this->world);
 
-    std::vector<std::shared_ptr<sf::Texture>> red_bird_t = {std::make_shared<sf::Texture>(textures[1])};
-    std::vector<std::shared_ptr<sf::Texture>> yellow_bird_t = {std::make_shared<sf::Texture>(textures[3])};
-    std::vector<std::shared_ptr<sf::Texture>> grey_bird_t = {std::make_shared<sf::Texture>(textures[2])};
+    std::vector<std::shared_ptr<sf::Texture>> red_bird_t = makeShared(entities_textures[RED_BIRD]);
+    std::vector<std::shared_ptr<sf::Texture>> yellow_bird_t = makeShared(entities_textures[YELLOW_BIRD]);
+    std::vector<std::shared_ptr<sf::Texture>> grey_bird_t = makeShared(entities_textures[GREY_BIRD]);
 
     // Bird Factories
     BirdFactory<Bird> red_factory(this->world, red_bird_t);
