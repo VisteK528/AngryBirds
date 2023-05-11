@@ -50,16 +50,17 @@ void GameState::initWorld() {
     std::vector<std::shared_ptr<sf::Texture>> yellow_bird_t = {std::make_shared<sf::Texture>(textures[3])};
     std::vector<std::shared_ptr<sf::Texture>> grey_bird_t = {std::make_shared<sf::Texture>(textures[2])};
 
-    std::unique_ptr<Bird> bird1 = std::make_unique<Bird>(this->entity_manager->getWorld(), yellow_bird_t, 40, 50);
-    std::unique_ptr<Bird> bird2 = std::make_unique<YellowBird>(this->entity_manager->getWorld(), yellow_bird_t,50, 50);
-    std::unique_ptr<Bird> bird3 = std::make_unique<FatRedBird>(this->entity_manager->getWorld(), red_bird_t, 60, 50);
-    std::unique_ptr<Bird> bird4 = std::make_unique<GreyBird>(this->entity_manager->getWorld(), grey_bird_t, 60, 50);
+    // Bird Factories
+    BirdFactory<Bird> red_factory(this->world, red_bird_t);
+    BirdFactory<YellowBird> yellow_factory(this->world, yellow_bird_t);
+    BirdFactory<FatRedBird> red_fat_factory(this->world, red_bird_t);
+    BirdFactory<GreyBird> grey_factory(this->world, grey_bird_t);
 
     std::vector<std::unique_ptr<Bird>> birds = {};
-    birds.push_back(std::move(bird1));
-    birds.push_back(std::move(bird2));
-    birds.push_back(std::move(bird3));
-    birds.push_back(std::move(bird4));
+    birds.push_back(red_factory.createBird());
+    birds.push_back(yellow_factory.createBird());
+    birds.push_back(red_fat_factory.createBird());
+    birds.push_back(grey_factory.createBird());
 
     this->cannon = std::make_unique<Cannon>(sf::Vector2f(100, 600), this->entity_manager);
     this->cannon->setBirds(birds);

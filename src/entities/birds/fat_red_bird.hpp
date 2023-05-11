@@ -10,7 +10,7 @@
 class FatRedBird: public Bird {
 public:
     FatRedBird()=default;
-    FatRedBird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x, float coord_y);
+    FatRedBird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x=0, float coord_y=0);
 };
 
 
