@@ -7,10 +7,9 @@ class Wood: public Box
 {
 private:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    void setTexture() override;
 public:
-    Wood(){};
-    Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y);
+    Wood()=default;
+    Wood(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Texture>> textures, float coord_x, float coord_y);
 };
 
 #endif

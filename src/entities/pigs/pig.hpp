@@ -12,14 +12,13 @@ class Pig: public Entity
         virtual void startCollision(b2Body* body_b) override;
         virtual void endCollision(b2Body* body_b) override;
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-        Pig(){};
+        Pig()=default;
         virtual ~Pig(){};
         Pig(std::shared_ptr<b2World> world);
 
     protected:
-        sf::Texture t_intact;
-        sf::Texture t_damaged;
-        sf::Texture t_destroyed;
+        typedef enum{INTACT, DAMAGED, DESTROYED} T_TYPE;
+        std::unordered_map<T_TYPE, std::shared_ptr<sf::Texture>> textures;
         double base_health;
         double health;
 
@@ -27,7 +26,7 @@ class Pig: public Entity
         float friction;
         float restitution;
 
-        virtual void setTexture()=0;
+        virtual void setTexture();
 };
 
 #endif

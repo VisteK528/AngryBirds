@@ -27,6 +27,24 @@
 #include "../entities/birds/grey_bird.hpp"
 #include "../exceptions.hpp"
 #include "../entities/factories/bird_factory.hpp"
+#include "../entities/factories/box_factory.hpp"
+#include "../entities/factories/pig_factory.hpp"
+
+typedef enum{
+    WOOD,
+    WOOD3x1,
+    STONE,
+    STONE3x1,
+    GLASS,
+    GLASS3x1,
+    BASIC_PIG,
+    RED_BIRD,
+    YELLOW_BIRD,
+    FAT_RED_BIRD,
+    GREY_BIRD
+} TEXTURE_TYPE;
+
+std::vector<std::shared_ptr<sf::Texture>> makeShared(std::vector<sf::Texture>& textures);
 
 class GameState: public State {
 private:
@@ -38,6 +56,7 @@ private:
     ContactListener contact_listener;
 
     sf::Sprite background;
+    std::unordered_map<TEXTURE_TYPE, std::vector<sf::Texture>> entities_textures;
     std::vector<sf::Texture> textures;
 
     const float SCALE = 10.0f;

@@ -80,3 +80,14 @@ void Box::endCollision(b2Body*) {
 void Box::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(sprite, states);
 }
+
+void Box::setTexture() {
+    if (health > (base_health*(2./3.))){
+        this->texture = textures[INTACT];
+    } else if (health > (base_health*(1./3.))){
+        this->texture = textures[DAMAGED];
+    } else {
+        this->texture = textures[DESTROYED];
+    }
+    this->texture->setSmooth(true);
+}

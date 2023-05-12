@@ -1,5 +1,14 @@
 #include "game_state.hpp"
 
+std::vector<std::shared_ptr<sf::Texture>> makeShared(std::vector<sf::Texture> &textures) {
+    std::vector<std::shared_ptr<sf::Texture>> shared_vector;
+    shared_vector.reserve(textures.size());
+    for(const sf::Texture& texture: textures){
+        shared_vector.push_back(std::make_shared<sf::Texture>(texture));
+    }
+    return shared_vector;
+}
+
 GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states): State(window, states) {
     init();
     initWorld();
@@ -13,18 +22,14 @@ void GameState::init() {
     loadTextures();
 }
 
+// std::unordered_map<TEXTURE_TYPE, std::vector<sf::Texture>> table
 void GameState::loadTextures() {
-    std::vector<std::string> textures_paths = {
+    // Paths for all textures
+    std::vector<std::string> other_textures_paths = {
             "textures/background.png",
-            "textures/birds/bird_red.png",
-            "textures/birds/bird_blue.png",
-            "textures/birds/bird_yellow.png",
-            "textures/boxes/wood/wood_1x1.png",
-            "textures/boxes/stone/stone_1x1.png",
-            "textures/boxes/glass/glass_1x1.png",
     };
 
-    for(const std::string& path: textures_paths){
+    for(const std::string& path: other_textures_paths){
         sf::Texture t;
         if(!t.loadFromFile(path)){
             throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
@@ -36,6 +41,38 @@ void GameState::loadTextures() {
     for(auto &t: textures){
         t.setSmooth(true);
     }
+
+    // Paths for entities' textures to be loaded
+    std::unordered_map<TEXTURE_TYPE, std::vector<std::string>> textures_paths = {
+            {WOOD, {"textures/boxes/wood/wood_1x1.png", "textures/boxes/wood/wood_1x1_damaged.png", "textures/boxes/wood/wood_1x1_destroyed.png"}},
+            {WOOD3x1, {"textures/boxes/wood/wood_3x1.png", "textures/boxes/wood/wood_3x1_damaged.png", "textures/boxes/wood/wood_3x1_damaged.png"}},
+            {GLASS, {"textures/boxes/glass/glass_1x1.png", "textures/boxes/glass/glass_1x1_damaged.png", "textures/boxes/glass/glass_1x1_destroyed.png"}},
+            {GLASS3x1, {"textures/boxes/glass/glass_3x1.png", "textures/boxes/glass/glass_3x1_damaged.png", "textures/boxes/glass/glass_3x1_damaged.png"}},
+            {STONE, {"textures/boxes/stone/stone_1x1.png", "textures/boxes/stone/stone_1x1_damaged.png", "textures/boxes/stone/stone_1x1_destroyed.png"}},
+            {STONE3x1, {"textures/boxes/stone/stone_3x1.png", "textures/boxes/stone/stone_3x1_damaged.png", "textures/boxes/stone/stone_3x1_damaged.png"}},
+            {BASIC_PIG, {"textures/pigs/basic/basic_pig.png", "textures/pigs/basic/basic_pig_damaged.png", "textures/pigs/basic/basic_pig_destroyed.png"}},
+            {RED_BIRD, {"textures/birds/bird_red.png"}},
+            {YELLOW_BIRD, {"textures/birds/bird_yellow.png"}},
+            {GREY_BIRD, {"textures/birds/bird_blue.png"}},
+            {FAT_RED_BIRD, {"textures/birds/bird_red.png"}},
+            };
+    
+    for(const auto& pair: textures_paths){
+        TEXTURE_TYPE type = pair.first;
+        std::vector<sf::Texture> loaded_textures;
+        for(const std::string& path: pair.second){
+            sf::Texture t;
+            if(!t.loadFromFile(path)){
+                throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
+            }
+            loaded_textures.push_back(t);
+        }
+        // Smoothing the textures
+        for(auto &t: loaded_textures){
+            t.setSmooth(true);
+        }
+        entities_textures[type] = loaded_textures;
+    }
 }
 
 void GameState::initWorld() {
@@ -46,9 +83,9 @@ void GameState::initWorld() {
 
     this->entity_manager = std::make_shared<EntityManager>(this->world);
 
-    std::vector<std::shared_ptr<sf::Texture>> red_bird_t = {std::make_shared<sf::Texture>(textures[1])};
-    std::vector<std::shared_ptr<sf::Texture>> yellow_bird_t = {std::make_shared<sf::Texture>(textures[3])};
-    std::vector<std::shared_ptr<sf::Texture>> grey_bird_t = {std::make_shared<sf::Texture>(textures[2])};
+    std::vector<std::shared_ptr<sf::Texture>> red_bird_t = makeShared(entities_textures[RED_BIRD]);
+    std::vector<std::shared_ptr<sf::Texture>> yellow_bird_t = makeShared(entities_textures[YELLOW_BIRD]);
+    std::vector<std::shared_ptr<sf::Texture>> grey_bird_t = makeShared(entities_textures[GREY_BIRD]);
 
     // Bird Factories
     BirdFactory<Bird> red_factory(this->world, red_bird_t);
@@ -75,34 +112,43 @@ void GameState::initWorld() {
 
     background = sf::Sprite(textures[0]);
 
+    BoxFactory<Wood> wood_fact(world, makeShared(entities_textures[WOOD]));
+    BoxFactory<Wood3x1> wood3x1_fact(world, makeShared(entities_textures[WOOD3x1]));
+    BoxFactory<Glass> glass_fact(world, makeShared(entities_textures[GLASS]));
+    BoxFactory<Glass3x1> glass3x1_fact(world, makeShared(entities_textures[GLASS3x1]));
+    BoxFactory<Stone> stone_fact(world, makeShared(entities_textures[STONE]));
+    BoxFactory<Stone3x1> stone3x1_fact(world, makeShared(entities_textures[STONE3x1]));
+
+    PigFactory<BasicPig> basic_pig_fact(world, makeShared(entities_textures[BASIC_PIG]));
+
     // Ustawienie boxów
-    entity_manager->pushEntity(std::make_unique<Wood3x1>(this->world, 90.f, 50.f, true));
-    entity_manager->pushEntity(std::make_unique<Wood3x1>(this->world, 80.f, 50.f));
+    entity_manager->pushEntity(wood3x1_fact.createBoxRotated(90.f, 50.f));
+    entity_manager->pushEntity(wood3x1_fact.createBox(80.f, 50.f));
 
-    entity_manager->pushEntity(std::make_unique<Glass3x1>(this->world, 50.f, 56.f, true));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 52.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 52.f, 56.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 52.f, 52.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 54.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 54.f, 56.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 54.f, 52.f));
-    entity_manager->pushEntity(std::make_unique<Glass3x1>(this->world, 52.f, 48.f));
+    /*entity_manager->pushEntity(glass3x1_fact.createBoxRotated(50.f, 56.f));
+    entity_manager->pushEntity(glass_fact.createBox(52.f, 60.f));
+    entity_manager->pushEntity(glass_fact.createBox(52.f, 56.f));
+    entity_manager->pushEntity(glass_fact.createBox(52.f, 52.f));
+    entity_manager->pushEntity(glass_fact.createBox(54.f, 60.f));
+    entity_manager->pushEntity(glass_fact.createBox(54.f, 56.f));
+    entity_manager->pushEntity(glass_fact.createBox(54.f, 52.f));
+    entity_manager->pushEntity(glass3x1_fact.createBox(52.f, 48.f));*/
 
-    entity_manager->pushEntity(std::make_unique<Stone3x1>(this->world, 95.f, 60.f, true));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 56.f));
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 52.f));
-    entity_manager->pushEntity(std::make_unique<Stone>(this->world, 105.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Stone>(this->world, 105.f, 56.f));
-    entity_manager->pushEntity(std::make_unique<Stone>(this->world, 105.f, 52.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 110.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 110.f, 56.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 110.f, 52.f));
+    entity_manager->pushEntity(stone3x1_fact.createBoxRotated(95.f, 60.f));
+    entity_manager->pushEntity(wood_fact.createBox(100.f, 60.f));
+    entity_manager->pushEntity(wood_fact.createBox(100.f, 56.f));
+    entity_manager->pushEntity(wood_fact.createBox(100.f, 52.f));
+    entity_manager->pushEntity(stone_fact.createBox(105.f, 60.f));
+    entity_manager->pushEntity(stone_fact.createBox(105.f, 56.f));
+    entity_manager->pushEntity(stone_fact.createBox(105.f, 52.f));
+    entity_manager->pushEntity(glass_fact.createBox(110.f, 60.f));
+    entity_manager->pushEntity(glass_fact.createBox(110.f, 56.f));
+    entity_manager->pushEntity(glass_fact.createBox(110.f, 52.f));
 
     // Ustawienie świń
-    entity_manager->pushEntity(std::make_unique<BasicPig>(this->world, 105.f, 48.f));
-    entity_manager->pushEntity(std::make_unique<BasicPig>(this->world, 105.f, 44.f));
-    entity_manager->pushEntity(std::make_unique<BasicPig>(this->world, 105.f, 40.f));
+    entity_manager->pushEntity(basic_pig_fact.createPig(105.f, 48.f));
+    entity_manager->pushEntity(basic_pig_fact.createPig(105.f, 44.f));
+    entity_manager->pushEntity(basic_pig_fact.createPig(105.f, 40.f));
 
     // Podłoże
     setWall(640, 630, 1280, 10);
