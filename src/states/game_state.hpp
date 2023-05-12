@@ -25,6 +25,8 @@
 #include "../entities/birds/yellow_bird.hpp"
 #include "../entities/birds/fat_red_bird.hpp"
 #include "../entities/birds/grey_bird.hpp"
+#include "../exceptions.hpp"
+#include "../entities/factories/bird_factory.hpp"
 
 class GameState: public State {
 private:
@@ -41,6 +43,7 @@ private:
     const float SCALE = 10.0f;
     const float DEG = 57.29577f;
 
+    void loadTextures();
     void setWall(int x, int y, int w, int h);
     void initWorld();
 public:

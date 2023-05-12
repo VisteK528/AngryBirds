@@ -10,18 +10,29 @@ GameState::~GameState() {
 }
 
 void GameState::init() {
-    sf::Texture t1, t2, t3, t4, t5, t6, t7;
-    t1.loadFromFile("textures/background.png");
-    t2.loadFromFile("textures/birds/bird_red.png");
-    t3.loadFromFile("textures/birds/bird_blue.png");
-    t4.loadFromFile("textures/birds/bird_yellow.png");
-    t5.loadFromFile("textures/boxes/wood/wood_1x1.png");
-    t6.loadFromFile("textures/boxes/stone/stone_1x1.png");
-    t7.loadFromFile("textures/boxes/glass/glass_1x1.png");
+    loadTextures();
+}
 
-    textures = {t1, t2, t3, t4, t5, t6, t7};
+void GameState::loadTextures() {
+    std::vector<std::string> textures_paths = {
+            "textures/background.png",
+            "textures/birds/bird_red.png",
+            "textures/birds/bird_blue.png",
+            "textures/birds/bird_yellow.png",
+            "textures/boxes/wood/wood_1x1.png",
+            "textures/boxes/stone/stone_1x1.png",
+            "textures/boxes/glass/glass_1x1.png",
+    };
 
-    // Wygładzanie tekstur
+    for(const std::string& path: textures_paths){
+        sf::Texture t;
+        if(!t.loadFromFile(path)){
+            throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
+        }
+        textures.push_back(t);
+    }
+
+    // Smoothing the textures
     for(auto &t: textures){
         t.setSmooth(true);
     }
@@ -35,16 +46,21 @@ void GameState::initWorld() {
 
     this->entity_manager = std::make_shared<EntityManager>(this->world);
 
-    std::unique_ptr<Bird> bird1 = std::make_unique<YellowBird>(this->entity_manager->getWorld(), 40, 50);
-    std::unique_ptr<Bird> bird2 = std::make_unique<YellowBird>(this->entity_manager->getWorld(), 50, 50);
-    std::unique_ptr<Bird> bird3 = std::make_unique<FatRedBird>(this->entity_manager->getWorld(), 60, 50);
-    std::unique_ptr<Bird> bird4 = std::make_unique<GreyBird>(this->entity_manager->getWorld(), 60, 50);
+    std::vector<std::shared_ptr<sf::Texture>> red_bird_t = {std::make_shared<sf::Texture>(textures[1])};
+    std::vector<std::shared_ptr<sf::Texture>> yellow_bird_t = {std::make_shared<sf::Texture>(textures[3])};
+    std::vector<std::shared_ptr<sf::Texture>> grey_bird_t = {std::make_shared<sf::Texture>(textures[2])};
+
+    // Bird Factories
+    BirdFactory<Bird> red_factory(this->world, red_bird_t);
+    BirdFactory<YellowBird> yellow_factory(this->world, yellow_bird_t);
+    BirdFactory<FatRedBird> red_fat_factory(this->world, red_bird_t);
+    BirdFactory<GreyBird> grey_factory(this->world, grey_bird_t);
 
     std::vector<std::unique_ptr<Bird>> birds = {};
-    birds.push_back(std::move(bird1));
-    birds.push_back(std::move(bird2));
-    birds.push_back(std::move(bird3));
-    birds.push_back(std::move(bird4));
+    birds.push_back(red_factory.createBird());
+    birds.push_back(yellow_factory.createBird());
+    birds.push_back(red_fat_factory.createBird());
+    birds.push_back(grey_factory.createBird());
 
     this->cannon = std::make_unique<Cannon>(sf::Vector2f(100, 600), this->entity_manager);
     this->cannon->setBirds(birds);
@@ -93,7 +109,7 @@ void GameState::initWorld() {
     // Prawa ściana
     setWall(1280, 360, 10, 640);
     // Lewa ściana
-    setWall(0, 360, 10, 640);
+    setWall(-30, 360, 10, 640);
 }
 
 void GameState::update(const float &dt) {
