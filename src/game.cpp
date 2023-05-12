@@ -7,7 +7,7 @@
 Game::Game() {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
-    this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode(window_dimensions.x, window_dimensions.y), "AngryBirds", sf::Style::Close, settings);
+    this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode(window_dimensions.x, window_dimensions.y), "AngryBirds", sf::Style::Default, settings);
     this->window->setFramerateLimit(120);
     this->view = std::make_unique<sf::View>(this->window->getDefaultView());
 
@@ -45,7 +45,7 @@ void Game::updateEvents() {
         else if(this->e.type == sf::Event::Resized) {
             sf::Vector2f view_size = {static_cast<float>(this->e.size.width), static_cast<float>(this->e.size.height)};
             view->setSize(view_size);
-            window->setView(*view);
+            // window->setView(*view);
         }
         if(!this->states->empty()){
             this->states->top()->handleEvent(e);

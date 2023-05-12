@@ -1,24 +1,28 @@
-#include "wood.hpp"
+#include "stone.hpp"
 
-Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y) {
-    this->world = std::move(world);
+#include <utility>
+
+#include <iostream>
+
+Stone::Stone(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(std::move(world)) {
     this->coliding = false;
     this->destroyed = false;
-    this->type = BOX;
+    this->type.sub_type = TYPE_DATA::STONE;
 
-    this->t_intact.loadFromFile("textures/boxes/wood/wood_1x1.png");
-    this->t_damaged.loadFromFile("textures/boxes/wood/wood_1x1_t_damaged.png");
-    this->t_destroyed.loadFromFile("textures/boxes/wood/wood_1x1_destroyed.png");
+    this->t_intact.loadFromFile("textures/boxes/stone/stone_1x1.png");
+    this->t_damaged.loadFromFile("textures/boxes/stone/stone_1x1_damaged.png");
+    this->t_destroyed.loadFromFile("textures/boxes/stone/stone_1x1_destroyed.png");
 
     this->texture = std::make_unique<sf::Texture>(this->t_intact);
     this->sprite.setTexture(*this->texture);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width/2, this->sprite.getGlobalBounds().height/2);
 
-    this->health = 100;
+    this->health = 3000;
+    this->base_health = 3000;
 
-    this->density = 0.5f;
-    this->friction = 0.4f;
-    this->restitution = 0.3f;
+    this->density = 1.f;
+    this->friction = 1.f;
+    this->restitution = 0.1f;
 
     b2BodyDef bodyDef;
     bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
@@ -37,17 +41,21 @@ Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y) {
     this->m_body->CreateFixture(&fixtureDef);
 }
 
-void Wood::draw(sf::RenderTarget &target, sf::RenderStates states)  {
-
-    if (health > 66) {
+void Stone::setTexture() {
+    if (health > base_health*(2./3.)){
         this->texture = std::make_unique<sf::Texture>(this->t_intact);
-    } else if (health > 33) {
+    } else if (health > base_health*(1./3.)){
         this->texture = std::make_unique<sf::Texture>(this->t_damaged);
     } else {
         this->texture = std::make_unique<sf::Texture>(this->t_destroyed);
     }
+    this->texture->setSmooth(true);
+}
 
-    this->sprite.setTexture(*this->texture);
+void Stone::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+
+    // this->setTexture();
+    // this->sprite.setTexture(*this->texture);
 
     target.draw(this->sprite, states);
 }

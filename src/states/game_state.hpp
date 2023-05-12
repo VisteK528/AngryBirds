@@ -7,14 +7,24 @@
 
 #include "state.hpp"
 #include "../../box2d/include/box2d/box2d.h"
-#include "../entities/bird.hpp"
-#include "../entities/box.hpp"
-#include "../entities/wood.hpp"
+#include "../entities/birds/bird.hpp"
+#include "../entities/boxes/box.hpp"
+#include "../entities/boxes/wood/wood.hpp"
+#include "../entities/boxes/wood/wood3x1.hpp"
+#include "../entities/boxes/stone/stone.hpp"
+#include "../entities/boxes/stone/stone3x1.hpp"
+#include "../entities/boxes/glass/glass.hpp"
+#include "../entities/boxes/glass/glass3x1.hpp"
+#include "../entities/pigs/pig.hpp"
+#include "../entities/pigs/basic_pig/basic_pig.hpp"
 #include <iostream>
 #include <string>
 #include "../contact_listener.hpp"
 #include "../entities/entity_manager.hpp"
 #include "../cannon.hpp"
+#include "../entities/birds/yellow_bird.hpp"
+#include "../entities/birds/fat_red_bird.hpp"
+#include "../entities/birds/grey_bird.hpp"
 
 class GameState: public State {
 private:
@@ -22,6 +32,7 @@ private:
     std::shared_ptr<b2World> world;
     std::shared_ptr<EntityManager> entity_manager;
     std::unique_ptr<Cannon> cannon;
+    CannonPowerWidget cannon_power_widget;
     ContactListener contact_listener;
 
     sf::Sprite background;

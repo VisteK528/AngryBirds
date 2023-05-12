@@ -26,28 +26,32 @@ void Menu::initVariables() {
     this->exit_btn = gui_manager->createButton("> Exit",20, sf::Vector2f(640, 640), sf::Vector2f(250, 60), ui::ORIGIN::C);
 }
 
-void Menu::update(const float &dt) {
+void Menu::update(const float &) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
-
-    if(this->start_btn->update(position)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states));
-    }
-
-    if(this->editor_btn->update(position)){
-
-    }
-
-    if(this->about_btn->update(position)){
-
-    }
-
-    if(this->exit_btn->update(position)){
-        quit = true;
-    }
+    this->start_btn->update(position);
+    this->editor_btn->update(position);
+    this->about_btn->update(position);
+    this->exit_btn->update(position);
 }
 
 void Menu::handleEvent(const sf::Event &e) {
+    sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
 
+    if(this->start_btn->handleInput(position, e)){
+        this->states->push(std::make_unique<GameState>(this->window, this->states));
+    }
+
+    if(this->editor_btn->handleInput(position, e)){
+
+    }
+
+    if(this->about_btn->handleInput(position, e)){
+
+    }
+
+    if(this->exit_btn->handleInput(position, e)){
+        quit = true;
+    }
 }
 
 void Menu::render(std::shared_ptr<sf::RenderTarget> target) {
