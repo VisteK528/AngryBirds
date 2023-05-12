@@ -65,6 +65,8 @@ void GameState::initWorld() {
     this->cannon = std::make_unique<Cannon>(sf::Vector2f(100, 600), this->entity_manager);
     this->cannon->setBirds(birds);
 
+    this->cannon_power_widget = CannonPowerWidget(10, 10, this->cannon->getMaxPower());
+
     // INFORMACJE O ŚWIECIE
     // 1 metr = 10 pikseli
     // 1 stopień = 57.29577 radiana
@@ -74,22 +76,19 @@ void GameState::initWorld() {
     background = sf::Sprite(textures[0]);
 
     // Ustawienie boxów
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 90.f, 10.f));
+    entity_manager->pushEntity(std::make_unique<Wood3x1>(this->world, 90.f, 50.f, true));
+    entity_manager->pushEntity(std::make_unique<Wood3x1>(this->world, 80.f, 50.f));
 
-    entity_manager->pushEntity(std::make_unique<Wood>(this->world, 80.f, 50.f));
-    // entity_manager->pushEntity(std::make_unique<Wood>(this->world, 80.f, 60.f));
-
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 50.f, 60.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 50.f, 56.f));
+    entity_manager->pushEntity(std::make_unique<Glass3x1>(this->world, 50.f, 56.f, true));
     entity_manager->pushEntity(std::make_unique<Glass>(this->world, 52.f, 60.f));
     entity_manager->pushEntity(std::make_unique<Glass>(this->world, 52.f, 56.f));
-    entity_manager->pushEntity(std::make_unique<Glass>(this->world, 50.f, 52.f));
     entity_manager->pushEntity(std::make_unique<Glass>(this->world, 52.f, 52.f));
     entity_manager->pushEntity(std::make_unique<Glass>(this->world, 54.f, 60.f));
     entity_manager->pushEntity(std::make_unique<Glass>(this->world, 54.f, 56.f));
     entity_manager->pushEntity(std::make_unique<Glass>(this->world, 54.f, 52.f));
+    entity_manager->pushEntity(std::make_unique<Glass3x1>(this->world, 52.f, 48.f));
 
-
+    entity_manager->pushEntity(std::make_unique<Stone3x1>(this->world, 95.f, 60.f, true));
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 60.f));
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 56.f));
     entity_manager->pushEntity(std::make_unique<Wood>(this->world, 100.f, 52.f));
@@ -119,6 +118,7 @@ void GameState::update(const float &dt) {
 
     sf::Vector2f mouse_position = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), this->window->getView());
     cannon->update(mouse_position);
+    cannon_power_widget.update(cannon->getPower(), cannon->isActive());
 }
 
 void GameState::handleEvent(const sf::Event &e) {
@@ -129,6 +129,7 @@ void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(background);
     target->draw(*cannon);
     entity_manager->render(target);
+    target->draw(cannon_power_widget);
 }
 
 void GameState::setWall(int x, int y, int w, int h)
@@ -146,5 +147,5 @@ void GameState::setWall(int x, int y, int w, int h)
     fixtureDef.density = 1000;
     fixtureDef.friction = 0.5;
     fixtureDef.restitution = 0.5;
-    *b_ground->CreateFixture(&fixtureDef);
+    b_ground->CreateFixture(&fixtureDef);
 }

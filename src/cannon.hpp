@@ -14,6 +14,20 @@
 #include "../box2d/include/box2d/box2d.h"
 #include <iostream>
 
+class CannonPowerWidget: public sf::Drawable{
+private:
+    sf::RectangleShape outline_rectangle_widget;
+    sf::RectangleShape fill_rectangle_widget;
+
+    float cannon_max_power = 0;
+
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+public:
+    void update(float cannon_power, bool cannon_active);
+    CannonPowerWidget()=default;
+    CannonPowerWidget(float coord_x, float coord_y, float cannon_max_power);
+};
+
 class Cannon: public sf::Drawable {
 private:
     std::shared_ptr<EntityManager> manager;
@@ -37,6 +51,9 @@ private:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
     Cannon(sf::Vector2f position, std::shared_ptr<EntityManager>);
+    bool isActive() const;
+    float getPower() const;
+    float getMaxPower() const;
     void setBirds(std::vector<std::unique_ptr<Bird>>& birds);
     void update(sf::Vector2f mouse_position);
     void handleInput(const sf::Event e);

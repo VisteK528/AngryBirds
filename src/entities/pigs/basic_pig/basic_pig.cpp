@@ -7,14 +7,15 @@ BasicPig::BasicPig(std::shared_ptr<b2World> world, float coord_x, float coord_y)
     this->coliding = false;
     this->destroyed = false;
 
-    this->health = 100;
+    this->health = 2000;
+    this->base_health = 2000;
     this->density = 0.7f;
     this->friction = 0.5f;
     this->restitution = 0.5f;
 
     this->t_intact.loadFromFile("textures/pigs/basic/basic_pig.png");
-    this->t_damaged.loadFromFile("textures/pigs/basic/basic_pig.png");
-    this->t_destroyed.loadFromFile("textures/pigs/basic/basic_pig.png");
+    this->t_damaged.loadFromFile("textures/pigs/basic/basic_pig_damaged.png");
+    this->t_destroyed.loadFromFile("textures/pigs/basic/basic_pig_destroyed.png");
 
     this->texture = std::make_unique<sf::Texture>(this->t_intact);
     this->sprite.setTexture(*this->texture);
@@ -38,9 +39,9 @@ BasicPig::BasicPig(std::shared_ptr<b2World> world, float coord_x, float coord_y)
 }
 
 void BasicPig::setTexture() {
-    if (health > 66){
+    if (health > (base_health*(2./3.))){
         this->texture = std::make_unique<sf::Texture>(this->t_intact);
-    } else if (health > 33){
+    } else if (health > (base_health*(1./3.))){
         this->texture = std::make_unique<sf::Texture>(this->t_damaged);
     } else {
         this->texture = std::make_unique<sf::Texture>(this->t_destroyed);
@@ -50,22 +51,4 @@ void BasicPig::setTexture() {
 
 void BasicPig::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(this->sprite, states);
-}
-
-void BasicPig::startCollision(b2Body* body_b) {
-    // Calculate damage based on the velocity of the bird
-    b2Vec2 vel = body_b->GetLinearVelocity();
-    float damage = sqrt(vel.x*vel.x + vel.y*vel.y) * 0.5;
-
-    // Reduce health
-    this->health -= damage;
-
-    if (this->health <= 0) {
-        destroyed = true;
-    }
-}
-
-void BasicPig::endCollision(b2Body* body_b) {
-    this->setTexture();
-    this->sprite.setTexture(*this->texture);
 }

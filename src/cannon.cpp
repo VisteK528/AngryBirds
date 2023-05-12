@@ -32,6 +32,11 @@ void Cannon::update(sf::Vector2f mouse_position){
         active = true;
     }
 
+    // Activity factor set depending on number of available birds
+    if(this->birds.empty()){
+        active = false;
+    }
+
     if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && active){
         if(power < max_power){
             power += power_gain;
@@ -102,4 +107,44 @@ void Cannon::setBirdsVisualPosition() {
         bird->update();
         i++;
     }
+}
+
+float Cannon::getPower() const {
+    return power;
+}
+
+float Cannon::getMaxPower() const {
+    return max_power;
+}
+
+bool Cannon::isActive() const {
+    return this->active;
+}
+
+CannonPowerWidget::CannonPowerWidget(float coord_x, float coord_y, float cannon_max_power) {
+    this->outline_rectangle_widget = sf::RectangleShape({300, 30});
+    this->outline_rectangle_widget.setPosition({coord_x, coord_y});
+    this->outline_rectangle_widget.setFillColor(sf::Color::Transparent);
+    this->outline_rectangle_widget.setOutlineThickness(2.f);
+    this->outline_rectangle_widget.setOutlineColor(sf::Color::Black);
+
+    this->fill_rectangle_widget = sf::RectangleShape({0, 30});
+    this->fill_rectangle_widget.setPosition({coord_x, coord_y});
+    this->fill_rectangle_widget.setFillColor(sf::Color::Yellow);
+
+    this->cannon_max_power = cannon_max_power;
+}
+
+void CannonPowerWidget::update(float cannon_power, bool cannon_active) {
+    if(cannon_active){
+        this->fill_rectangle_widget.setSize({(cannon_power/this->cannon_max_power)*300, 30});
+    }
+    else{
+        this->fill_rectangle_widget = sf::RectangleShape({0, 30});
+    }
+}
+
+void CannonPowerWidget::draw(sf::RenderTarget &target, sf::RenderStates states) const{
+   target.draw(outline_rectangle_widget, states);
+   target.draw(fill_rectangle_widget, states);
 }

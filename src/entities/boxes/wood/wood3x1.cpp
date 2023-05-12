@@ -1,21 +1,21 @@
-#include "wood.hpp"
+#include "wood3x1.hpp"
 #include <utility>
 
-Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(std::move(world)) {
+Wood3x1::Wood3x1(std::shared_ptr<b2World> world, float coord_x, float coord_y, bool rotated): Box(std::move(world)) {
     this->coliding = false;
     this->destroyed = false;
     this->type.sub_type = TYPE_DATA::WOOD;
 
-    this->t_intact.loadFromFile("textures/boxes/wood/wood_1x1.png");
-    this->t_damaged.loadFromFile("textures/boxes/wood/wood_1x1_damaged.png");
-    this->t_destroyed.loadFromFile("textures/boxes/wood/wood_1x1_destroyed.png");
+    this->t_intact.loadFromFile("textures/boxes/wood/wood_3x1.png");
+    this->t_damaged.loadFromFile("textures/boxes/wood/wood_3x1_damaged.png");
+    this->t_destroyed.loadFromFile("textures/boxes/wood/wood_3x1_destroyed.png");
 
     this->texture = std::make_unique<sf::Texture>(this->t_intact);
     this->sprite.setTexture(*this->texture);
     this->sprite.setOrigin(this->sprite.getGlobalBounds().width/2, this->sprite.getGlobalBounds().height/2);
 
-    this->health = 1000;
-    this->base_health = 1000;
+    this->health = 3000;
+    this->base_health = 3000;
 
     this->density = 0.7f;
     this->friction = 0.5f;
@@ -25,6 +25,12 @@ Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(st
     bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
     bodyDef.type = b2_dynamicBody;
     bodyDef.position.Set(coord_x, coord_y);
+
+    // Ustawianie obrotu na podstawie parametru rotated
+    if (rotated){
+        bodyDef.angle = 90 / DEG;
+    }
+
     this->m_body = this->world->CreateBody(&bodyDef);
 
     b2PolygonShape dynamicBox;
@@ -38,7 +44,7 @@ Wood::Wood(std::shared_ptr<b2World> world, float coord_x, float coord_y): Box(st
     this->m_body->CreateFixture(&fixtureDef);
 }
 
-void Wood::setTexture() {
+void Wood3x1::setTexture() {
     if (health > (base_health*(2./3.))){
         this->texture = std::make_unique<sf::Texture>(this->t_intact);
     } else if (health > (base_health*(1./3.))){
@@ -49,7 +55,7 @@ void Wood::setTexture() {
     this->texture->setSmooth(true);
 }
 
-void Wood::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+void Wood3x1::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
     // this->setTexture();
     // this->sprite.setTexture(*this->texture);
