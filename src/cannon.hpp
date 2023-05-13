@@ -46,6 +46,7 @@ private:
     float power_gain = 4;
     float max_power = 100;
     bool active = true;
+    bool loading = false;
 
     void setBirdsVisualPosition();
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
