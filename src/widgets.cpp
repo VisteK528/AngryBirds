@@ -209,3 +209,70 @@ void ui::Button::updatePosition(std::pair<double, double> change_ratio, const st
 
     this->shape.setScale(change_ratio.first, change_ratio.second);
 }
+
+ui::TextureButton::TextureButton(sf::Texture &button_texture, sf::Vector2f position, ui::ORIGIN origin) {
+    updateTexture(button_texture);
+    this->btn_origin = origin;
+    setPosition(position);
+}
+
+const sf::Vector2f &ui::TextureButton::getPosition() const {
+    return this->position;
+}
+
+const sf::Vector2f &ui::TextureButton::getRelativePosition() const {
+    return this->relative_position;
+}
+
+sf::Vector2u ui::TextureButton::getDimensions() const {
+    return this->texture.getSize();
+}
+
+void ui::TextureButton::setPosition(const sf::Vector2f btn_position) {
+    this->origin_coords = getOrigin((float)this->texture.getSize().x, (float)this->texture.getSize().y, this->btn_origin);
+    this->position = btn_position;
+    this->relative_position = sf::Vector2f(position.x-origin_coords.x, position.y-origin_coords.y);
+
+    this->background_sprite.setPosition(relative_position);
+}
+
+void ui::TextureButton::updatePosition(std::pair<double, double> change_ratio,
+                                       const std::shared_ptr<sf::RenderWindow> &window) {
+
+}
+
+void ui::TextureButton::updateTexture(sf::Texture &button_texture) {
+    this->texture = button_texture;
+    this->background_sprite.setTexture(this->texture, true);
+    setPosition(this->position);
+}
+
+void ui::TextureButton::update(sf::Vector2f mouse_position) {
+    /*if(mouse_position.x >= relative_position.x && mouse_position.x <= relative_position.x+texture.getSize().x*background_sprite.getScale().x && mouse_position.y >= relative_position.y && mouse_position.y <= relative_position.y+texture.getSize().y*background_sprite.getScale().y){
+        this->background_sprite.setTexture(mask_texture);
+    }
+    else{
+        this->background_sprite.setTexture(texture);
+    }*/
+}
+
+ui::BUTTON_STATE ui::TextureButton::handleInput(sf::Vector2f mouse_position, const sf::Event &e) {
+    if(mouse_position.x >= relative_position.x && mouse_position.x <= relative_position.x+texture.getSize().x*background_sprite.getScale().x && mouse_position.y >= relative_position.y && mouse_position.y <= relative_position.y+texture.getSize().y*background_sprite.getScale().y){
+        if(e.type == sf::Event::MouseButtonReleased){
+            if(e.mouseButton.button == sf::Mouse::Left){
+                return LEFT;
+            }
+            else if(e.mouseButton.button == sf::Mouse::Middle) {
+                return MIDDLE;
+            }
+            else if(e.mouseButton.button == sf::Mouse::Right) {
+                return RIGHT;
+            }
+        }
+    }
+    return NONE;
+}
+
+void ui::TextureButton::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    target.draw(background_sprite, states);
+}

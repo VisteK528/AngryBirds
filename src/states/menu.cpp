@@ -42,7 +42,7 @@ void Menu::handleEvent(const sf::Event &e) {
     }
 
     if(this->editor_btn->handleInput(position, e)){
-
+        this->states->push(std::make_unique<EditorState>(this->window, this->states, this->gui_manager));
     }
 
     if(this->about_btn->handleInput(position, e)){
