@@ -10,11 +10,13 @@
 
 namespace ui{
     typedef enum{N, S, W, E, NW, NE, SW, SE, C} ORIGIN;
+    typedef enum{LEFT, MIDDLE, RIGHT, NONE} BUTTON_STATE;
 
     sf::Vector2f getOrigin(float width, float height, ORIGIN origin);
 
     class Text;
     class Button;
+    class TextureButton;
 }
 
 class ui::Text: public sf::Drawable {
@@ -79,5 +81,30 @@ public:
     void updatePosition(std::pair<double, double> change_ratio, const std::shared_ptr<sf::RenderWindow>& window);
     void update(sf::Vector2f mouse_position);
     bool handleInput(sf::Vector2f mouse_position, const sf::Event& e);
+};
+
+class ui::TextureButton: public sf::Drawable{private:
+    sf::Vector2f origin_coords;
+    ORIGIN btn_origin=NW;
+
+    sf::Vector2f position;
+    sf::Vector2f relative_position;
+    sf::Vector2f dimensions;
+
+    sf::Texture texture;
+    sf::Sprite background_sprite;
+
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+public:
+    TextureButton()=default;
+    TextureButton(sf::Texture& button_texture, sf::Vector2f position, ORIGIN origin);
+    const sf::Vector2f &getPosition() const;
+    const sf::Vector2f &getRelativePosition() const;
+    sf::Vector2u getDimensions() const;
+    void setPosition(const sf::Vector2f btn_position);
+    void updatePosition(std::pair<double, double> change_ratio, const std::shared_ptr<sf::RenderWindow>& window);
+    void updateTexture(sf::Texture& button_texture);
+    void update(sf::Vector2f mouse_position);
+    BUTTON_STATE handleInput(sf::Vector2f mouse_position, const sf::Event& e);
 };
 #endif
