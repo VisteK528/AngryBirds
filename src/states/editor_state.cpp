@@ -20,6 +20,7 @@ EditorState::~EditorState() noexcept {
 }
 
 void EditorState::loadTextures() {
+    // TODO Move load textures function into separate function because of the usage in multiple files
     std::unordered_map<BACKGROUNDS, std::string> background_paths = {
             {DEFAULT, "textures/background.png"},
             {MOUNTAINS, "textures/background2.png"},
@@ -145,7 +146,8 @@ void EditorState::handleEvent(const sf::Event &e) {
     }
 
     if(save_btn->handleInput(position, e)){
-
+        std::cout<<"Saving..."<<std::endl;
+        saveToFile("data/save1.json");
     }
 
 
@@ -156,7 +158,11 @@ void EditorState::handleEvent(const sf::Event &e) {
     if(e.type == sf::Event::MouseButtonReleased && placingSprite){
         if(e.mouseButton.button == sf::Mouse::Left && !intersecting){
             sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
-            added_entities.push_back(std::pair<TEXTURE_TYPE, sf::Vector2f>(selected_texture_type, position));
+            ENTITY entity;
+            entity.type = selected_texture_type;
+            entity.position = position;
+            entity.rotated = rotated;
+            added_entities.push_back(entity);
             added_sprites_textures.push_back(sf::Sprite(entities_textures[selected_texture_type][0]));
             added_sprites_textures[added_sprites_textures.size()-1].setOrigin(entities_textures[selected_texture_type][0].getSize().x/2., entities_textures[selected_texture_type][0].getSize().y/2.);
             added_sprites_textures[added_sprites_textures.size()-1].setPosition(position);
@@ -273,4 +279,18 @@ void EditorState::addTransparentBarriers() {
     added_sprites_textures.push_back(bottom_barrier);
     added_sprites_textures.push_back(left_barrier);
     added_sprites_textures.push_back(right_barrier);
+}
+
+void EditorState::saveToFile(std::string path){
+    // TODO Saving strings mapped to enums instead of enums values
+    json j;
+    j["background"] = selected_background;
+    j["birds"] = {RED_BIRD, YELLOW_BIRD, FAT_RED_BIRD};
+    for(const auto& entity_block: added_entities){
+        j["entities"].push_back(json::array({entity_block.type, json::array({entity_block.position.x, entity_block.position.y}), entity_block.rotated}));
+    }
+    std::ofstream file;
+    file.open(path);
+    file<<j.dump();
+    file.close();
 }

@@ -38,6 +38,11 @@ void Menu::handleEvent(const sf::Event &e) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
 
     if(this->start_btn->handleInput(position, e)){
+        // TODO Create Lobby state as a intermediate state between menu and game state
+        /* Lobby state should provide user with two types of gameplay
+         *      1. Adventure - previously created levels with increasing level of difficulty
+         *      2. Custom    - levels created and saved to data directory by user
+         * */
         this->states->push(std::make_unique<GameState>(this->window, this->states));
     }
 
@@ -46,7 +51,7 @@ void Menu::handleEvent(const sf::Event &e) {
     }
 
     if(this->about_btn->handleInput(position, e)){
-
+        // TODO Add about state
     }
 
     if(this->exit_btn->handleInput(position, e)){
