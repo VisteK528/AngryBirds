@@ -10,6 +10,7 @@
 #include "../exceptions.hpp"
 #include "../entities/entity.hpp"
 #include "../textures.hpp"
+#include <iostream>
 
 class EditorState: public State {
 private:
@@ -18,8 +19,12 @@ private:
 
     //Logic elements
     BACKGROUNDS selected_background;
+    TEXTURE_TYPE selected_texture_type = WOOD;
     unsigned int selected_background_index;
     unsigned int selected_entity_index=0;
+    bool placingSprite = false;
+    bool intersecting = false;
+    bool rotated = false;
 
     // GUI Elements
     std::shared_ptr<GuiManager> gui_manager;
@@ -33,7 +38,8 @@ private:
     sf::Sprite background_sprite;
     sf::Sprite selected_sprite;
 
-    void updateChangeSelectedSpriteBtn(unsigned int entity_index);
+    void addTransparentBarriers();
+    void updateChangeSelectedSprite(unsigned int entity_index);
     void updateBackgroundTexture();
     void loadTextures();
     void initVariables();
