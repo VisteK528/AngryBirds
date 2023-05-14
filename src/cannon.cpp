@@ -86,7 +86,6 @@ void Cannon::handleInput(const sf::Event e){
             }
             power = 0;
 
-            // TODO Commented only for testing purposes, uncomment before release
             //active = false;
         }
     }

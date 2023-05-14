@@ -11,6 +11,16 @@
 #include "../entities/entity.hpp"
 #include "../textures.hpp"
 #include <iostream>
+#include <fstream>
+#include "../../include/json.hpp"
+
+using json = nlohmann::json;
+
+typedef struct{
+    TEXTURE_TYPE type;
+    sf::Vector2f position;
+    bool rotated;
+} ENTITY;
 
 class EditorState: public State {
 private:
@@ -33,7 +43,7 @@ private:
     std::unique_ptr<ui::Button> save_btn;
     std::unique_ptr<ui::Button> change_background_btn;
     std::unique_ptr<ui::TextureButton> change_selected_sprite_btn;
-    std::vector<std::pair<TEXTURE_TYPE, sf::Vector2f>> added_entities;
+    std::vector<ENTITY> added_entities;
     std::vector<sf::Sprite> added_sprites_textures;
     sf::Sprite background_sprite;
     sf::Sprite selected_sprite;
@@ -43,6 +53,7 @@ private:
     void updateBackgroundTexture();
     void loadTextures();
     void initVariables();
+    void saveToFile(std::string path);
 public:
     EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager);
     ~EditorState();

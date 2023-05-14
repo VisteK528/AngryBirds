@@ -31,6 +31,7 @@
 #include "../entities/factories/pig_factory.hpp"
 #include "../textures.hpp"
 
+// TODO Add the possibility to load the game from file
 class GameState: public State {
 private:
     b2Vec2 gravity;
