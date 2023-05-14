@@ -84,7 +84,9 @@ void EditorState::initVariables() {
     this->change_selected_sprite_btn = std::make_unique<ui::TextureButton>(entities_textures[WOOD][0], sf::Vector2f(700, 40), ui::ORIGIN::C);
 
     this->selected_background = DEFAULT;
+    updateChangeSelectedSprite(selected_entity_index);
     updateBackgroundTexture();
+    addTransparentBarriers();
 }
 
 void EditorState::init() {
@@ -97,6 +99,23 @@ void EditorState::update(const float &dt) {
     back_btn->update(position);
     change_background_btn->update(position);
     change_selected_sprite_btn->update(position);
+
+    if(placingSprite){
+        selected_sprite.setPosition(position);
+        if(!added_sprites_textures.empty()){
+            for(const auto& added_sprite: added_sprites_textures){
+                if(selected_sprite.getGlobalBounds().intersects(added_sprite.getGlobalBounds())){
+                    selected_sprite.setColor(sf::Color(255, 0,0, 255));
+                    intersecting = true;
+                    break;
+                }
+                else{
+                    selected_sprite.setColor(sf::Color(255, 255,255, 255));
+                    intersecting = false;
+                }
+            }
+        }
+    }
 }
 
 void EditorState::handleEvent(const sf::Event &e) {
@@ -125,8 +144,43 @@ void EditorState::handleEvent(const sf::Event &e) {
         updateBackgroundTexture();
     }
 
+    if(save_btn->handleInput(position, e)){
+
+    }
+
+
+    if(back_btn->handleInput(position, e)){
+        quit = true;
+    }
+
+    if(e.type == sf::Event::MouseButtonReleased && placingSprite){
+        if(e.mouseButton.button == sf::Mouse::Left && !intersecting){
+            sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
+            added_entities.push_back(std::pair<TEXTURE_TYPE, sf::Vector2f>(selected_texture_type, position));
+            added_sprites_textures.push_back(sf::Sprite(entities_textures[selected_texture_type][0]));
+            added_sprites_textures[added_sprites_textures.size()-1].setOrigin(entities_textures[selected_texture_type][0].getSize().x/2., entities_textures[selected_texture_type][0].getSize().y/2.);
+            added_sprites_textures[added_sprites_textures.size()-1].setPosition(position);
+            if(rotated){
+                added_sprites_textures[added_sprites_textures.size()-1].setRotation(90);
+            }
+        }
+        else if(e.mouseButton.button == sf::Mouse::Middle){
+            selected_sprite.rotate(90);
+            if(rotated){
+                rotated = false;
+            }
+            else{
+                rotated = true;
+            }
+        }
+        else if(e.mouseButton.button == sf::Mouse::Right){
+            placingSprite = false;
+        }
+    }
+
     switch (change_selected_sprite_btn->handleInput(position, e)) {
         case ui::LEFT:
+            placingSprite = true;
             break;
         case ui::MIDDLE:
             break;
@@ -137,19 +191,10 @@ void EditorState::handleEvent(const sf::Event &e) {
             else{
                 selected_entity_index = 0;
             }
-            updateChangeSelectedSpriteBtn(selected_entity_index);
+            updateChangeSelectedSprite(selected_entity_index);
             break;
         default:
             break;
-    }
-
-    if(save_btn->handleInput(position, e)){
-
-    }
-
-
-    if(back_btn->handleInput(position, e)){
-        quit = true;
     }
 }
 
@@ -163,29 +208,69 @@ void EditorState::render(std::shared_ptr<sf::RenderTarget> target) {
     for(const auto& sprite: added_sprites_textures){
         target->draw(sprite);
     }
+
+    if(placingSprite){
+        target->draw(selected_sprite);
+    }
 }
 
-void EditorState::updateChangeSelectedSpriteBtn(unsigned int entity_index) {
+void EditorState::updateChangeSelectedSprite(unsigned int entity_index) {
     switch (entity_index) {
         case 0:
             this->change_selected_sprite_btn->updateTexture(entities_textures[WOOD][0]);
+            this->selected_sprite = sf::Sprite(entities_textures[WOOD][0]);
+            this->selected_texture_type = WOOD;
             break;
         case 1:
             this->change_selected_sprite_btn->updateTexture(entities_textures[WOOD3x1][0]);
+            this->selected_sprite = sf::Sprite(entities_textures[WOOD3x1][0]);
+            this->selected_texture_type = WOOD3x1;
             break;
         case 2:
             this->change_selected_sprite_btn->updateTexture(entities_textures[STONE][0]);
+            this->selected_sprite = sf::Sprite(entities_textures[STONE][0]);
+            this->selected_texture_type = STONE;
             break;
         case 3:
             this->change_selected_sprite_btn->updateTexture(entities_textures[STONE3x1][0]);
+            this->selected_sprite = sf::Sprite(entities_textures[STONE3x1][0]);
+            this->selected_texture_type = STONE3x1;
             break;
         case 4:
             this->change_selected_sprite_btn->updateTexture(entities_textures[GLASS][0]);
+            this->selected_sprite = sf::Sprite(entities_textures[GLASS][0]);
+            this->selected_texture_type = GLASS;
             break;
         case 5:
             this->change_selected_sprite_btn->updateTexture(entities_textures[GLASS3x1][0]);
+            this->selected_sprite = sf::Sprite(entities_textures[GLASS3x1][0]);
+            this->selected_texture_type = GLASS3x1;
             break;
         default:
             break;
     }
+    this->selected_sprite.setOrigin(selected_sprite.getTexture()->getSize().x/2., selected_sprite.getTexture()->getSize().y/2);
+}
+
+void EditorState::addTransparentBarriers() {
+    // Top barrier
+    sf::Sprite top_barrier;
+    top_barrier.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(window->getView().getSize().x, 120)));
+
+    // Bottom barrier
+    sf::Sprite bottom_barrier;
+    bottom_barrier.setTextureRect(sf::IntRect(sf::Vector2i(640, 630), sf::Vector2i(1280, 200)));
+
+    // Left barrier
+    sf::Sprite left_barrier;
+    left_barrier.setTextureRect(sf::IntRect(sf::Vector2i(-30, 0), sf::Vector2i(10, window->getView().getSize().y)));
+
+    // Right barrier
+    sf::Sprite right_barrier;
+    right_barrier.setTextureRect(sf::IntRect(sf::Vector2i(1280, 360), sf::Vector2i(10, window->getView().getSize().y)));
+
+    //added_sprites_textures.push_back(top_barrier);
+    added_sprites_textures.push_back(bottom_barrier);
+    added_sprites_textures.push_back(left_barrier);
+    added_sprites_textures.push_back(right_barrier);
 }
