@@ -10,7 +10,8 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_p
     this->back_btn = nullptr;
     this->save_btn = nullptr;
     this->change_background_btn = nullptr;
-    this->change_selected_sprite_btn = nullptr;
+    this->change_selected_block_btn = nullptr;
+    this->change_selected_pig_btn = nullptr;
     loadTextures();
     initVariables();
 }
@@ -82,10 +83,12 @@ void EditorState::initVariables() {
     this->back_btn = gui_manager->createButton("Back",15, sf::Vector2f(1190, 650), sf::Vector2f(150, 30), ui::ORIGIN::C);
     this->save_btn = gui_manager->createButton("Save", 15, sf::Vector2f(1190, 690), sf::Vector2f(150, 30), ui::ORIGIN::C);
     this->change_background_btn = gui_manager->createButton("Change background", 15, sf::Vector2f(400, 40), sf::Vector2f(300, 30), ui::ORIGIN::C);
-    this->change_selected_sprite_btn = std::make_unique<ui::TextureButton>(entities_textures[WOOD][0], sf::Vector2f(700, 40), ui::ORIGIN::C);
+    this->change_selected_block_btn = std::make_unique<ui::TextureButton>(entities_textures[WOOD][0], sf::Vector2f(700, 40), ui::ORIGIN::C);
+    this->change_selected_pig_btn = std::make_unique<ui::TextureButton>(entities_textures[BASIC_PIG][0], sf::Vector2f(900, 40), ui::ORIGIN::C);
 
     this->selected_background = DEFAULT;
-    updateChangeSelectedSprite(selected_entity_index);
+    updateChangeSelectedBlockBtn(selected_block_index);
+    updateChangeSelectedPigBtn(selected_pig_index);
     updateBackgroundTexture();
     addTransparentBarriers();
 }
@@ -99,9 +102,10 @@ void EditorState::update(const float &dt) {
     save_btn->update(position);
     back_btn->update(position);
     change_background_btn->update(position);
-    change_selected_sprite_btn->update(position);
+    change_selected_block_btn->update(position);
+    change_selected_pig_btn->update(position);
 
-    if(placingSprite){
+    if(placingBlock || placingPig){
         selected_sprite.setPosition(position);
         if(!added_sprites_textures.empty()){
             for(const auto& added_sprite: added_sprites_textures){
@@ -155,16 +159,24 @@ void EditorState::handleEvent(const sf::Event &e) {
         quit = true;
     }
 
-    if(e.type == sf::Event::MouseButtonReleased && placingSprite){
+    if(e.type == sf::Event::MouseButtonReleased && (placingBlock || placingPig)){
         if(e.mouseButton.button == sf::Mouse::Left && !intersecting){
             sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
             ENTITY entity;
-            entity.type = selected_texture_type;
+            entity.type = selected_block_type;
+            if(placingBlock){
+                entity.type = selected_block_type;
+                added_sprites_textures.push_back(sf::Sprite(entities_textures[selected_block_type][0]));
+                added_sprites_textures[added_sprites_textures.size()-1].setOrigin(entities_textures[selected_block_type][0].getSize().x / 2., entities_textures[selected_block_type][0].getSize().y / 2.);
+            }
+            else if(placingPig){
+                entity.type = selected_pig_type;
+                added_sprites_textures.push_back(sf::Sprite(entities_textures[selected_pig_type][0]));
+                added_sprites_textures[added_sprites_textures.size()-1].setOrigin(entities_textures[selected_pig_type][0].getSize().x / 2., entities_textures[selected_pig_type][0].getSize().y / 2.);
+            }
             entity.position = position;
             entity.rotated = rotated;
             added_entities.push_back(entity);
-            added_sprites_textures.push_back(sf::Sprite(entities_textures[selected_texture_type][0]));
-            added_sprites_textures[added_sprites_textures.size()-1].setOrigin(entities_textures[selected_texture_type][0].getSize().x/2., entities_textures[selected_texture_type][0].getSize().y/2.);
             added_sprites_textures[added_sprites_textures.size()-1].setPosition(position);
             if(rotated){
                 added_sprites_textures[added_sprites_textures.size()-1].setRotation(90);
@@ -180,27 +192,45 @@ void EditorState::handleEvent(const sf::Event &e) {
             }
         }
         else if(e.mouseButton.button == sf::Mouse::Right){
-            placingSprite = false;
+            placingBlock = false;
+            placingPig = false;
         }
     }
 
-    switch (change_selected_sprite_btn->handleInput(position, e)) {
+    switch (change_selected_block_btn->handleInput(position, e)) {
         case ui::LEFT:
-            placingSprite = true;
+            placingBlock = true;
             break;
         case ui::MIDDLE:
             break;
         case ui::RIGHT:
-            if(selected_entity_index < 5){
-                selected_entity_index++;
+            if(selected_block_index < 5){
+                selected_block_index++;
             }
             else{
-                selected_entity_index = 0;
+                selected_block_index = 0;
             }
-            updateChangeSelectedSprite(selected_entity_index);
+            updateChangeSelectedBlockBtn(selected_block_index);
             break;
         default:
             break;
+    }
+
+    switch(change_selected_pig_btn->handleInput(position, e)){
+        case ui::LEFT:
+            placingPig = true;
+            break;
+        case ui::MIDDLE:
+            break;
+        case ui::RIGHT:
+            selected_pig_index = 6;
+            updateChangeSelectedPigBtn(selected_pig_index);
+            break;
+        default:
+            break;
+    }
+    if(placingBlock || placingPig){
+        updateChangeSelectedSprite();
     }
 }
 
@@ -210,52 +240,15 @@ void EditorState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw((*back_btn));
     target->draw((*save_btn));
     target->draw(*change_background_btn);
-    target->draw(*change_selected_sprite_btn);
+    target->draw(*change_selected_block_btn);
+    target->draw(*change_selected_pig_btn);
     for(const auto& sprite: added_sprites_textures){
         target->draw(sprite);
     }
 
-    if(placingSprite){
+    if(placingBlock || placingPig){
         target->draw(selected_sprite);
     }
-}
-
-void EditorState::updateChangeSelectedSprite(unsigned int entity_index) {
-    switch (entity_index) {
-        case 0:
-            this->change_selected_sprite_btn->updateTexture(entities_textures[WOOD][0]);
-            this->selected_sprite = sf::Sprite(entities_textures[WOOD][0]);
-            this->selected_texture_type = WOOD;
-            break;
-        case 1:
-            this->change_selected_sprite_btn->updateTexture(entities_textures[WOOD3x1][0]);
-            this->selected_sprite = sf::Sprite(entities_textures[WOOD3x1][0]);
-            this->selected_texture_type = WOOD3x1;
-            break;
-        case 2:
-            this->change_selected_sprite_btn->updateTexture(entities_textures[STONE][0]);
-            this->selected_sprite = sf::Sprite(entities_textures[STONE][0]);
-            this->selected_texture_type = STONE;
-            break;
-        case 3:
-            this->change_selected_sprite_btn->updateTexture(entities_textures[STONE3x1][0]);
-            this->selected_sprite = sf::Sprite(entities_textures[STONE3x1][0]);
-            this->selected_texture_type = STONE3x1;
-            break;
-        case 4:
-            this->change_selected_sprite_btn->updateTexture(entities_textures[GLASS][0]);
-            this->selected_sprite = sf::Sprite(entities_textures[GLASS][0]);
-            this->selected_texture_type = GLASS;
-            break;
-        case 5:
-            this->change_selected_sprite_btn->updateTexture(entities_textures[GLASS3x1][0]);
-            this->selected_sprite = sf::Sprite(entities_textures[GLASS3x1][0]);
-            this->selected_texture_type = GLASS3x1;
-            break;
-        default:
-            break;
-    }
-    this->selected_sprite.setOrigin(selected_sprite.getTexture()->getSize().x/2., selected_sprite.getTexture()->getSize().y/2);
 }
 
 void EditorState::addTransparentBarriers() {
@@ -293,4 +286,58 @@ void EditorState::saveToFile(std::string path){
     file.open(path);
     file<<j.dump();
     file.close();
+}
+
+void EditorState::updateChangeSelectedBlockBtn(unsigned int block_index) {
+    switch (block_index) {
+        case 0:
+            this->change_selected_block_btn->updateTexture(entities_textures[WOOD][0]);
+            this->selected_block_type = WOOD;
+            break;
+        case 1:
+            this->change_selected_block_btn->updateTexture(entities_textures[WOOD3x1][0]);
+            this->selected_block_type = WOOD3x1;
+            break;
+        case 2:
+            this->change_selected_block_btn->updateTexture(entities_textures[STONE][0]);
+            this->selected_block_type = STONE;
+            break;
+        case 3:
+            this->change_selected_block_btn->updateTexture(entities_textures[STONE3x1][0]);
+            this->selected_block_type = STONE3x1;
+            break;
+        case 4:
+            this->change_selected_block_btn->updateTexture(entities_textures[GLASS][0]);
+            this->selected_block_type = GLASS;
+            break;
+        case 5:
+            this->change_selected_block_btn->updateTexture(entities_textures[GLASS3x1][0]);
+            this->selected_block_type = GLASS3x1;
+            break;
+        default:
+            break;
+    }
+}
+
+void EditorState::updateChangeSelectedPigBtn(unsigned int pig_index) {
+    switch(pig_index) {
+        case 6:
+            this->change_selected_pig_btn->updateTexture(entities_textures[BASIC_PIG][0]);
+            this->selected_pig_type = BASIC_PIG;
+            break;
+        default:
+            break;
+    }
+}
+
+void EditorState::updateChangeSelectedSprite() {
+    if(placingBlock){
+        placingPig = false;
+        this->selected_sprite.setTexture(entities_textures[selected_block_type][0], true);
+    }
+    else{
+        placingBlock = false;
+        this->selected_sprite.setTexture(entities_textures[selected_pig_type][0], true);
+    }
+    this->selected_sprite.setOrigin(selected_sprite.getTexture()->getSize().x/2., selected_sprite.getTexture()->getSize().y/2);
 }
