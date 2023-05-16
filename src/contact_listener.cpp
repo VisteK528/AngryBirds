@@ -37,15 +37,11 @@ void ContactListener::EndContact(b2Contact* contact){
 
     if(dataA != 0){
         auto *i = reinterpret_cast<Entity *>(dataA);
-        if(dataB != 0){
-            i->endCollision(bodyB);
-        }
+        i->endCollision(bodyB);
     }
 
     if(dataB != 0){
         auto *i2 = reinterpret_cast<Entity *>(dataB);
-        if(dataA != 0){
-            i2->endCollision(bodyA);
-        }
+        i2->endCollision(bodyA);
     }
 }

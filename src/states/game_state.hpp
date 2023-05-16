@@ -30,6 +30,10 @@
 #include "../entities/factories/box_factory.hpp"
 #include "../entities/factories/pig_factory.hpp"
 #include "../textures.hpp"
+#include "../../include/json.hpp"
+#include <fstream>
+
+using json = nlohmann::json;
 
 // TODO Add the possibility to load the game from file
 class GameState: public State {
@@ -48,6 +52,7 @@ private:
     const float SCALE = 10.0f;
     const float DEG = 57.29577f;
 
+    std::vector<std::unique_ptr<Bird>> loadWorld(std::string level_path);
     void loadTextures();
     void setWall(int x, int y, int w, int h);
     void initWorld();

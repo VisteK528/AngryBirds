@@ -18,6 +18,9 @@ void GameState::loadTextures() {
     // Paths for all textures
     std::vector<std::string> other_textures_paths = {
             "textures/background.png",
+            "textures/background2.png",
+            "textures/background3.png",
+            "textures/background4.png"
     };
 
     for(const std::string& path: other_textures_paths){
@@ -66,6 +69,105 @@ void GameState::loadTextures() {
     }
 }
 
+
+std::vector<std::unique_ptr<Bird>> GameState::loadWorld(std::string level_path) {
+    std::ifstream file;
+    file.open(level_path);
+
+    std::vector<std::shared_ptr<sf::Texture>> red_bird_t = makeShared(entities_textures[RED_BIRD]);
+    std::vector<std::shared_ptr<sf::Texture>> yellow_bird_t = makeShared(entities_textures[YELLOW_BIRD]);
+    std::vector<std::shared_ptr<sf::Texture>> grey_bird_t = makeShared(entities_textures[GREY_BIRD]);
+
+    BirdFactory<Bird> red_factory(this->world, red_bird_t);
+    BirdFactory<YellowBird> yellow_factory(this->world, yellow_bird_t);
+    BirdFactory<FatRedBird> red_fat_factory(this->world, red_bird_t);
+    BirdFactory<GreyBird> grey_factory(this->world, grey_bird_t);
+
+    BoxFactory<Wood> wood_fact(world, makeShared(entities_textures[WOOD]));
+    BoxFactory<Wood3x1> wood3x1_fact(world, makeShared(entities_textures[WOOD3x1]));
+    BoxFactory<Glass> glass_fact(world, makeShared(entities_textures[GLASS]));
+    BoxFactory<Glass3x1> glass3x1_fact(world, makeShared(entities_textures[GLASS3x1]));
+    BoxFactory<Stone> stone_fact(world, makeShared(entities_textures[STONE]));
+    BoxFactory<Stone3x1> stone3x1_fact(world, makeShared(entities_textures[STONE3x1]));
+
+    PigFactory<BasicPig> basic_pig_fact(world, makeShared(entities_textures[BASIC_PIG]));
+    
+    json j;
+    file >> j;
+
+    background = sf::Sprite(textures[j["background"]]);
+
+    std::vector<std::unique_ptr<Bird>> birds = {};
+    for(const auto& bird: j["birds"].items()){
+        switch (static_cast<int>(bird.value())) {
+            case 7:
+                birds.push_back(red_factory.createBird());
+                break;
+            case 8:
+                birds.push_back(yellow_factory.createBird());
+                break;
+            case 9:
+                birds.push_back(red_fat_factory.createBird());
+                break;
+            case 10:
+                birds.push_back(grey_factory.createBird());
+                break;
+            default:
+                break;
+        }
+    }
+
+    for(const auto& entity_array: j["entities"].items()){
+        json entity_array_json = entity_array.value();
+        int type = entity_array_json[0];
+        std::vector<float> unscaled_position = entity_array_json[1].get<std::vector<float>>();
+        std::vector<float> position = {unscaled_position[0]/SCALE, unscaled_position[1]/SCALE};
+        bool rotated = entity_array_json[2].get<bool>();
+
+        switch (type) {
+            case 0:
+                entity_manager->pushEntity(wood_fact.createBox(position[0], position[1]));
+                break;
+            case 1:
+                if(rotated){
+                    entity_manager->pushEntity(wood3x1_fact.createBoxRotated(position[0], position[1]));
+                }
+                else{
+                    entity_manager->pushEntity(wood3x1_fact.createBox(position[0], position[1]));
+                }
+                break;
+            case 2:
+                entity_manager->pushEntity(stone_fact.createBox(position[0], position[1]));
+                break;
+            case 3:
+                if(rotated){
+                    entity_manager->pushEntity(stone3x1_fact.createBoxRotated(position[0], position[1]));
+                }
+                else{
+                    entity_manager->pushEntity(stone3x1_fact.createBox(position[0], position[1]));
+                }
+                break;
+            case 4:
+                entity_manager->pushEntity(glass_fact.createBox(position[0], position[1]));
+                break;
+            case 5:
+                if(rotated){
+                    entity_manager->pushEntity(glass3x1_fact.createBoxRotated(position[0], position[1]));
+                }
+                else{
+                    entity_manager->pushEntity(glass3x1_fact.createBox(position[0], position[1]));
+                }
+                break;
+            case 6:
+                entity_manager->pushEntity(basic_pig_fact.createPig(position[0], position[1]));
+
+            default:
+                break;
+        }
+    }
+    return birds;
+}
+
 void GameState::initWorld() {
     this->gravity = b2Vec2(0.0f, 9.81f);
     this->world = std::make_shared<b2World>(this->gravity);
@@ -74,7 +176,7 @@ void GameState::initWorld() {
 
     this->entity_manager = std::make_shared<EntityManager>(this->world);
 
-    std::vector<std::shared_ptr<sf::Texture>> red_bird_t = makeShared(entities_textures[RED_BIRD]);
+    /*std::vector<std::shared_ptr<sf::Texture>> red_bird_t = makeShared(entities_textures[RED_BIRD]);
     std::vector<std::shared_ptr<sf::Texture>> yellow_bird_t = makeShared(entities_textures[YELLOW_BIRD]);
     std::vector<std::shared_ptr<sf::Texture>> grey_bird_t = makeShared(entities_textures[GREY_BIRD]);
 
@@ -88,7 +190,8 @@ void GameState::initWorld() {
     birds.push_back(red_factory.createBird());
     birds.push_back(yellow_factory.createBird());
     birds.push_back(red_fat_factory.createBird());
-    birds.push_back(grey_factory.createBird());
+    birds.push_back(grey_factory.createBird());*/
+    std::vector<std::unique_ptr<Bird>> birds = loadWorld("data/save1.json");
 
     this->cannon = std::make_unique<Cannon>(sf::Vector2f(100, 600), this->entity_manager);
     this->cannon->setBirds(birds);
@@ -101,20 +204,18 @@ void GameState::initWorld() {
     // Świat ma wymiary 1280x720 pikseli
     // Świat ma wymiary 128x72 metry
 
-    background = sf::Sprite(textures[0]);
-
-    BoxFactory<Wood> wood_fact(world, makeShared(entities_textures[WOOD]));
+    /*BoxFactory<Wood> wood_fact(world, makeShared(entities_textures[WOOD]));
     BoxFactory<Wood3x1> wood3x1_fact(world, makeShared(entities_textures[WOOD3x1]));
     BoxFactory<Glass> glass_fact(world, makeShared(entities_textures[GLASS]));
     BoxFactory<Glass3x1> glass3x1_fact(world, makeShared(entities_textures[GLASS3x1]));
     BoxFactory<Stone> stone_fact(world, makeShared(entities_textures[STONE]));
     BoxFactory<Stone3x1> stone3x1_fact(world, makeShared(entities_textures[STONE3x1]));
 
-    PigFactory<BasicPig> basic_pig_fact(world, makeShared(entities_textures[BASIC_PIG]));
+    PigFactory<BasicPig> basic_pig_fact(world, makeShared(entities_textures[BASIC_PIG]));*/
 
     // Ustawienie boxów
-    entity_manager->pushEntity(wood3x1_fact.createBoxRotated(90.f, 50.f));
-    entity_manager->pushEntity(wood3x1_fact.createBox(80.f, 50.f));
+    /*entity_manager->pushEntity(wood3x1_fact.createBoxRotated(90.f, 50.f));
+    entity_manager->pushEntity(wood3x1_fact.createBox(80.f, 50.f));*/
 
     /*entity_manager->pushEntity(glass3x1_fact.createBoxRotated(50.f, 56.f));
     entity_manager->pushEntity(glass_fact.createBox(52.f, 60.f));
@@ -125,7 +226,7 @@ void GameState::initWorld() {
     entity_manager->pushEntity(glass_fact.createBox(54.f, 52.f));
     entity_manager->pushEntity(glass3x1_fact.createBox(52.f, 48.f));*/
 
-    entity_manager->pushEntity(stone3x1_fact.createBoxRotated(95.f, 60.f));
+    /*entity_manager->pushEntity(stone3x1_fact.createBoxRotated(95.f, 60.f));
     entity_manager->pushEntity(wood_fact.createBox(100.f, 60.f));
     entity_manager->pushEntity(wood_fact.createBox(100.f, 56.f));
     entity_manager->pushEntity(wood_fact.createBox(100.f, 52.f));
@@ -139,7 +240,7 @@ void GameState::initWorld() {
     // Ustawienie świń
     entity_manager->pushEntity(basic_pig_fact.createPig(105.f, 48.f));
     entity_manager->pushEntity(basic_pig_fact.createPig(105.f, 44.f));
-    entity_manager->pushEntity(basic_pig_fact.createPig(105.f, 40.f));
+    entity_manager->pushEntity(basic_pig_fact.createPig(105.f, 40.f));*/
 
     // Podłoże
     setWall(640, 630, 1280, 10);
