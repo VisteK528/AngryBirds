@@ -7,8 +7,8 @@ BasicPig::BasicPig(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<s
     this->coliding = false;
     this->destroyed = false;
 
-    this->health = 2000;
-    this->base_health = 2000;
+    this->health = 1000;
+    this->base_health = 1000;
     this->density = 0.7f;
     this->friction = 0.5f;
     this->restitution = 0.5f;

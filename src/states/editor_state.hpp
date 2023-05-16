@@ -29,10 +29,13 @@ private:
 
     //Logic elements
     BACKGROUNDS selected_background;
-    TEXTURE_TYPE selected_texture_type = WOOD;
+    TEXTURE_TYPE selected_block_type = WOOD;
+    TEXTURE_TYPE selected_pig_type = BASIC_PIG;
     unsigned int selected_background_index;
-    unsigned int selected_entity_index=0;
-    bool placingSprite = false;
+    unsigned int selected_block_index=0;
+    unsigned int selected_pig_index=6;
+    bool placingBlock = false;
+    bool placingPig = false;
     bool intersecting = false;
     bool rotated = false;
 
@@ -42,14 +45,17 @@ private:
     std::unique_ptr<ui::Button> back_btn;
     std::unique_ptr<ui::Button> save_btn;
     std::unique_ptr<ui::Button> change_background_btn;
-    std::unique_ptr<ui::TextureButton> change_selected_sprite_btn;
+    std::unique_ptr<ui::TextureButton> change_selected_block_btn;
+    std::unique_ptr<ui::TextureButton> change_selected_pig_btn;
     std::vector<ENTITY> added_entities;
     std::vector<sf::Sprite> added_sprites_textures;
     sf::Sprite background_sprite;
     sf::Sprite selected_sprite;
 
     void addTransparentBarriers();
-    void updateChangeSelectedSprite(unsigned int entity_index);
+    void updateChangeSelectedBlockBtn(unsigned int block_index);
+    void updateChangeSelectedPigBtn(unsigned int pig_index);
+    void updateChangeSelectedSprite();
     void updateBackgroundTexture();
     void loadTextures();
     void initVariables();

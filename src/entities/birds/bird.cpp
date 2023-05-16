@@ -48,6 +48,10 @@ void Bird::update() {
 }
 
 void Bird::startCollision(b2Body*) {
+    if(!countdown){
+        despawn_clock.restart();
+        countdown = true;
+    }
     this->action_available = false;
 }
 
