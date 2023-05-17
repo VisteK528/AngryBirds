@@ -87,6 +87,7 @@ void EditorState::initVariables() {
     this->change_selected_pig_btn = std::make_unique<ui::TextureButton>(entities_textures[BASIC_PIG][0], sf::Vector2f(900, 40), ui::ORIGIN::C);
 
     this->selected_background = DEFAULT;
+    this->selected_background_index = 1;
     updateChangeSelectedBlockBtn(selected_block_index);
     updateChangeSelectedPigBtn(selected_pig_index);
     updateBackgroundTexture();
@@ -178,16 +179,15 @@ void EditorState::handleEvent(const sf::Event &e) {
             entity.rotated = rotated;
             added_entities.push_back(entity);
             added_sprites_textures[added_sprites_textures.size()-1].setPosition(position);
-            if(rotated){
+            if(rotated && placingBlock){
                 added_sprites_textures[added_sprites_textures.size()-1].setRotation(90);
             }
         }
-        else if(e.mouseButton.button == sf::Mouse::Middle){
+        else if(e.mouseButton.button == sf::Mouse::Middle && placingBlock){
             selected_sprite.rotate(90);
             if(rotated){
                 rotated = false;
-            }
-            else{
+            } else {
                 rotated = true;
             }
         }
@@ -337,6 +337,8 @@ void EditorState::updateChangeSelectedSprite() {
     }
     else{
         placingBlock = false;
+        rotated = false;
+        this->selected_sprite.setRotation(0);
         this->selected_sprite.setTexture(entities_textures[selected_pig_type][0], true);
     }
     this->selected_sprite.setOrigin(selected_sprite.getTexture()->getSize().x/2., selected_sprite.getTexture()->getSize().y/2);
