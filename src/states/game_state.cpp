@@ -1,6 +1,6 @@
 #include "game_state.hpp"
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states): State(window, states) {
+GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, int level): State(window, states) {
     init();
     initWorld();
 }
@@ -50,7 +50,7 @@ void GameState::loadTextures() {
             {GREY_BIRD, {"textures/birds/bird_blue.png"}},
             {FAT_RED_BIRD, {"textures/birds/bird_red.png"}},
             };
-    
+
     for(const auto& pair: textures_paths){
         TEXTURE_TYPE type = pair.first;
         std::vector<sf::Texture> loaded_textures;
@@ -91,7 +91,7 @@ std::vector<std::unique_ptr<Bird>> GameState::loadWorld(std::string level_path) 
     BoxFactory<Stone3x1> stone3x1_fact(world, makeShared(entities_textures[STONE3x1]));
 
     PigFactory<BasicPig> basic_pig_fact(world, makeShared(entities_textures[BASIC_PIG]));
-    
+
     json j;
     file >> j;
 
