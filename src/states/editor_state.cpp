@@ -48,6 +48,7 @@ void EditorState::loadTextures() {
             {STONE, {"textures/boxes/stone/stone_1x1.png", "textures/boxes/stone/stone_1x1_damaged.png", "textures/boxes/stone/stone_1x1_destroyed.png"}},
             {STONE3x1, {"textures/boxes/stone/stone_3x1.png", "textures/boxes/stone/stone_3x1_damaged.png", "textures/boxes/stone/stone_3x1_damaged.png"}},
             {BASIC_PIG, {"textures/pigs/basic/basic_pig.png", "textures/pigs/basic/basic_pig_damaged.png", "textures/pigs/basic/basic_pig_destroyed.png"}},
+            {ARMORED_PIG, {"textures/pigs/armored/armored_pig.png", "textures/pigs/armored/armored_pig_damaged.png", "textures/pigs/armored/armored_pig_destroyed.png"}},
             {RED_BIRD, {"textures/birds/bird_red.png"}},
             {YELLOW_BIRD, {"textures/birds/bird_yellow.png"}},
             {GREY_BIRD, {"textures/birds/bird_blue.png"}},

@@ -20,6 +20,7 @@ private:
     bool bird_active = false;
 
     int current_score = 0;
+    void updateScore(int score);
 
 public:
     EntityManager(std::shared_ptr<b2World> world);
@@ -30,8 +31,6 @@ public:
     const std::shared_ptr<b2World> &getWorld() const;
 
     int getCurrentScore() const;
-    void updateScore(int score);
-
 };
 
 

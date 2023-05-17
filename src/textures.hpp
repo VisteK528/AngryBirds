@@ -18,6 +18,7 @@ typedef enum{
     GLASS,
     GLASS3x1,
     BASIC_PIG,
+    ARMORED_PIG,
     RED_BIRD,
     YELLOW_BIRD,
     FAT_RED_BIRD,
