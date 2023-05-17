@@ -9,6 +9,9 @@ BasicPig::BasicPig(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<s
 
     this->health = 1000;
     this->base_health = 1000;
+
+    this->score = 5000;
+
     this->density = 0.7f;
     this->friction = 0.5f;
     this->restitution = 0.5f;

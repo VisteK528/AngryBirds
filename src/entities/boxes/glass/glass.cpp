@@ -20,6 +20,8 @@ Glass::Glass(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Tex
     this->health = 500;
     this->base_health = 500;
 
+    this->score = 500;
+
     this->density = 0.6f;
     this->friction = 0.1f;
     this->restitution = 0.1f;

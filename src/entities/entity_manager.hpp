@@ -19,6 +19,8 @@ private:
     std::vector<std::unique_ptr<Entity>> entities;
     bool bird_active = false;
 
+    int current_score = 0;
+
 public:
     EntityManager(std::shared_ptr<b2World> world);
     bool isBirdActive() const;
@@ -26,6 +28,9 @@ public:
     void render(std::shared_ptr<sf::RenderTarget> target);
     void pushEntity(std::unique_ptr<Entity> entity);
     const std::shared_ptr<b2World> &getWorld() const;
+
+    int getCurrentScore() const;
+    void updateScore(int score);
 
 };
 

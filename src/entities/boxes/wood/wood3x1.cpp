@@ -17,6 +17,8 @@ Wood3x1::Wood3x1(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf:
     this->health = 3000;
     this->base_health = 3000;
 
+    this->score = 3000;
+
     this->density = 0.7f;
     this->friction = 0.5f;
     this->restitution = 0.5f;

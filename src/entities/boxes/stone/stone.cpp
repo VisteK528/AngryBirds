@@ -20,6 +20,8 @@ Stone::Stone(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Tex
     this->health = 3000;
     this->base_health = 3000;
 
+    this->score = 3000;
+
     this->density = 1.f;
     this->friction = 1.f;
     this->restitution = 0.1f;
