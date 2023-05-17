@@ -19,6 +19,7 @@ using json = nlohmann::json;
 typedef struct{
     TEXTURE_TYPE type;
     sf::Vector2f position;
+    sf::Sprite sprite;
     bool rotated;
 } ENTITY;
 
@@ -48,11 +49,10 @@ private:
     std::unique_ptr<ui::TextureButton> change_selected_block_btn;
     std::unique_ptr<ui::TextureButton> change_selected_pig_btn;
     std::vector<ENTITY> added_entities;
-    std::vector<sf::Sprite> added_sprites_textures;
+    std::vector<sf::FloatRect> place_area;
     sf::Sprite background_sprite;
     sf::Sprite selected_sprite;
 
-    void addTransparentBarriers();
     void updateChangeSelectedBlockBtn(unsigned int block_index);
     void updateChangeSelectedPigBtn(unsigned int pig_index);
     void updateChangeSelectedSprite();

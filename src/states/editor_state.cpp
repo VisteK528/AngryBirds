@@ -74,7 +74,6 @@ void EditorState::loadTextures() {
 
 void EditorState::updateBackgroundTexture() {
     this->background_sprite = sf::Sprite(background_textures_table[selected_background]);
-    //this->background_sprite.setOrigin(background_textures_table[DEFAULT].getSize().x, background_textures_table[DEFAULT].getSize().y);
     this->background_sprite.setPosition(0, 0);
 }
 
@@ -86,12 +85,18 @@ void EditorState::initVariables() {
     this->change_selected_block_btn = std::make_unique<ui::TextureButton>(entities_textures[WOOD][0], sf::Vector2f(700, 40), ui::ORIGIN::C);
     this->change_selected_pig_btn = std::make_unique<ui::TextureButton>(entities_textures[BASIC_PIG][0], sf::Vector2f(900, 40), ui::ORIGIN::C);
 
+    this->place_area = {
+            sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(1280, 120)),
+            sf::FloatRect(sf::Vector2f(-10, 0), sf::Vector2f(10, 720)),
+            sf::FloatRect(sf::Vector2f(0, 630), sf::Vector2f(1280, 400)),
+            sf::FloatRect(sf::Vector2f(1280, 0), sf::Vector2f(10, 720)),
+                        };
+
     this->selected_background = DEFAULT;
     this->selected_background_index = 1;
     updateChangeSelectedBlockBtn(selected_block_index);
     updateChangeSelectedPigBtn(selected_pig_index);
     updateBackgroundTexture();
-    addTransparentBarriers();
 }
 
 void EditorState::init() {
@@ -106,11 +111,24 @@ void EditorState::update(const float &dt) {
     change_selected_block_btn->update(position);
     change_selected_pig_btn->update(position);
 
-    if(placingBlock || placingPig){
-        selected_sprite.setPosition(position);
-        if(!added_sprites_textures.empty()){
-            for(const auto& added_sprite: added_sprites_textures){
-                if(selected_sprite.getGlobalBounds().intersects(added_sprite.getGlobalBounds())){
+    selected_sprite.setPosition(position);
+
+    for(const auto& barrier: place_area){
+        if(selected_sprite.getGlobalBounds().intersects(barrier)){
+            selected_sprite.setColor(sf::Color(255, 0,0, 255));
+            intersecting = true;
+            break;
+        }
+        else{
+            selected_sprite.setColor(sf::Color(255, 255,255, 255));
+            intersecting = false;
+        }
+    }
+
+    if((placingBlock || placingPig ) && !intersecting){
+        if(!added_entities.empty()){
+            for(const auto& added_sprite: added_entities){
+                if(selected_sprite.getGlobalBounds().intersects(added_sprite.sprite.getGlobalBounds())){
                     selected_sprite.setColor(sf::Color(255, 0,0, 255));
                     intersecting = true;
                     break;
@@ -155,33 +173,29 @@ void EditorState::handleEvent(const sf::Event &e) {
         saveToFile("data/save1.json");
     }
 
-
     if(back_btn->handleInput(position, e)){
         quit = true;
     }
 
     if(e.type == sf::Event::MouseButtonReleased && (placingBlock || placingPig)){
         if(e.mouseButton.button == sf::Mouse::Left && !intersecting){
-            sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
             ENTITY entity;
-            entity.type = selected_block_type;
             if(placingBlock){
                 entity.type = selected_block_type;
-                added_sprites_textures.push_back(sf::Sprite(entities_textures[selected_block_type][0]));
-                added_sprites_textures[added_sprites_textures.size()-1].setOrigin(entities_textures[selected_block_type][0].getSize().x / 2., entities_textures[selected_block_type][0].getSize().y / 2.);
+                entity.sprite = sf::Sprite(entities_textures[selected_block_type][0]);
             }
             else if(placingPig){
                 entity.type = selected_pig_type;
-                added_sprites_textures.push_back(sf::Sprite(entities_textures[selected_pig_type][0]));
-                added_sprites_textures[added_sprites_textures.size()-1].setOrigin(entities_textures[selected_pig_type][0].getSize().x / 2., entities_textures[selected_pig_type][0].getSize().y / 2.);
+                entity.sprite = sf::Sprite(entities_textures[selected_pig_type][0]);
             }
+            entity.sprite.setOrigin(entity.sprite.getTexture()->getSize().x/2., entity.sprite.getTexture()->getSize().y/2.);
             entity.position = position;
             entity.rotated = rotated;
-            added_entities.push_back(entity);
-            added_sprites_textures[added_sprites_textures.size()-1].setPosition(position);
+            entity.sprite.setPosition(position);
             if(rotated && placingBlock){
-                added_sprites_textures[added_sprites_textures.size()-1].setRotation(90);
+                entity.sprite.setRotation(90);
             }
+            added_entities.push_back(entity);
         }
         else if(e.mouseButton.button == sf::Mouse::Middle && placingBlock){
             selected_sprite.rotate(90);
@@ -242,36 +256,13 @@ void EditorState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(*change_background_btn);
     target->draw(*change_selected_block_btn);
     target->draw(*change_selected_pig_btn);
-    for(const auto& sprite: added_sprites_textures){
-        target->draw(sprite);
+    for(const auto& sprite: added_entities){
+        target->draw(sprite.sprite);
     }
 
     if(placingBlock || placingPig){
         target->draw(selected_sprite);
     }
-}
-
-void EditorState::addTransparentBarriers() {
-    // Top barrier
-    sf::Sprite top_barrier;
-    top_barrier.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(window->getView().getSize().x, 120)));
-
-    // Bottom barrier
-    sf::Sprite bottom_barrier;
-    bottom_barrier.setTextureRect(sf::IntRect(sf::Vector2i(640, 630), sf::Vector2i(1280, 200)));
-
-    // Left barrier
-    sf::Sprite left_barrier;
-    left_barrier.setTextureRect(sf::IntRect(sf::Vector2i(-30, 0), sf::Vector2i(10, window->getView().getSize().y)));
-
-    // Right barrier
-    sf::Sprite right_barrier;
-    right_barrier.setTextureRect(sf::IntRect(sf::Vector2i(1280, 360), sf::Vector2i(10, window->getView().getSize().y)));
-
-    //added_sprites_textures.push_back(top_barrier);
-    added_sprites_textures.push_back(bottom_barrier);
-    added_sprites_textures.push_back(left_barrier);
-    added_sprites_textures.push_back(right_barrier);
 }
 
 void EditorState::saveToFile(std::string path){
