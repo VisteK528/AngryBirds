@@ -21,6 +21,7 @@ typedef struct{
     sf::Vector2f position;
     sf::Sprite sprite;
     bool rotated;
+    bool moving;
 } ENTITY;
 
 class EditorState: public State {
@@ -37,6 +38,7 @@ private:
     unsigned int selected_pig_index=6;
     bool placingBlock = false;
     bool placingPig = false;
+    bool movingEntity = false;
     bool intersecting = false;
     bool rotated = false;
 

@@ -126,7 +126,7 @@ void EditorState::update(const float &dt) {
         }
     }
 
-    if((placingBlock || placingPig ) && !intersecting){
+    if((placingBlock || placingPig || movingEntity) && !intersecting){
         if(!added_entities.empty()){
             for(const auto& added_sprite: added_entities){
                 if(selected_sprite.getGlobalBounds().intersects(added_sprite.sprite.getGlobalBounds())){
@@ -139,13 +139,6 @@ void EditorState::update(const float &dt) {
                     intersecting = false;
                 }
             }
-        }
-    }
-
-    for(auto& added_sprite: added_entities){
-        if(added_sprite.sprite.getGlobalBounds().contains(position.x, position.y) && sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-            added_sprite.position = position;
-            added_sprite.sprite.setPosition(position);
         }
     }
 }
@@ -185,7 +178,44 @@ void EditorState::handleEvent(const sf::Event &e) {
         quit = true;
     }
 
-    if(e.type == sf::Event::MouseButtonReleased && (placingBlock || placingPig)){
+    for(auto& added_sprite: added_entities){
+        if(added_sprite.sprite.getGlobalBounds().contains(position.x, position.y) && e.type == sf::Event::MouseButtonReleased && !movingEntity){
+            if(e.mouseButton.button == sf::Mouse::Left){
+                added_sprite.position = position;
+                added_sprite.moving = true;
+                selected_sprite = added_sprite.sprite;
+                added_sprite.sprite = sf::Sprite();
+                if(added_sprite.type == BASIC_PIG || added_sprite.type == ARMORED_PIG){
+                    placingPig = true;
+                }
+                movingEntity = true;
+                break;
+            }
+        }
+        else if(added_sprite.moving && e.type == sf::Event::MouseButtonReleased && movingEntity && !intersecting){
+            if(e.mouseButton.button == sf::Mouse::Left){
+                added_sprite.position = position;
+                added_sprite.sprite = selected_sprite;
+                added_sprite.moving = false;
+                added_sprite.rotated = rotated;
+                movingEntity = false;
+                placingPig = false;
+            }
+        }
+    }
+
+    if(e.type == sf::Event::MouseButtonReleased && (placingBlock || movingEntity)){
+        if(e.mouseButton.button == sf::Mouse::Middle && !placingPig){
+            selected_sprite.rotate(90);
+            if(rotated){
+                rotated = false;
+            } else {
+                rotated = true;
+            }
+        }
+    }
+
+    if(e.type == sf::Event::MouseButtonReleased && (placingBlock || placingPig) && !movingEntity){
         if(e.mouseButton.button == sf::Mouse::Left && !intersecting){
             ENTITY entity;
             if(placingBlock){
@@ -200,18 +230,11 @@ void EditorState::handleEvent(const sf::Event &e) {
             entity.position = position;
             entity.rotated = rotated;
             entity.sprite.setPosition(position);
+            entity.moving = false;
             if(rotated && placingBlock){
                 entity.sprite.setRotation(90);
             }
             added_entities.push_back(entity);
-        }
-        else if(e.mouseButton.button == sf::Mouse::Middle && placingBlock){
-            selected_sprite.rotate(90);
-            if(rotated){
-                rotated = false;
-            } else {
-                rotated = true;
-            }
         }
         else if(e.mouseButton.button == sf::Mouse::Right){
             placingBlock = false;
@@ -268,7 +291,7 @@ void EditorState::render(std::shared_ptr<sf::RenderTarget> target) {
         target->draw(sprite.sprite);
     }
 
-    if(placingBlock || placingPig){
+    if(placingBlock || placingPig || movingEntity){
         target->draw(selected_sprite);
     }
 }
