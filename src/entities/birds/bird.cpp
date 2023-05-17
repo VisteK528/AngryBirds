@@ -5,6 +5,9 @@
 Bird::Bird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x, float coord_y): Entity(world){
     this->bird_textures = bird_textures;
 
+    // Score to be added when bird was not shot
+    this->score = 10000;
+
     //General information
     this->type.main_type = TYPE_DATA::BIRD;
     this->sprite = sf::Sprite(*bird_textures[0]);

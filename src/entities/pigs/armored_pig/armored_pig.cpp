@@ -1,20 +1,20 @@
-#include "basic_pig.hpp"
+#include "armored_pig.hpp"
 #include <utility>
 
-BasicPig::BasicPig(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Texture>> textures, float coord_x, float coord_y): Pig(std::move(world))
+ArmoredPig::ArmoredPig(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Texture>> textures, float coord_x, float coord_y): Pig(std::move(world))
 {
-    this->type.sub_type = TYPE_DATA::BASIC_PIG;
+    this->type.sub_type = TYPE_DATA::ARMORED_PIG;
     this->coliding = false;
     this->destroyed = false;
 
-    this->health = 1000;
-    this->base_health = 1000;
+    this->health = 2000;
+    this->base_health = 2000;
 
-    this->score = 5000;
+    this->score = 7000;
 
-    this->density = 0.7f;
-    this->friction = 0.5f;
-    this->restitution = 0.5f;
+    this->density = 0.9f;
+    this->friction = 0.3f;
+    this->restitution = 0.3f;
 
     this->textures[INTACT] = textures[0];
     this->textures[DAMAGED] = textures[1];
@@ -41,6 +41,6 @@ BasicPig::BasicPig(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<s
     m_body->CreateFixture(&fixtureDef);
 }
 
-void BasicPig::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+void ArmoredPig::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(this->sprite, states);
 }

@@ -17,6 +17,8 @@ Stone3x1::Stone3x1(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<s
     this->health = 9000;
     this->base_health = 9000;
 
+    this->score = 9000;
+
     this->density = 0.7f;
     this->friction = 0.5f;
     this->restitution = 0.5f;

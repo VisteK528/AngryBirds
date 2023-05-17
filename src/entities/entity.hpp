@@ -22,7 +22,8 @@ struct TYPE_DATA{
         WOOD,
         STONE,
         GLASS,
-        BASIC_PIG
+        BASIC_PIG,
+        ARMORED_PIG
     } SUBTYPE;
 
     TYPE main_type;
@@ -40,6 +41,8 @@ protected:
     std::shared_ptr<sf::Texture> texture;
     double health=0;
 
+    int score=0;
+
     bool coliding;
     bool destroyed;
     TYPE_DATA type;
@@ -53,6 +56,9 @@ public:
     virtual void startCollision(b2Body* body_b)=0;
     virtual void endCollision(b2Body* body_b)=0;
     virtual void update()=0;
+
+    int getScore();
+
     Entity();
     Entity(std::shared_ptr<b2World> world);
 };

@@ -3,6 +3,7 @@
 //
 
 #include "entity_manager.hpp"
+#include <iostream>
 
 EntityManager::EntityManager(std::shared_ptr<b2World> world) {
     this->world = std::move(world);
@@ -23,6 +24,10 @@ void EntityManager::update() {
             if(entity->getType().main_type == TYPE_DATA::BIRD){
                 bird_active = false;
             }
+            else {
+                updateScore(entity->getScore());
+                std::cout << "Score: " << getCurrentScore() << std::endl;
+            }
         }
     }
     this->entities.erase(std::remove_if(entities.begin(), entities.end(), [&](const auto& e){return e->getDestroyed() == true;}), this->entities.end());
@@ -40,4 +45,12 @@ const std::shared_ptr<b2World> &EntityManager::getWorld() const {
 
 bool EntityManager::isBirdActive() const {
     return bird_active;
+}
+
+int EntityManager::getCurrentScore() const {
+    return current_score;
+}
+
+void EntityManager::updateScore(int score) {
+    current_score += score;
 }

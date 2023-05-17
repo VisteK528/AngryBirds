@@ -37,3 +37,7 @@ const TYPE_DATA &Entity::getType() const {
 double Entity::getHealth() const {
     return health;
 }
+
+int Entity::getScore() {
+    return score;
+}
