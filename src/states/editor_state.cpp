@@ -140,6 +140,13 @@ void EditorState::update(const float &dt) {
             }
         }
     }
+
+    for(auto& added_sprite: added_entities){
+        if(added_sprite.sprite.getGlobalBounds().contains(position.x, position.y) && sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+            added_sprite.position = position;
+            added_sprite.sprite.setPosition(position);
+        }
+    }
 }
 
 void EditorState::handleEvent(const sf::Event &e) {
