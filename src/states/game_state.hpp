@@ -57,7 +57,7 @@ private:
     void setWall(int x, int y, int w, int h);
     void initWorld();
 public:
-    GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states);
+    GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, int level);
     ~GameState();
 
     void init() override;

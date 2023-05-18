@@ -1,6 +1,6 @@
 #include "game_state.hpp"
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states): State(window, states) {
+GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, int level): State(window, states) {
     init();
     initWorld();
 }
@@ -51,7 +51,7 @@ void GameState::loadTextures() {
             {GREY_BIRD, {"textures/birds/grey_bird.png"}},
             {FAT_RED_BIRD, {"textures/birds/big_bird.png"}},
             };
-    
+
     for(const auto& pair: textures_paths){
         TEXTURE_TYPE type = pair.first;
         std::vector<sf::Texture> loaded_textures;

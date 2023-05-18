@@ -43,7 +43,7 @@ void Menu::handleEvent(const sf::Event &e) {
          *      1. Adventure - previously created levels with increasing level of difficulty
          *      2. Custom    - levels created and saved to data directory by user
          * */
-        this->states->push(std::make_unique<GameState>(this->window, this->states));
+        this->states->push(std::make_unique<Lobby>(this->window, this->states, this->gui_manager));
     }
 
     if(this->editor_btn->handleInput(position, e)){
