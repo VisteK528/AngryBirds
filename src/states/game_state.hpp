@@ -17,6 +17,7 @@
 #include "../entities/boxes/glass/glass3x1.hpp"
 #include "../entities/pigs/pig.hpp"
 #include "../entities/pigs/basic_pig/basic_pig.hpp"
+#include "../entities/pigs/armored_pig//armored_pig.hpp"
 #include <iostream>
 #include <string>
 #include "../contact_listener.hpp"
@@ -50,9 +51,8 @@ private:
     std::vector<sf::Texture> textures;
 
     const float SCALE = 10.0f;
-    const float DEG = 57.29577f;
 
-    std::vector<std::unique_ptr<Bird>> loadWorld(std::string level_path);
+    std::vector<std::unique_ptr<Bird>> loadWorld(const std::string& level_path);
     void loadTextures();
     void setWall(int x, int y, int w, int h);
     void initWorld();

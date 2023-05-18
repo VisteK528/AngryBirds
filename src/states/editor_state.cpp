@@ -5,20 +5,21 @@
 #include "editor_state.hpp"
 
 EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager): State(window, states){
-    this->gui_manager = gui_manager;
+    this->gui_manager = std::move(gui_manager);
     this->title = nullptr;
     this->back_btn = nullptr;
     this->save_btn = nullptr;
     this->change_background_btn = nullptr;
     this->change_selected_block_btn = nullptr;
     this->change_selected_pig_btn = nullptr;
+    this->change_bird_btn = nullptr;
+    this->level_number_txt = nullptr;
+    this->load_btn = nullptr;
     loadTextures();
     initVariables();
 }
 
-EditorState::~EditorState() noexcept {
-
-}
+EditorState::~EditorState() noexcept = default;
 
 void EditorState::loadTextures() {
     // TODO Move load textures function into separate function because of the usage in multiple files
@@ -39,6 +40,12 @@ void EditorState::loadTextures() {
         background_textures_table[type] = t;
     }
 
+    environment_gravity = {
+            {DEFAULT, 9.81f},
+            {MOUNTAINS, 7.f},
+            {OCEAN, 1.f},
+            {SPACE, 9.81f/6.f}};
+
     // Paths for entities' textures to be loaded
     std::unordered_map<TEXTURE_TYPE , std::vector<std::string>> textures_paths = {
             {WOOD, {"textures/boxes/wood/wood_1x1.png", "textures/boxes/wood/wood_1x1_damaged.png", "textures/boxes/wood/wood_1x1_destroyed.png"}},
@@ -51,8 +58,8 @@ void EditorState::loadTextures() {
             {ARMORED_PIG, {"textures/pigs/armored/armored_pig.png", "textures/pigs/armored/armored_pig_damaged.png", "textures/pigs/armored/armored_pig_destroyed.png"}},
             {RED_BIRD, {"textures/birds/bird_red.png"}},
             {YELLOW_BIRD, {"textures/birds/bird_yellow.png"}},
-            {GREY_BIRD, {"textures/birds/bird_blue.png"}},
-            {FAT_RED_BIRD, {"textures/birds/bird_red.png"}},
+            {GREY_BIRD, {"textures/birds/grey_bird.png"}},
+            {FAT_RED_BIRD, {"textures/birds/big_bird.png"}},
     };
 
     for(const auto& pair: textures_paths){
@@ -80,11 +87,14 @@ void EditorState::updateBackgroundTexture() {
 
 void EditorState::initVariables() {
     this->title = this->gui_manager->createText("Editor", 35, sf::Vector2f(20, 20), ui::ORIGIN::NW);
-    this->back_btn = gui_manager->createButton("Back",15, sf::Vector2f(1190, 650), sf::Vector2f(150, 30), ui::ORIGIN::C);
-    this->save_btn = gui_manager->createButton("Save", 15, sf::Vector2f(1190, 690), sf::Vector2f(150, 30), ui::ORIGIN::C);
+    this->back_btn = gui_manager->createButton("Back",15, sf::Vector2f(1195, 650), sf::Vector2f(160, 30), ui::ORIGIN::C);
+    this->save_btn = gui_manager->createButton("Save", 15, sf::Vector2f(1237.5, 690), sf::Vector2f(75, 30), ui::ORIGIN::C);
+    this->load_btn = gui_manager->createButton("Load", 15, sf::Vector2f(1152.5, 690), sf::Vector2f(75, 30), ui::ORIGIN::C);
     this->change_background_btn = gui_manager->createButton("Change background", 15, sf::Vector2f(400, 40), sf::Vector2f(300, 30), ui::ORIGIN::C);
-    this->change_selected_block_btn = std::make_unique<ui::TextureButton>(entities_textures[WOOD][0], sf::Vector2f(700, 40), ui::ORIGIN::C);
-    this->change_selected_pig_btn = std::make_unique<ui::TextureButton>(entities_textures[BASIC_PIG][0], sf::Vector2f(900, 40), ui::ORIGIN::C);
+    this->change_selected_block_btn = std::make_unique<ui::TextureButton>(entities_textures[WOOD][0], sf::Vector2f(700, 50), ui::ORIGIN::C);
+    this->change_selected_pig_btn = std::make_unique<ui::TextureButton>(entities_textures[BASIC_PIG][0], sf::Vector2f(900, 50), ui::ORIGIN::C);
+    this->change_bird_btn = std::make_unique<ui::TextureButton>(entities_textures[RED_BIRD][0], sf::Vector2f(1100, 50), ui::ORIGIN::C);
+    this->level_number_txt = gui_manager->createText("Selected level: 0", 10, sf::Vector2f(1190, 620), ui::ORIGIN::C);
 
     this->place_area = {
             sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(1280, 120)),
@@ -111,6 +121,8 @@ void EditorState::update(const float &dt) {
     change_background_btn->update(position);
     change_selected_block_btn->update(position);
     change_selected_pig_btn->update(position);
+    change_bird_btn->update(position);
+    load_btn->update(position);
 
     selected_sprite.setPosition(position);
 
@@ -146,6 +158,22 @@ void EditorState::update(const float &dt) {
 void EditorState::handleEvent(const sf::Event &e) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
 
+    if(back_btn->handleInput(position, e)){
+        quit = true;
+    }
+
+    // Changing level number, based on user input from keyboard
+    if(e.type == e.KeyReleased){
+        if(e.key.code == sf::Keyboard::Up && level_number < 4){
+            level_number++;
+        }
+
+        if(e.key.code == sf::Keyboard::Down && level_number > 0){
+            level_number--;
+        }
+        level_number_txt->setString("Selected level: "+std::to_string(level_number));
+    }
+
     if(change_background_btn->handleInput(position, e)){
         selected_background_index ++;
         switch (selected_background_index) {
@@ -171,12 +199,14 @@ void EditorState::handleEvent(const sf::Event &e) {
 
     if(save_btn->handleInput(position, e)){
         std::cout<<"Saving..."<<std::endl;
-        saveToFile("data/save1.json");
+        saveToFile("data/custom/custom_level_"+std::to_string(level_number)+".json");
     }
 
-    if(back_btn->handleInput(position, e)){
-        quit = true;
+    if(!placingBlock || !placingPig){
+        added_entities.erase(std::remove_if(added_entities.begin(), added_entities.end(), [&](ENTITY& entity){return checkIfToDelete(entity, position, e);}), added_entities.end());
     }
+
+    added_birds.erase(std::remove_if(added_birds.begin(), added_birds.end(), [&](BIRD & bird){return checkIfToDelete(bird, position, e);}), added_birds.end());
 
     for(auto& added_sprite: added_entities){
         if(added_sprite.sprite.getGlobalBounds().contains(position.x, position.y) && e.type == sf::Event::MouseButtonReleased && !movingEntity){
@@ -192,8 +222,8 @@ void EditorState::handleEvent(const sf::Event &e) {
                 break;
             }
         }
-        else if(added_sprite.moving && e.type == sf::Event::MouseButtonReleased && movingEntity && !intersecting){
-            if(e.mouseButton.button == sf::Mouse::Left){
+        else if(added_sprite.moving && e.type == sf::Event::MouseButtonReleased && movingEntity){
+            if(e.mouseButton.button == sf::Mouse::Left && !intersecting){
                 added_sprite.position = position;
                 added_sprite.sprite = selected_sprite;
                 added_sprite.moving = false;
@@ -246,8 +276,6 @@ void EditorState::handleEvent(const sf::Event &e) {
         case ui::LEFT:
             placingBlock = true;
             break;
-        case ui::MIDDLE:
-            break;
         case ui::RIGHT:
             if(selected_block_index < 5){
                 selected_block_index++;
@@ -265,17 +293,49 @@ void EditorState::handleEvent(const sf::Event &e) {
         case ui::LEFT:
             placingPig = true;
             break;
-        case ui::MIDDLE:
-            break;
         case ui::RIGHT:
-            selected_pig_index = 6;
+            if(selected_pig_index < 7){
+                selected_pig_index++;
+            }
+            else{
+                selected_pig_index = 6;
+            }
             updateChangeSelectedPigBtn(selected_pig_index);
+            break;
+        default:
+            break;
+    }
+
+    switch(change_bird_btn->handleInput(position, e)){
+        case ui::LEFT: {
+            if(added_birds.size() <= 7){
+                BIRD bird;
+                bird.type = selected_bird_type;
+                bird.sprite = sf::Sprite(entities_textures[selected_bird_type][0]);
+                bird.sprite.setOrigin(bird.sprite.getTexture()->getSize().x/2.f, bird.sprite.getTexture()->getSize().y/2.f);
+                added_birds.push_back(bird);
+            }
+            break;
+        }
+        case ui::RIGHT:
+            if(selected_bird_index < 11){
+                selected_bird_index++;
+            }
+            else{
+                selected_bird_index=8;
+            }
+            updateChangeSelectedBirdBtn(selected_bird_index);
             break;
         default:
             break;
     }
     if(placingBlock || placingPig){
         updateChangeSelectedSprite();
+    }
+    updateSelectedBirdsPosition();
+
+    if(load_btn->handleInput(position, e)){
+        loadFromFile("data/custom/custom_level_"+std::to_string(level_number)+".json");
     }
 }
 
@@ -287,8 +347,15 @@ void EditorState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(*change_background_btn);
     target->draw(*change_selected_block_btn);
     target->draw(*change_selected_pig_btn);
+    target->draw(*change_bird_btn);
+    target->draw(*level_number_txt);
+    target->draw(*load_btn);
     for(const auto& sprite: added_entities){
         target->draw(sprite.sprite);
+    }
+
+    for(const auto& bird: added_birds){
+        target->draw(bird.sprite);
     }
 
     if(placingBlock || placingPig || movingEntity){
@@ -296,60 +363,85 @@ void EditorState::render(std::shared_ptr<sf::RenderTarget> target) {
     }
 }
 
-void EditorState::saveToFile(std::string path){
-    // TODO Saving strings mapped to enums instead of enums values
-    json j;
-    j["background"] = selected_background;
-    j["birds"] = {RED_BIRD, YELLOW_BIRD, FAT_RED_BIRD};
-    for(const auto& entity_block: added_entities){
-        j["entities"].push_back(json::array({entity_block.type, json::array({entity_block.position.x, entity_block.position.y}), entity_block.rotated}));
+void EditorState::saveToFile(const std::string& path){
+    json level_json;
+
+    // Store environment information
+    level_json["background"] = selected_background;
+    level_json["gravity"] = environment_gravity[selected_background];
+
+    // Store birds deck
+    std::vector<TEXTURE_TYPE> selected_birds;
+    selected_birds.reserve(added_birds.size());
+    for(const BIRD& bird: added_birds){
+        selected_birds.push_back(bird.type);
     }
+    level_json["birds"] = selected_birds;
+
+    // Store entities information including blocks and pigs
+    for(const auto& entity_block: added_entities){
+        level_json["entities"].push_back(json::array({entity_block.type, json::array({entity_block.position.x, entity_block.position.y}), entity_block.rotated}));
+    }
+
+    // Open file and save the string to the json file
     std::ofstream file;
     file.open(path);
-    file<<j.dump();
+    file<<level_json.dump();
     file.close();
 }
 
-void EditorState::updateChangeSelectedBlockBtn(unsigned int block_index) {
-    switch (block_index) {
-        case 0:
-            this->change_selected_block_btn->updateTexture(entities_textures[WOOD][0]);
-            this->selected_block_type = WOOD;
-            break;
-        case 1:
-            this->change_selected_block_btn->updateTexture(entities_textures[WOOD3x1][0]);
-            this->selected_block_type = WOOD3x1;
-            break;
-        case 2:
-            this->change_selected_block_btn->updateTexture(entities_textures[STONE][0]);
-            this->selected_block_type = STONE;
-            break;
-        case 3:
-            this->change_selected_block_btn->updateTexture(entities_textures[STONE3x1][0]);
-            this->selected_block_type = STONE3x1;
-            break;
-        case 4:
-            this->change_selected_block_btn->updateTexture(entities_textures[GLASS][0]);
-            this->selected_block_type = GLASS;
-            break;
-        case 5:
-            this->change_selected_block_btn->updateTexture(entities_textures[GLASS3x1][0]);
-            this->selected_block_type = GLASS3x1;
-            break;
-        default:
-            break;
+void EditorState::loadFromFile(const std::string &path) {
+    std::ifstream file;
+    file.open(path);
+
+    json level_json;
+    file >> level_json;
+
+    background_sprite = sf::Sprite(background_textures_table[backgrounds_dict[level_json["background"]]]);
+    selected_background = backgrounds_dict[level_json["background"]];
+
+    added_birds.clear();
+    for(const auto& bird: level_json["birds"].items()){
+        BIRD bird_struct;
+        bird_struct.type = birds_dict[static_cast<int>(bird.value())];
+        bird_struct.sprite = sf::Sprite(entities_textures[bird_struct.type][0]);
+        bird_struct.sprite.setOrigin(bird_struct.sprite.getTexture()->getSize().x/2.f, bird_struct.sprite.getTexture()->getSize().y/2.f);
+        added_birds.push_back(bird_struct);
+    }
+    updateSelectedBirdsPosition();
+
+
+    added_entities.clear();
+    for(const auto& entity_array: level_json["entities"].items()){
+        json entity_array_json = entity_array.value();
+        ENTITY loaded_entity;
+        loaded_entity.type = entities_dict[entity_array_json[0]];
+        std::vector<float> unscaled_position = entity_array_json[1].get<std::vector<float>>();
+        loaded_entity.position = {unscaled_position[0], unscaled_position[1]};
+        loaded_entity.rotated = entity_array_json[2].get<bool>();
+        loaded_entity.sprite = sf::Sprite(entities_textures[loaded_entity.type][0]);
+        loaded_entity.sprite.setOrigin(loaded_entity.sprite.getTexture()->getSize().x/2.f, loaded_entity.sprite.getTexture()->getSize().y/2.f);
+        loaded_entity.sprite.setPosition(loaded_entity.position);
+        if(loaded_entity.rotated){
+            loaded_entity.sprite.setRotation(90);
+        }
+        added_entities.push_back(loaded_entity);
     }
 }
 
+void EditorState::updateChangeSelectedBlockBtn(unsigned int block_index) {
+    this->change_selected_block_btn->updateTexture(entities_textures[entities_dict[block_index]][0]);
+    this->selected_block_type = entities_dict[block_index];
+}
+
 void EditorState::updateChangeSelectedPigBtn(unsigned int pig_index) {
-    switch(pig_index) {
-        case 6:
-            this->change_selected_pig_btn->updateTexture(entities_textures[BASIC_PIG][0]);
-            this->selected_pig_type = BASIC_PIG;
-            break;
-        default:
-            break;
-    }
+    this->change_selected_pig_btn->updateTexture(entities_textures[entities_dict[pig_index]][0]);
+    this->selected_pig_type = entities_dict[pig_index];
+}
+
+void EditorState::updateChangeSelectedBirdBtn(unsigned int bird_index) {
+    this->change_bird_btn->updateTexture(entities_textures[birds_dict[bird_index]][0]);
+    this->selected_bird_type = birds_dict[bird_index];
 }
 
 void EditorState::updateChangeSelectedSprite() {
@@ -363,5 +455,11 @@ void EditorState::updateChangeSelectedSprite() {
         this->selected_sprite.setRotation(0);
         this->selected_sprite.setTexture(entities_textures[selected_pig_type][0], true);
     }
-    this->selected_sprite.setOrigin(selected_sprite.getTexture()->getSize().x/2., selected_sprite.getTexture()->getSize().y/2);
+    this->selected_sprite.setOrigin(selected_sprite.getTexture()->getSize().x/2.f, selected_sprite.getTexture()->getSize().y/2.f);
+}
+
+void EditorState::updateSelectedBirdsPosition() {
+    for(int i = 0; i < added_birds.size(); i++){
+        added_birds[added_birds.size()-1-i].sprite.setPosition(50+i*100, 100);
+    }
 }

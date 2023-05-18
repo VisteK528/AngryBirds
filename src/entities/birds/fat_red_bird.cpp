@@ -14,7 +14,6 @@ FatRedBird::FatRedBird(const std::shared_ptr<b2World>& world, std::vector<std::s
 
     this->sprite = sf::Sprite(*bird_textures[0]);
     this->sprite.setOrigin((float)(*bird_textures[0]).getSize().x/2, (float)(*bird_textures[0]).getSize().y/2);
-    this->sprite.scale(2, 2);
 
     b2BodyDef bdef;
     bdef.userData.pointer = reinterpret_cast<uintptr_t>(this);
