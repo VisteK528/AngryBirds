@@ -9,6 +9,8 @@
 #include "../gui_manager.hpp"
 #include "state.hpp"
 #include "game_state.hpp"
+#include "editor_state.hpp"
+#include "lobby.hpp"
 
 class Menu: public State {
 private:

@@ -6,6 +6,7 @@
 
 Cannon::Cannon(sf::Vector2f position, std::shared_ptr<EntityManager> manager) {
     this->manager = std::move(manager);
+    this->loading = false;
 
     hull_texture.loadFromFile("textures/cannon/cannon_base.png");
     hull_texture.setSmooth(true);
@@ -37,7 +38,7 @@ void Cannon::update(sf::Vector2f mouse_position){
         active = false;
     }
 
-    if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && active){
+    if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && active && loading){
         if(power < max_power){
             power += power_gain;
         }
@@ -45,6 +46,12 @@ void Cannon::update(sf::Vector2f mouse_position){
 }
 
 void Cannon::handleInput(const sf::Event e){
+    if(e.type == sf::Event::MouseButtonPressed && active){
+        if(e.mouseButton.button == sf::Mouse::Left){
+            loading = true;
+        }
+    }
+
     if(e.type == sf::Event::MouseButtonReleased && active){
         if(e.mouseButton.button == sf::Mouse::Middle){
             if(bird_index < 3){
@@ -56,6 +63,7 @@ void Cannon::handleInput(const sf::Event e){
         }
 
         if(e.mouseButton.button == sf::Mouse::Left){
+            loading = false;
             sf::Vector2f position = {cannon_sprite.getPosition().x-20 + (cannon_texture.getSize().x / 2 + 20) * std::cos(angle), cannon_sprite.getPosition().y-20 + (cannon_texture.getSize().x / 2 + 20) * std::sin(angle)};
 
             if(!birds.empty()){
@@ -78,7 +86,6 @@ void Cannon::handleInput(const sf::Event e){
             }
             power = 0;
 
-            // TODO Commented only for testing purposes, uncomment before release
             //active = false;
         }
     }

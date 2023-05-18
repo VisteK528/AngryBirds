@@ -17,6 +17,7 @@
 #include "../entities/boxes/glass/glass3x1.hpp"
 #include "../entities/pigs/pig.hpp"
 #include "../entities/pigs/basic_pig/basic_pig.hpp"
+#include "../entities/pigs/armored_pig//armored_pig.hpp"
 #include <iostream>
 #include <string>
 #include "../contact_listener.hpp"
@@ -29,25 +30,16 @@
 #include "../entities/factories/bird_factory.hpp"
 #include "../entities/factories/box_factory.hpp"
 #include "../entities/factories/pig_factory.hpp"
+#include "../textures.hpp"
+#include "../../include/json.hpp"
+#include <fstream>
 
-typedef enum{
-    WOOD,
-    WOOD3x1,
-    STONE,
-    STONE3x1,
-    GLASS,
-    GLASS3x1,
-    BASIC_PIG,
-    RED_BIRD,
-    YELLOW_BIRD,
-    FAT_RED_BIRD,
-    GREY_BIRD
-} TEXTURE_TYPE;
+using json = nlohmann::json;
 
-std::vector<std::shared_ptr<sf::Texture>> makeShared(std::vector<sf::Texture>& textures);
-
+// TODO Add the possibility to load the game from file
 class GameState: public State {
 private:
+    std::string level_path;
     b2Vec2 gravity;
     std::shared_ptr<b2World> world;
     std::shared_ptr<EntityManager> entity_manager;
@@ -60,13 +52,13 @@ private:
     std::vector<sf::Texture> textures;
 
     const float SCALE = 10.0f;
-    const float DEG = 57.29577f;
 
+    std::vector<std::unique_ptr<Bird>> loadWorld(const std::string& level_path);
     void loadTextures();
     void setWall(int x, int y, int w, int h);
     void initWorld();
 public:
-    GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states);
+    GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string level_path);
     ~GameState();
 
     void init() override;

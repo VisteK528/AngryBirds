@@ -17,6 +17,8 @@ Glass3x1::Glass3x1(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<s
     this->health = 1500;
     this->base_health = 1500;
 
+    this->score = 1500;
+
     this->density = 0.6f;
     this->friction = 0.1f;
     this->restitution = 0.1f;
