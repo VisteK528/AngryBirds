@@ -1,6 +1,7 @@
 #include "game_state.hpp"
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, int level): State(window, states) {
+GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string level_path): State(window, states) {
+    this->level_path = level_path;
     init();
     initWorld();
 }
@@ -187,7 +188,7 @@ void GameState::initWorld() {
     this->world->SetContactListener(&contact_listener);
 
     // Load world data from file
-    std::vector<std::unique_ptr<Bird>> birds = loadWorld("data/custom/custom_level_0.json");
+    std::vector<std::unique_ptr<Bird>> birds = loadWorld(level_path);
 
     // Create cannon and initialize it with the deck of loaded birds
     this->cannon = std::make_unique<Cannon>(sf::Vector2f(100, 600), this->entity_manager);

@@ -39,6 +39,7 @@ using json = nlohmann::json;
 // TODO Add the possibility to load the game from file
 class GameState: public State {
 private:
+    std::string level_path;
     b2Vec2 gravity;
     std::shared_ptr<b2World> world;
     std::shared_ptr<EntityManager> entity_manager;
@@ -57,7 +58,7 @@ private:
     void setWall(int x, int y, int w, int h);
     void initWorld();
 public:
-    GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, int level);
+    GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string level_path);
     ~GameState();
 
     void init() override;
