@@ -32,6 +32,8 @@
 #include "../entities/factories/pig_factory.hpp"
 #include "../textures.hpp"
 #include "../../include/json.hpp"
+#include "../sound_manager.hpp"
+#include "../gui_manager.hpp"
 #include <fstream>
 
 using json = nlohmann::json;
@@ -51,6 +53,9 @@ private:
     std::unordered_map<TEXTURE_TYPE, std::vector<sf::Texture>> entities_textures;
     std::vector<sf::Texture> textures;
 
+    std::shared_ptr<GuiManager> gui_manager;
+    std::shared_ptr<SoundManager> sound_manager;
+
     const float SCALE = 10.0f;
 
     std::vector<std::unique_ptr<Bird>> loadWorld(const std::string& level_path);
@@ -58,7 +63,7 @@ private:
     void setWall(int x, int y, int w, int h);
     void initWorld();
 public:
-    GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::string level_path);
+    GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager, std::string level_path);
     ~GameState();
 
     void init() override;

@@ -12,12 +12,14 @@
 #include "states/game_state.hpp"
 #include "states/menu.hpp"
 #include "gui_manager.hpp"
+#include "sound_manager.hpp"
 #include <exception>
 
 class Game {
 private:
     std::shared_ptr<sf::RenderWindow> window;
     std::shared_ptr<GuiManager> gui_manager;
+    std::shared_ptr<SoundManager> sound_manager;
     std::shared_ptr<std::stack<std::unique_ptr<State>>> states;
     std::unique_ptr<sf::View> view;
     sf::Event e;

@@ -15,8 +15,9 @@ Game::Game() {
     setIcon();
 
     this->gui_manager = std::make_shared<GuiManager>(this->font, widget_background_color, widget_text_color);
+    this->sound_manager = std::make_shared<SoundManager>();
     this->states = std::make_shared<std::stack<std::unique_ptr<State>>>();
-    states->push(std::make_unique<Menu>(this->window, this->states, this->gui_manager));
+    states->push(std::make_unique<Menu>(this->window, this->states, this->gui_manager, this->sound_manager));
 }
 
 Game::~Game() {
