@@ -225,14 +225,14 @@ void GameState::update(const float &dt) {
         cannon->update(mouse_position);
         cannon_power_widget.update(cannon->getPower(), cannon->isActive());
     }
-    else{
+    else if(!running && !quit){
         if(result == WIN){
-            this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager, window->capture(), score));
             quit = true;
+            this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager, window->capture(), score));
         }
         else if(result == LOOSE){
-            this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager, window->capture(), score));
             quit = true;
+            this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager, window->capture(), score));
         }
     }
 

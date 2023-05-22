@@ -47,7 +47,7 @@ void Loose::handleEvent(const sf::Event &e) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
 
     if(this->menu_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<Adventure>(this->window, this->states, this->gui_manager, this->sound_manager));
+        quit = true;
     }
 
     if(this->exit_btn->handleInput(position, e)){

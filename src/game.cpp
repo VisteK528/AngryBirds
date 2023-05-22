@@ -79,14 +79,12 @@ void Game::setIcon() {
 }
 
 void Game::update() {
+    std::cout<<this->states->size()<<std::endl;
     updateEvents();
     if(!this->states->empty()){
         this->states->top()->update(dt);
         if(this->states->top()->getQuit()){
             this->states->pop();
-            if(!this->states->empty()){
-                this->states->top()->init();
-            }
         }
     }
     else{
