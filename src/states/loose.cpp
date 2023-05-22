@@ -51,7 +51,7 @@ void Loose::handleEvent(const sf::Event &e) {
     }
 
     if(this->exit_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<Menu>(this->window, this->states, this->gui_manager, this->sound_manager));
+        return_to_first = true;
     }
 }
 

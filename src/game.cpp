@@ -83,7 +83,12 @@ void Game::update() {
     updateEvents();
     if(!this->states->empty()){
         this->states->top()->update(dt);
-        if(this->states->top()->getQuit()){
+        if(this->states->top()->returnToFirst()){
+            while(this->states->size() > 1){
+                this->states->pop();
+            }
+        }
+        else if(this->states->top()->getQuit()){
             this->states->pop();
         }
     }
