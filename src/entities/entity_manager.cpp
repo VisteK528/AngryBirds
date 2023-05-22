@@ -68,23 +68,11 @@ void EntityManager::updateScore(int score) {
 }
 
 int EntityManager::CountPigs() const {
-    int count = 0;
-    for(const auto& entity: entities){
-        if(entity->getType().main_type == TYPE_DATA::PIG){
-            count++;
-        }
-    }
-    return count;
+    return (int)std::count_if(entities.begin(), entities.end(), [](const std::unique_ptr<Entity>& e){return e->getType().main_type == TYPE_DATA::PIG;});
 }
 
 int EntityManager::CountBirds() const {
-    int count = 0;
-    for(const auto& entity: entities){
-        if(entity->getType().main_type == TYPE_DATA::BIRD){
-            count++;
-        }
-    }
-    return count;
+    return (int)std::count_if(entities.begin(), entities.end(), [](const std::unique_ptr<Entity>& e){return e->getType().main_type == TYPE_DATA::BIRD;});
 }
 
 void EntityManager::setBirds(int birds) {

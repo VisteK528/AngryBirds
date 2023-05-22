@@ -63,6 +63,10 @@ void Game::run() {
 }
 
 void Game::loadTextures() {
+    if(!this->app_icon_image.loadFromFile("textures/angry_birds_ico.png")){
+        throw std::runtime_error("Cannot load window icon!");
+    }
+
     if(!this->font.loadFromFile("textures/mine-sweeper.ttf")){
         throw std::runtime_error("Cannot load default font from file textures/mine-sweeper.ttf");
     }
@@ -71,7 +75,7 @@ void Game::loadTextures() {
 }
 
 void Game::setIcon() {
-
+    this->window->setIcon(app_icon_image.getSize().x, app_icon_image.getSize().y, app_icon_image.getPixelsPtr());
 }
 
 void Game::update() {

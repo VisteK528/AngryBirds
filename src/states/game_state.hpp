@@ -44,6 +44,12 @@ using json = nlohmann::json;
 // TODO Add the possibility to load the game from file
 class GameState: public State {
 private:
+    typedef enum{WIN, LOOSE} RESULT;
+
+    RESULT result;
+    bool running = false;
+    int score = 0;
+
     std::string level_path;
     b2Vec2 gravity;
     std::shared_ptr<b2World> world;

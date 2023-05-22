@@ -212,24 +212,40 @@ void GameState::initWorld() {
 
     // Left wall
     setWall(-30, 360, 10, 640);
+    running = true;
 }
 
 void GameState::update(const float &dt) {
-    world->Step(dt, 8, 3);
-    entity_manager->update();
-    entity_manager->setBirds(cannon->getBirdsCount());
+    if(running){
+        world->Step(dt, 8, 3);
+        entity_manager->update();
+        entity_manager->setBirds(cannon->getBirdsCount());
 
-    sf::Vector2f mouse_position = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), this->window->getView());
-    cannon->update(mouse_position);
-    cannon_power_widget.update(cannon->getPower(), cannon->isActive());
-
-    if(entity_manager->CheckForWin()){
-        std::cout << "You won!" << std::endl;
-        this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager));
+        sf::Vector2f mouse_position = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), this->window->getView());
+        cannon->update(mouse_position);
+        cannon_power_widget.update(cannon->getPower(), cannon->isActive());
     }
-    else if(entity_manager->CheckForLose()){
-        std::cout << "You lost!" << std::endl;
-        this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager));
+    else{
+        if(result == WIN){
+            this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager, window->capture(), score));
+            quit = true;
+        }
+        else if(result == LOOSE){
+            this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager, window->capture(), score));
+            quit = true;
+        }
+    }
+
+    if(entity_manager->CountPigs() == 0){
+        score = entity_manager->getCurrentScore();
+        score += cannon->getBirdsCount()*5000;
+        running = false;
+        result = WIN;
+    }
+    else if(cannon->getBirdsCount() == 0 && entity_manager->CountBirds() == 0){
+        score = entity_manager->getCurrentScore();
+        running = false;
+        result = LOOSE;
     }
 }
 

@@ -21,8 +21,6 @@ private:
 
     int current_score = 0;
     void updateScore(int score);
-    int CountPigs() const;
-    int CountBirds() const;
     int m_birds;
     bool m_win = false;
     bool m_lose = false;
@@ -39,6 +37,8 @@ public:
     int getCurrentScore() const;
     bool CheckForWin() const;
     bool CheckForLose() const;
+    int CountPigs() const;
+    int CountBirds() const;
 };
 
 
