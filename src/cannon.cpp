@@ -155,3 +155,7 @@ void CannonPowerWidget::draw(sf::RenderTarget &target, sf::RenderStates states) 
    target.draw(outline_rectangle_widget, states);
    target.draw(fill_rectangle_widget, states);
 }
+
+int Cannon::getBirdsCount() const {
+    return birds.size();
+}

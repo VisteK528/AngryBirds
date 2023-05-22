@@ -98,7 +98,7 @@ std::vector<std::unique_ptr<Bird>> GameState::loadWorld(const std::string& level
 
     PigFactory<BasicPig> basic_pig_fact(world, makeShared(entities_textures[BASIC_PIG]));
     PigFactory<ArmoredPig> armored_pig_fact(world, makeShared(entities_textures[ARMORED_PIG]));
-    
+
     json j;
     file >> j;
 
@@ -217,10 +217,20 @@ void GameState::initWorld() {
 void GameState::update(const float &dt) {
     world->Step(dt, 8, 3);
     entity_manager->update();
+    entity_manager->setBirds(cannon->getBirdsCount());
 
     sf::Vector2f mouse_position = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), this->window->getView());
     cannon->update(mouse_position);
     cannon_power_widget.update(cannon->getPower(), cannon->isActive());
+
+    if(entity_manager->CheckForWin()){
+        std::cout << "You won!" << std::endl;
+        this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager));
+    }
+    else if(entity_manager->CheckForLose()){
+        std::cout << "You lost!" << std::endl;
+        this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager));
+    }
 }
 
 void GameState::handleEvent(const sf::Event &e) {

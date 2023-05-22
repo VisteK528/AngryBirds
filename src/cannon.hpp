@@ -55,6 +55,7 @@ public:
     bool isActive() const;
     float getPower() const;
     float getMaxPower() const;
+    int getBirdsCount() const;
     void setBirds(std::vector<std::unique_ptr<Bird>>& birds);
     void update(sf::Vector2f mouse_position);
     void handleInput(const sf::Event e);

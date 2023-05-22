@@ -36,6 +36,9 @@
 #include "../gui_manager.hpp"
 #include <fstream>
 
+#include "win.hpp"
+#include "loose.hpp"
+
 using json = nlohmann::json;
 
 // TODO Add the possibility to load the game from file
@@ -62,6 +65,7 @@ private:
     void loadTextures();
     void setWall(int x, int y, int w, int h);
     void initWorld();
+
 public:
     GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager, std::string level_path);
     ~GameState();
