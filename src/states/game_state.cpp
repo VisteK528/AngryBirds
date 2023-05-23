@@ -226,13 +226,17 @@ void GameState::update(const float &dt) {
         cannon_power_widget.update(cannon->getPower(), cannon->isActive());
     }
     else if(!running && !quit){
+        quit = true;
+        window->display();
+        sf::Texture t;
+        t.create(window->getSize().x, window->getSize().y);
+        t.update(*window);
+        std::cout<<window->getSize().x<<" "<<window->getSize().y<<std::endl;
         if(result == WIN){
-            quit = true;
-            this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager, window->capture(), score));
+            this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
         }
         else if(result == LOOSE){
-            quit = true;
-            this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager, window->capture(), score));
+            this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
         }
     }
 

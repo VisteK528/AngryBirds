@@ -18,8 +18,8 @@ Win::~Win(){
 
 void Win::initVariables() {
     this->title = gui_manager->createText("You won!", 70, sf::Vector2f(640, 250), ui::ORIGIN::C);
-    this->menu_btn = gui_manager->createButton("> Menu", 20, sf::Vector2f(640, 400), sf::Vector2f(250, 60), ui::ORIGIN::C);
-    this->exit_btn = gui_manager->createButton("> Exit",20, sf::Vector2f(640, 480), sf::Vector2f(250, 60), ui::ORIGIN::C);
+    this->menu_btn = gui_manager->createButton("> Menu", 20, sf::Vector2f(640, 420), sf::Vector2f(250, 60), ui::ORIGIN::C);
+    this->exit_btn = gui_manager->createButton("> Exit",20, sf::Vector2f(640, 500), sf::Vector2f(250, 60), ui::ORIGIN::C);
     this->score_widget = gui_manager->createText("Score: "+std::to_string(player_score), 20, sf::Vector2f(640, 350), ui::ORIGIN::C);
 
     this->sound_manager->loadBackgroundMusic("sounds/Angry-Birds-Theme.wav");
@@ -29,6 +29,7 @@ void Win::initVariables() {
     this->background_texture.loadFromImage(background_image);
     this->background = sf::Sprite(background_texture);
     this->background.setColor(sf::Color(255, 255, 255, 180));
+    this->background.setScale(1280.f/(float)window->getSize().x, 720.f/(float)window->getSize().y);
     this->background.setPosition(0,0);
 }
 
