@@ -21,16 +21,24 @@ private:
 
     int current_score = 0;
     void updateScore(int score);
+    int m_birds;
+    bool m_win = false;
+    bool m_lose = false;
 
 public:
     EntityManager(std::shared_ptr<b2World> world);
     bool isBirdActive() const;
     void update();
+    void setBirds(int birds);
     void render(std::shared_ptr<sf::RenderTarget> target);
     void pushEntity(std::unique_ptr<Entity> entity);
     const std::shared_ptr<b2World> &getWorld() const;
 
     int getCurrentScore() const;
+    bool CheckForWin() const;
+    bool CheckForLose() const;
+    int CountPigs() const;
+    int CountBirds() const;
 };
 
 

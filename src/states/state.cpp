@@ -15,3 +15,7 @@ State::~State(){}
 const bool& State::getQuit() const{
     return this->quit;
 }
+
+const bool& State::returnToFirst() const{
+    return this->return_to_first;
+}

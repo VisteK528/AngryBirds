@@ -98,7 +98,7 @@ std::vector<std::unique_ptr<Bird>> GameState::loadWorld(const std::string& level
 
     PigFactory<BasicPig> basic_pig_fact(world, makeShared(entities_textures[BASIC_PIG]));
     PigFactory<ArmoredPig> armored_pig_fact(world, makeShared(entities_textures[ARMORED_PIG]));
-    
+
     json j;
     file >> j;
 
@@ -212,15 +212,45 @@ void GameState::initWorld() {
 
     // Left wall
     setWall(-30, 360, 10, 640);
+    running = true;
 }
 
 void GameState::update(const float &dt) {
-    world->Step(dt, 8, 3);
-    entity_manager->update();
+    if(running){
+        world->Step(dt, 8, 3);
+        entity_manager->update();
+        entity_manager->setBirds(cannon->getBirdsCount());
 
-    sf::Vector2f mouse_position = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), this->window->getView());
-    cannon->update(mouse_position);
-    cannon_power_widget.update(cannon->getPower(), cannon->isActive());
+        sf::Vector2f mouse_position = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), this->window->getView());
+        cannon->update(mouse_position);
+        cannon_power_widget.update(cannon->getPower(), cannon->isActive());
+    }
+    else if(!running && !quit){
+        quit = true;
+        window->display();
+        sf::Texture t;
+        t.create(window->getSize().x, window->getSize().y);
+        t.update(*window);
+        std::cout<<window->getSize().x<<" "<<window->getSize().y<<std::endl;
+        if(result == WIN){
+            this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
+        }
+        else if(result == LOOSE){
+            this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
+        }
+    }
+
+    if(entity_manager->CountPigs() == 0){
+        score = entity_manager->getCurrentScore();
+        score += cannon->getBirdsCount()*5000;
+        running = false;
+        result = WIN;
+    }
+    else if(cannon->getBirdsCount() == 0 && entity_manager->CountBirds() == 0){
+        score = entity_manager->getCurrentScore();
+        running = false;
+        result = LOOSE;
+    }
 }
 
 void GameState::handleEvent(const sf::Event &e) {

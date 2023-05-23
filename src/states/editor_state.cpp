@@ -129,7 +129,7 @@ void EditorState::update(const float &dt) {
 
     for(const auto& barrier: place_area){
         if(selected_sprite.getGlobalBounds().intersects(barrier)){
-            selected_sprite.setColor(sf::Color(255, 0,0, 255));
+            selected_sprite.setColor(sf::Color(255, 0,0, 175));
             intersecting = true;
             break;
         }
@@ -143,7 +143,7 @@ void EditorState::update(const float &dt) {
         if(!added_entities.empty()){
             for(const auto& added_sprite: added_entities){
                 if(selected_sprite.getGlobalBounds().intersects(added_sprite.sprite.getGlobalBounds())){
-                    selected_sprite.setColor(sf::Color(255, 0,0, 255));
+                    selected_sprite.setColor(sf::Color(255, 0,0, 175));
                     intersecting = true;
                     break;
                 }

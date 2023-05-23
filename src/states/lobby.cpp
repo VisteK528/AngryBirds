@@ -45,7 +45,7 @@ void Lobby::handleEvent(const sf::Event &e) {
     }
 
     if(this->back_btn->handleInput(position, e)){
-        this->states->pop();
+        quit = true;
     }
 }
 

@@ -25,7 +25,7 @@ private:
     sf::Event e;
 
     sf::Font font;
-    sf::Texture app_icon_texture;
+    sf::Image app_icon_image;
     std::pair<sf::Color, sf::Color> widget_background_color;
     std::pair<sf::Color, sf::Color> widget_text_color;
 

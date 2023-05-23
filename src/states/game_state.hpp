@@ -36,11 +36,20 @@
 #include "../gui_manager.hpp"
 #include <fstream>
 
+#include "win.hpp"
+#include "loose.hpp"
+
 using json = nlohmann::json;
 
 // TODO Add the possibility to load the game from file
 class GameState: public State {
 private:
+    typedef enum{WIN, LOOSE} RESULT;
+
+    RESULT result;
+    bool running = false;
+    int score = 0;
+
     std::string level_path;
     b2Vec2 gravity;
     std::shared_ptr<b2World> world;
@@ -62,6 +71,7 @@ private:
     void loadTextures();
     void setWall(int x, int y, int w, int h);
     void initWorld();
+
 public:
     GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager, std::string level_path);
     ~GameState();
