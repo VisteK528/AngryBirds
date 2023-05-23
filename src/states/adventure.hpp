@@ -8,6 +8,7 @@
 
 class Adventure: public State {
 private:
+    std::shared_ptr<SoundManager> sound_manager;
     std::shared_ptr<GuiManager> gui_manager;
     std::unique_ptr<ui::Text> title;
     std::unique_ptr<ui::Button> level1_btn;
@@ -27,10 +28,13 @@ private:
 
     std::unique_ptr<ui::Button> back_btn;
 
+    sf::Texture background_texture;
+    sf::Sprite background;
+
     void initVariables();
 
 public:
-    Adventure(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager);
+    Adventure(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager);
     ~Adventure();
     void init() override;
     void update(const float& dt) override;

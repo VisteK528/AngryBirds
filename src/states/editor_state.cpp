@@ -4,8 +4,9 @@
 
 #include "editor_state.hpp"
 
-EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager): State(window, states){
+EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(window, states){
     this->gui_manager = std::move(gui_manager);
+    this->sound_manager = std::move(sound_manager);
     this->title = nullptr;
     this->back_btn = nullptr;
     this->save_btn = nullptr;
@@ -234,8 +235,8 @@ void EditorState::handleEvent(const sf::Event &e) {
         }
     }
 
-    if(e.type == sf::Event::MouseButtonReleased && (placingBlock || movingEntity)){
-        if(e.mouseButton.button == sf::Mouse::Middle && !placingPig){
+    if((e.type == sf::Event::MouseButtonReleased || e.type == sf::Event::KeyReleased) && (placingBlock || movingEntity)){
+        if((e.mouseButton.button == sf::Mouse::Middle || e.key.code == sf::Keyboard::R) && !placingPig){
             selected_sprite.rotate(90);
             if(rotated){
                 rotated = false;

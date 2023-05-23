@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include "../../include/json.hpp"
+#include "../sound_manager.hpp"
 
 using json = nlohmann::json;
 
@@ -61,6 +62,9 @@ private:
     bool intersecting = false;
     bool rotated = false;
 
+    // Sounds
+    std::shared_ptr<SoundManager> sound_manager;
+
     // GUI Elements
     std::shared_ptr<GuiManager> gui_manager;
     std::unique_ptr<ui::Text> title;
@@ -89,7 +93,7 @@ private:
     void saveToFile(const std::string& path);
     void loadFromFile(const std::string& path);
 public:
-    EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager);
+    EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager);
     ~EditorState();
     void init() override;
     void update(const float& dt) override;
