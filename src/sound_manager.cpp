@@ -1,4 +1,4 @@
-#include "sound_manager.hpp"
+#include "include/sound_manager.hpp"
 
 sf::Music& SoundManager::getBackgroundMusic() {
     return this->background_music;

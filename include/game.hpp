@@ -8,9 +8,9 @@
 #include <SFML/Graphics.hpp>
 #include <stack>
 #include <memory>
-#include "states//state.hpp"
-#include "states/game_state.hpp"
-#include "states/menu.hpp"
+#include "include/states/state.hpp"
+#include "include/states/game_state.hpp"
+#include "include/states/menu.hpp"
 #include "gui_manager.hpp"
 #include "sound_manager.hpp"
 #include <exception>

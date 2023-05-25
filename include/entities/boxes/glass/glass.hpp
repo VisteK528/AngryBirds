@@ -1,7 +1,7 @@
 #ifndef GLASS_HPP
 #define GLASS_HPP
 
-#include "../box.hpp"
+#include "include/entities/boxes/box.hpp"
 
 class Glass: public Box
 {

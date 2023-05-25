@@ -1,7 +1,7 @@
 #ifndef ANGRYBIRDS_RESULT_STATE_HPP
 #define ANGRYBIRDS_RESULT_STATE_HPP
 
-#include "../widgets.hpp"
+#include "include/widgets.hpp"
 #include "state.hpp"
 
 class ResultState: public State {

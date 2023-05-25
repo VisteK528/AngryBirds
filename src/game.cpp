@@ -1,4 +1,4 @@
-#include "game.hpp"
+#include "include/game.hpp"
 
 Game::Game() {
     sf::ContextSettings settings;

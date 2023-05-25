@@ -1,4 +1,4 @@
-#include "result_state.hpp"
+#include "include/states/result_state.hpp"
 
 ResultState::ResultState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
          std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager,

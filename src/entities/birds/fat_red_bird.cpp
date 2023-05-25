@@ -2,7 +2,7 @@
 // Created by piotr on 5/9/23.
 //
 
-#include "fat_red_bird.hpp"
+#include "include/entities/birds/fat_red_bird.hpp"
 
 FatRedBird::FatRedBird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x, float coord_y){
     this->bird_textures = bird_textures;

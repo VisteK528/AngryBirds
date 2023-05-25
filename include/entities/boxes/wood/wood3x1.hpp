@@ -1,7 +1,7 @@
 #ifndef WOOD3X1_HPP
 #define WOOD3X1_HPP
 
-#include "../box.hpp"
+#include "include/entities/boxes/box.hpp"
 
 class Wood3x1: public Box
 {

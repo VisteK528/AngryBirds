@@ -7,8 +7,8 @@
 #include <fstream>
 
 // Box2D
-#include "../../box2d/include/box2d/box2d.h"
-#include "../contact_listener.hpp"
+#include "box2d/include/box2d/box2d.h"
+#include "include/contact_listener.hpp"
 
 // States
 #include "state.hpp"
@@ -16,32 +16,32 @@
 #include "loose.hpp"
 
 //Entities
-#include "../entities/birds/bird.hpp"
-#include "../entities/boxes/box.hpp"
-#include "../entities/boxes/wood/wood.hpp"
-#include "../entities/boxes/wood/wood3x1.hpp"
-#include "../entities/boxes/stone/stone.hpp"
-#include "../entities/boxes/stone/stone3x1.hpp"
-#include "../entities/boxes/glass/glass.hpp"
-#include "../entities/boxes/glass/glass3x1.hpp"
-#include "../entities/pigs/pig.hpp"
-#include "../entities/pigs/basic_pig/basic_pig.hpp"
-#include "../entities/pigs/armored_pig//armored_pig.hpp"
-#include "../entities/entity_manager.hpp"
-#include "../cannon.hpp"
-#include "../entities/birds/yellow_bird.hpp"
-#include "../entities/birds/fat_red_bird.hpp"
-#include "../entities/birds/grey_bird.hpp"
+#include "include/entities/birds/bird.hpp"
+#include "include/entities/boxes/box.hpp"
+#include "include/entities/boxes/wood/wood.hpp"
+#include "include/entities/boxes/wood/wood3x1.hpp"
+#include "include/entities/boxes/stone/stone.hpp"
+#include "include/entities/boxes/stone/stone3x1.hpp"
+#include "include/entities/boxes/glass/glass.hpp"
+#include "include/entities/boxes/glass/glass3x1.hpp"
+#include "src/entities/pigs/pig.hpp"
+#include "src/entities/pigs/basic_pig/basic_pig.hpp"
+#include "src/entities/pigs/armored_pig/armored_pig.hpp"
+#include "include/entities/entity_manager.hpp"
+#include "include/cannon.hpp"
+#include "include/entities/birds/yellow_bird.hpp"
+#include "include/entities/birds/fat_red_bird.hpp"
+#include "include/entities/birds/grey_bird.hpp"
 
 // Factories
-#include "../entities/factories/bird_factory.hpp"
-#include "../entities/factories/box_factory.hpp"
-#include "../entities/factories/pig_factory.hpp"
+#include "include/entities/factories/bird_factory.hpp"
+#include "include/entities/factories/box_factory.hpp"
+#include "include/entities/factories/pig_factory.hpp"
 
 // Utilities
-#include "../textures.hpp"
-#include "../../include/json.hpp"
-#include "../exceptions.hpp"
+#include "include/textures.hpp"
+#include "include/json.hpp"
+#include "include/exceptions.hpp"
 
 using json = nlohmann::json;
 

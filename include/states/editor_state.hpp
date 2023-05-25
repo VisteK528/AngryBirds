@@ -2,12 +2,12 @@
 #define ANGRYBIRDS_EDITOR_STATE_HPP
 
 #include "state.hpp"
-#include "../exceptions.hpp"
-#include "../entities/entity.hpp"
-#include "../textures.hpp"
+#include "include/exceptions.hpp"
+#include "include/entities/entity.hpp"
+#include "include/textures.hpp"
 #include <iostream>
 #include <fstream>
-#include "../../include/json.hpp"
+#include "include/json.hpp"
 
 using json = nlohmann::json;
 

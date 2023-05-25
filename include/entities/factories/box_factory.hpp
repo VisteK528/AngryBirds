@@ -7,15 +7,15 @@
 
 #include <utility>
 
-#include "../entity.hpp"
+#include "include/entities/entity.hpp"
 
-#include "../boxes/box.hpp"
-#include "../boxes/wood/wood.hpp"
-#include "../boxes/wood/wood3x1.hpp"
-#include "../boxes/glass/glass.hpp"
-#include "../boxes/glass/glass3x1.hpp"
-#include "../boxes/stone/stone.hpp"
-#include "../boxes/stone/stone3x1.hpp"
+#include "include/entities/boxes/box.hpp"
+#include "include/entities/boxes/wood/wood.hpp"
+#include "include/entities/boxes/wood/wood3x1.hpp"
+#include "include/entities/boxes/glass/glass.hpp"
+#include "include/entities/boxes/glass/glass3x1.hpp"
+#include "include/entities/boxes/stone/stone.hpp"
+#include "include/entities/boxes/stone/stone3x1.hpp"
 
 template<class T>
 class BoxFactory{

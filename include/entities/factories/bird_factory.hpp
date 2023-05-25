@@ -7,10 +7,10 @@
 
 #include <utility>
 
-#include "../birds/bird.hpp"
-#include "../birds/yellow_bird.hpp"
-#include "../birds/grey_bird.hpp"
-#include "../birds/fat_red_bird.hpp"
+#include "include/entities/birds/bird.hpp"
+#include "include/entities/birds/yellow_bird.hpp"
+#include "include/entities/birds/grey_bird.hpp"
+#include "include/entities/birds/fat_red_bird.hpp"
 
 template<class T>
 class BirdFactory {

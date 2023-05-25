@@ -1,7 +1,7 @@
 #ifndef ANGRYBIRDS_LOBBY_HPP
 #define ANGRYBIRDS_LOBBY_HPP
 
-#include "../widgets.hpp"
+#include "include/widgets.hpp"
 #include "state.hpp"
 #include "adventure.hpp"
 #include "custom.hpp"

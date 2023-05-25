@@ -1,7 +1,7 @@
 #ifndef ANGRYBIRDS_ADVENTURE_HPP
 #define ANGRYBIRDS_ADVENTURE_HPP
 
-#include "../widgets.hpp"
+#include "include/widgets.hpp"
 #include "state.hpp"
 #include "game_state.hpp"
 

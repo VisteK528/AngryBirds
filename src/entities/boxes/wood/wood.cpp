@@ -1,4 +1,4 @@
-#include "wood.hpp"
+#include "include/entities/boxes/wood/wood.hpp"
 #include <utility>
 
 Wood::Wood(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Texture>> textures, float coord_x, float coord_y): Box(std::move(world))

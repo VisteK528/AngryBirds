@@ -2,7 +2,7 @@
 // Created by piotr on 5/5/23.
 //
 
-#include "entity_manager.hpp"
+#include "include/entities/entity_manager.hpp"
 #include <iostream>
 
 EntityManager::EntityManager(std::shared_ptr<b2World> world) {

@@ -1,8 +1,8 @@
 #ifndef PIG_HPP
 #define PIG_HPP
 
-#include "../entity.hpp"
-#include "../birds/bird.hpp"
+#include "include/entities/entity.hpp"
+#include "include/entities/birds/bird.hpp"
 #include <math.h>
 
 class Pig: public Entity

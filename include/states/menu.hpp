@@ -1,7 +1,7 @@
 #ifndef ANGRYBIRDS_MENU_HPP
 #define ANGRYBIRDS_MENU_HPP
 
-#include "../widgets.hpp"
+#include "include/widgets.hpp"
 #include "state.hpp"
 #include "editor_state.hpp"
 #include "lobby.hpp"

@@ -1,7 +1,7 @@
 #ifndef BIRD_HPP
 #define BIRD_HPP
 
-#include "../entity.hpp"
+#include "include/entities/entity.hpp"
 #include <iostream>
 #include <math.h>
 

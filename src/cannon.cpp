@@ -1,4 +1,4 @@
-#include "cannon.hpp"
+#include "include/cannon.hpp"
 
 Cannon::Cannon(sf::Vector2f position, std::shared_ptr<EntityManager> manager) {
     this->manager = std::move(manager);

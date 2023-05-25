@@ -11,8 +11,8 @@
 #include <map>
 #include <memory>
 #include <utility>
-#include "../gui_manager.hpp"
-#include "../sound_manager.hpp"
+#include "include/gui_manager.hpp"
+#include "include/sound_manager.hpp"
 
 class State {
 protected:

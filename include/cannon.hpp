@@ -2,12 +2,12 @@
 #define ANGRYBIRDS_CANNON_HPP
 
 #include <SFML/Graphics.hpp>
-#include "entities/entity_manager.hpp"
-#include "entities/birds/bird.hpp"
-#include "entities/birds/yellow_bird.hpp"
-#include "entities/birds/fat_red_bird.hpp"
-#include "entities/birds/grey_bird.hpp"
-#include "../box2d/include/box2d/box2d.h"
+#include "include/entities/entity_manager.hpp"
+#include "include/entities/birds/bird.hpp"
+#include "include/entities/birds/yellow_bird.hpp"
+#include "include/entities/birds/fat_red_bird.hpp"
+#include "include/entities/birds/grey_bird.hpp"
+#include "box2d/include/box2d/box2d.h"
 #include <iostream>
 
 class CannonPowerWidget: public sf::Drawable{

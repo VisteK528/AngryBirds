@@ -1,4 +1,4 @@
-#include "gui_manager.hpp"
+#include "include/gui_manager.hpp"
 
 GuiManager::GuiManager(sf::Font &font, std::pair<sf::Color, sf::Color> widget_default_background_color,
                        std::pair<sf::Color, sf::Color> widget_default_text_color) {

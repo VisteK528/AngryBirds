@@ -7,7 +7,7 @@
 
 #include "entity.hpp"
 #include <SFML/Graphics.hpp>
-#include "../../box2d/include/box2d/box2d.h"
+#include "box2d/include/box2d/box2d.h"
 
 /* TODO Create methods for checking if all birds and pigs are destroyed (separately)
  * TODO Make bird's action available only for the last bird
