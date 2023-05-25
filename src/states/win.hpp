@@ -2,8 +2,6 @@
 #define ANGRYBIRDS_WIN_HPP
 
 #include "../widgets.hpp"
-#include "../gui_manager.hpp"
-#include "../sound_manager.hpp"
 #include "state.hpp"
 #include "game_state.hpp"
 #include "menu.hpp"
@@ -12,8 +10,6 @@
 
 class Win: public State {
 private:
-    std::shared_ptr<GuiManager> gui_manager;
-    std::shared_ptr<SoundManager> sound_manager;
     std::unique_ptr<ui::Text> title;
     std::unique_ptr<ui::Text> score_widget;
     std::unique_ptr<ui::Button> menu_btn;

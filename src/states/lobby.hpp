@@ -2,17 +2,13 @@
 #define ANGRYBIRDS_LOBBY_HPP
 
 #include "../widgets.hpp"
-#include "../gui_manager.hpp"
 #include "state.hpp"
 #include "game_state.hpp"
 #include "adventure.hpp"
 #include "custom.hpp"
-#include "../sound_manager.hpp"
 
 class Lobby: public State {
 private:
-    std::shared_ptr<GuiManager> gui_manager;
-    std::shared_ptr<SoundManager> sound_manager;
     std::unique_ptr<ui::Text> title;
     std::unique_ptr<ui::Button> adventure_mode_btn;
     std::unique_ptr<ui::Button> custom_mode_btn;

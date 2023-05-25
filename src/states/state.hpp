@@ -10,16 +10,21 @@
 #include <stack>
 #include <map>
 #include <memory>
+#include "../gui_manager.hpp"
+#include "../sound_manager.hpp"
 
 class State {
 protected:
     std::shared_ptr<std::stack<std::unique_ptr<State>>> states;
     std::shared_ptr<sf::RenderWindow> window;
     std::vector<sf::Texture> textures;
+    std::shared_ptr<GuiManager> gui_manager;
+    std::shared_ptr<SoundManager> sound_manager;
+
     bool quit = false;
     bool return_to_first = false;
 public:
-    State(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states);
+    State(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager);
     virtual ~State();
 
     virtual void init() = 0;

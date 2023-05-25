@@ -1,9 +1,13 @@
 #include "game_state.hpp"
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager, std::string level_path): State(window, states) {
+#include <utility>
+
+GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
+                     std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager,
+                     std::string level_path): State(std::move(window), std::move(states),
+                                                    std::move(gui_manager), std::move(sound_manager)) {
+
     this->level_path = level_path;
-    this->sound_manager = std::move(sound_manager);
-    this->gui_manager = std::move(gui_manager);
     init();
     initWorld();
 }

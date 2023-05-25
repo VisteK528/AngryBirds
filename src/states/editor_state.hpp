@@ -6,14 +6,12 @@
 #define ANGRYBIRDS_EDITOR_STATE_HPP
 
 #include "state.hpp"
-#include "../gui_manager.hpp"
 #include "../exceptions.hpp"
 #include "../entities/entity.hpp"
 #include "../textures.hpp"
 #include <iostream>
 #include <fstream>
 #include "../../include/json.hpp"
-#include "../sound_manager.hpp"
 
 using json = nlohmann::json;
 
@@ -62,11 +60,7 @@ private:
     bool intersecting = false;
     bool rotated = false;
 
-    // Sounds
-    std::shared_ptr<SoundManager> sound_manager;
-
     // GUI Elements
-    std::shared_ptr<GuiManager> gui_manager;
     std::unique_ptr<ui::Text> title;
     std::unique_ptr<ui::Button> back_btn;
     std::unique_ptr<ui::Button> save_btn;

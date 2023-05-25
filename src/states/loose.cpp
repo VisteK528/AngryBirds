@@ -1,8 +1,13 @@
 #include "loose.hpp"
 
-Loose::Loose(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager, sf::Image background_image, int score): State(window, states){
-    this->gui_manager = std::move(gui_manager);
-    this->sound_manager = std::move(sound_manager);
+#include <utility>
+
+Loose::Loose(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
+             std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager,
+             sf::Image background_image, int score): State(
+                     std::move(window), std::move(states), std::move(gui_manager),
+                     std::move(sound_manager)){
+
     this->title = nullptr;
     this->menu_btn = nullptr;
     this->exit_btn = nullptr;

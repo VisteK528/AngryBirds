@@ -32,8 +32,6 @@
 #include "../entities/factories/pig_factory.hpp"
 #include "../textures.hpp"
 #include "../../include/json.hpp"
-#include "../sound_manager.hpp"
-#include "../gui_manager.hpp"
 #include <fstream>
 
 #include "win.hpp"
@@ -61,9 +59,6 @@ private:
     sf::Sprite background;
     std::unordered_map<TEXTURE_TYPE, std::vector<sf::Texture>> entities_textures;
     std::vector<sf::Texture> textures;
-
-    std::shared_ptr<GuiManager> gui_manager;
-    std::shared_ptr<SoundManager> sound_manager;
 
     const float SCALE = 10.0f;
 

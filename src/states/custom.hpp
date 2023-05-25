@@ -2,14 +2,11 @@
 #define ANGRYBIRDS_CUSTOM_HPP
 
 #include "../widgets.hpp"
-#include "../gui_manager.hpp"
 #include "state.hpp"
 #include "game_state.hpp"
 
 class Custom: public State {
 private:
-    std::shared_ptr<SoundManager> sound_manager;
-    std::shared_ptr<GuiManager> gui_manager;
     std::unique_ptr<ui::Text> title;
     std::unique_ptr<ui::Button> level1_btn;
     std::unique_ptr<ui::Button> level2_btn;

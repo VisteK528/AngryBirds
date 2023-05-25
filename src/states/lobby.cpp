@@ -1,8 +1,11 @@
 #include "lobby.hpp"
 
-Lobby::Lobby(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(window, states){
-    this->gui_manager = std::move(gui_manager);
-    this->sound_manager = std::move(sound_manager);
+#include <utility>
+
+Lobby::Lobby(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
+             std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(
+                     std::move(window), std::move(states), std::move(gui_manager),
+                     std::move(sound_manager)){
     this->title = nullptr;
     this->adventure_mode_btn = nullptr;
     this->custom_mode_btn = nullptr;
