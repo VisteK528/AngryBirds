@@ -1,7 +1,3 @@
-//
-// Created by Piotr Patek on 19/05/2023.
-//
-
 #include "sound_manager.hpp"
 
 sf::Music& SoundManager::getBackgroundMusic() {

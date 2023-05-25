@@ -1,7 +1,3 @@
-//
-// Created by piotr on 5/6/23.
-//
-
 #ifndef ANGRYBIRDS_CANNON_HPP
 #define ANGRYBIRDS_CANNON_HPP
 

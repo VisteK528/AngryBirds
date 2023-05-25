@@ -1,7 +1,3 @@
-//
-// Created by Piotr Patek on 19/05/2023.
-//
-
 #ifndef ANGRYBIRDS_SOUND_MANAGER_HPP
 #define ANGRYBIRDS_SOUND_MANAGER_HPP
 

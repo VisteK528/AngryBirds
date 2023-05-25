@@ -1,7 +1,3 @@
-//
-// Created by piotr on 5/4/23.
-//
-
 #include "contact_listener.hpp"
 
 ContactListener::ContactListener() {

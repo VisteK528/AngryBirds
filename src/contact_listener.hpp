@@ -1,7 +1,3 @@
-//
-// Created by piotr on 5/4/23.
-//
-
 #ifndef ANGRYBIRDS_CONTACT_LISTENER_HPP
 #define ANGRYBIRDS_CONTACT_LISTENER_HPP
 

@@ -1,12 +1,21 @@
-//
-// Created by piotr on 5/4/23.
-//
-
 #ifndef ANGRYBIRDS_GAME_STATE_HPP
 #define ANGRYBIRDS_GAME_STATE_HPP
 
-#include "state.hpp"
+// Standard libraries
+#include <iostream>
+#include <string>
+#include <fstream>
+
+// Box2D
 #include "../../box2d/include/box2d/box2d.h"
+#include "../contact_listener.hpp"
+
+// States
+#include "state.hpp"
+#include "win.hpp"
+#include "loose.hpp"
+
+//Entities
 #include "../entities/birds/bird.hpp"
 #include "../entities/boxes/box.hpp"
 #include "../entities/boxes/wood/wood.hpp"
@@ -18,28 +27,24 @@
 #include "../entities/pigs/pig.hpp"
 #include "../entities/pigs/basic_pig/basic_pig.hpp"
 #include "../entities/pigs/armored_pig//armored_pig.hpp"
-#include <iostream>
-#include <string>
-#include "../contact_listener.hpp"
 #include "../entities/entity_manager.hpp"
 #include "../cannon.hpp"
 #include "../entities/birds/yellow_bird.hpp"
 #include "../entities/birds/fat_red_bird.hpp"
 #include "../entities/birds/grey_bird.hpp"
-#include "../exceptions.hpp"
+
+// Factories
 #include "../entities/factories/bird_factory.hpp"
 #include "../entities/factories/box_factory.hpp"
 #include "../entities/factories/pig_factory.hpp"
+
+// Utilities
 #include "../textures.hpp"
 #include "../../include/json.hpp"
-#include <fstream>
-
-#include "win.hpp"
-#include "loose.hpp"
+#include "../exceptions.hpp"
 
 using json = nlohmann::json;
 
-// TODO Add the possibility to load the game from file
 class GameState: public State {
 private:
     typedef enum{WIN, LOOSE} RESULT;

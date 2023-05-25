@@ -1,7 +1,3 @@
-//
-// Created by piotr on 5/11/23.
-//
-
 #ifndef ANGRYBIRDS_EXCEPTIONS_HPP
 #define ANGRYBIRDS_EXCEPTIONS_HPP
 

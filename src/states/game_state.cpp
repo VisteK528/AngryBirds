@@ -1,7 +1,5 @@
 #include "game_state.hpp"
 
-#include <utility>
-
 GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
                      std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager,
                      std::string level_path): State(std::move(window), std::move(states),
@@ -242,6 +240,7 @@ void GameState::update(const float &dt) {
         else if(result == LOOSE){
             this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
         }
+        this->states->top()->init();
     }
 
     if(entity_manager->CountPigs() == 0){

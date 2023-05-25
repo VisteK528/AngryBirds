@@ -1,7 +1,3 @@
-//
-// Created by piotr on 5/14/23.
-//
-
 #ifndef ANGRYBIRDS_TEXTURES_HPP
 #define ANGRYBIRDS_TEXTURES_HPP
 

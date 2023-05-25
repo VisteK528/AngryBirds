@@ -3,7 +3,6 @@
 
 #include "../widgets.hpp"
 #include "state.hpp"
-#include "game_state.hpp"
 #include "adventure.hpp"
 #include "custom.hpp"
 

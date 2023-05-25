@@ -1,13 +1,8 @@
-//
-// Created by piotr on 5/4/23.
-//
-
 #ifndef ANGRYBIRDS_MENU_HPP
 #define ANGRYBIRDS_MENU_HPP
 
 #include "../widgets.hpp"
 #include "state.hpp"
-#include "game_state.hpp"
 #include "editor_state.hpp"
 #include "lobby.hpp"
 

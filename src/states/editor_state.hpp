@@ -1,7 +1,3 @@
-//
-// Created by piotr on 5/13/23.
-//
-
 #ifndef ANGRYBIRDS_EDITOR_STATE_HPP
 #define ANGRYBIRDS_EDITOR_STATE_HPP
 

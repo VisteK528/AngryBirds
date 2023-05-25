@@ -1,7 +1,3 @@
-//
-// Created by piotr on 5/6/23.
-//
-
 #include "cannon.hpp"
 
 Cannon::Cannon(sf::Vector2f position, std::shared_ptr<EntityManager> manager) {

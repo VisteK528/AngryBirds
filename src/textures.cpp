@@ -1,7 +1,3 @@
-//
-// Created by piotr on 5/14/23.
-//
-
 #include "textures.hpp"
 
 std::vector<std::shared_ptr<sf::Texture>> makeShared(std::vector<sf::Texture> &textures) {

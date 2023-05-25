@@ -1,7 +1,3 @@
-//
-// Created by piotr on 5/3/23.
-//
-
 #ifndef ANGRYBIRDS_GUI_MANAGER_HPP
 #define ANGRYBIRDS_GUI_MANAGER_HPP
 
