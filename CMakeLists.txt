@@ -13,8 +13,7 @@ link_directories(box2d/build/bin)
 add_executable(
         angrybirds
         main.cpp
-        ${SRC}
-        src/sound_manager.cpp)
+        ${SRC})
 
 target_link_libraries(angrybirds libbox2d.a)
 target_include_directories(angrybirds PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
