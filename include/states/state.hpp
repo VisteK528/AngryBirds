@@ -18,7 +18,6 @@ class State {
 protected:
     std::shared_ptr<std::stack<std::unique_ptr<State>>> states;
     std::shared_ptr<sf::RenderWindow> window;
-    std::vector<sf::Texture> textures;
     std::shared_ptr<GuiManager> gui_manager;
     std::shared_ptr<SoundManager> sound_manager;
 

@@ -63,12 +63,11 @@ private:
 
     sf::Sprite background;
     std::unordered_map<TEXTURE_TYPE, std::vector<sf::Texture>> entities_textures;
-    std::vector<sf::Texture> textures;
+    std::unordered_map<BACKGROUNDS, sf::Texture> background_textures;
 
     const float SCALE = 10.0f;
 
     std::vector<std::unique_ptr<Bird>> loadWorld(const std::string& level_path);
-    void loadTextures();
     void setWall(int x, int y, int w, int h);
     void initWorld();
 

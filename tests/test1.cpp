@@ -1,3 +1,5 @@
-//
-// Created by Piotr Patek on 27/05/2023.
-//
+#include "catch.hpp"
+
+TEST_CASE("Test "){
+    CHECK(1 == 1);
+}

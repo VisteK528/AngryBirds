@@ -78,7 +78,7 @@ private:
     void updateChangeSelectedPigBtn(unsigned int pig_index);
     void updateChangeSelectedSprite();
     void updateBackgroundTexture();
-    void loadTextures();
+    void initTextures();
     void initVariables();
     void saveToFile(const std::string& path);
     void loadFromFile(const std::string& path);
