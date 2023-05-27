@@ -72,59 +72,59 @@ void Adventure::handleEvent(const sf::Event &e) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
 
     if(this->level1_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_1"));
     }
 
     if(this->level2_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_2"));
     }
 
     if(this->level3_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_3"));
     }
 
     if(this->level4_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_4"));
     }
 
     if(this->level5_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_5"));
     }
 
     if(this->level6_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_6"));
     }
 
     if(this->level7_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_7"));
     }
 
     if(this->level8_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_8"));
     }
 
     if(this->level9_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_9"));
     }
 
     if(this->level10_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_10"));
     }
 
     if(this->level11_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_11"));
     }
 
     if(this->level12_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_12"));
     }
 
     if(this->level13_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_13"));
     }
 
     if(this->level14_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_14"));
     }
 
     if(this->back_btn->handleInput(position, e)){

@@ -200,8 +200,12 @@ void EditorState::handleEvent(const sf::Event &e) {
         saveToFile("data/custom/custom_level_"+std::to_string(level_number)+".json");
     }
 
-    if(!placingBlock || !placingPig){
-        added_entities.erase(std::remove_if(added_entities.begin(), added_entities.end(), [&](ENTITY& entity){return checkIfToDelete(entity, position, e);}), added_entities.end());
+    if(!placingBlock && !placingPig){
+        if(e.type == sf::Event::MouseButtonReleased){
+            if(e.mouseButton.button == sf::Mouse::Right){
+                added_entities.erase(std::remove_if(added_entities.begin(), added_entities.end(), [&](ENTITY& entity){return checkIfToDelete(entity, position, e);}), added_entities.end());
+            }
+        }
     }
 
     added_birds.erase(std::remove_if(added_birds.begin(), added_birds.end(), [&](BIRD & bird){return checkIfToDelete(bird, position, e);}), added_birds.end());
@@ -234,11 +238,14 @@ void EditorState::handleEvent(const sf::Event &e) {
 
     if((e.type == sf::Event::MouseButtonReleased || e.type == sf::Event::KeyReleased) && (placingBlock || movingEntity)){
         if((e.mouseButton.button == sf::Mouse::Middle || e.key.code == sf::Keyboard::R) && !placingPig){
-            selected_sprite.rotate(90);
-            if(rotated){
-                rotated = false;
-            } else {
+            float rotation = selected_sprite.getRotation();
+            if(rotation == 0){
                 rotated = true;
+                selected_sprite.setRotation(90);
+            }
+            else{
+                rotated = false;
+                selected_sprite.setRotation(0);
             }
         }
     }

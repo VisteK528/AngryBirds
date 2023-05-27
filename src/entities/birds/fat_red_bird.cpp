@@ -31,7 +31,7 @@ FatRedBird::FatRedBird(const std::shared_ptr<b2World>& world, std::vector<std::s
     b2FixtureDef fdef;
     fdef.shape = &circle;
     fdef.restitution = 0.3f;
-    fdef.density = 1.f;
+    fdef.density = 2.f;
     fdef.friction=1;
     m_body->CreateFixture(&fdef);
     m_body->SetEnabled(false);
