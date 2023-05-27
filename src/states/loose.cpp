@@ -11,7 +11,7 @@ Loose::~Loose()= default;
 void Loose::init() {
     ResultState::init();
 
-    this->sound_manager->loadBackgroundMusic("sounds/Angry-Birds-Theme.wav");
+    this->sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
     this->sound_manager->getBackgroundMusic().setLoop(true);
     this->sound_manager->getBackgroundMusic().play();
 

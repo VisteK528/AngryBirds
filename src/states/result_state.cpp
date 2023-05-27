@@ -26,6 +26,7 @@ void ResultState::init() {
 }
 
 void ResultState::update(const float &) {
+    this->sound_manager->updateVolume();
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
     if(this->menu_btn != nullptr && this->exit_btn != nullptr){
         this->menu_btn->update(position);

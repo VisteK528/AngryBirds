@@ -218,6 +218,7 @@ void GameState::initWorld() {
 }
 
 void GameState::update(const float &dt) {
+    this->sound_manager->updateVolume();
     if(running){
         world->Step(dt, 8, 3);
         entity_manager->update();

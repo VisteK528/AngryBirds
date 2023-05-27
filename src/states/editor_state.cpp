@@ -113,6 +113,7 @@ void EditorState::init() {
 }
 
 void EditorState::update(const float &dt) {
+    this->sound_manager->updateVolume();
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
     save_btn->update(position);
     back_btn->update(position);
@@ -200,7 +201,7 @@ void EditorState::handleEvent(const sf::Event &e) {
         saveToFile("data/custom/custom_level_"+std::to_string(level_number)+".json");
     }
 
-    if(!placingBlock || !placingPig){
+    if(!placingBlock && !placingPig){
         added_entities.erase(std::remove_if(added_entities.begin(), added_entities.end(), [&](ENTITY& entity){return checkIfToDelete(entity, position, e);}), added_entities.end());
     }
 
@@ -212,7 +213,7 @@ void EditorState::handleEvent(const sf::Event &e) {
                 added_sprite.position = position;
                 added_sprite.moving = true;
                 selected_sprite = added_sprite.sprite;
-                added_sprite.sprite = sf::Sprite();
+                //added_sprite.sprite = sf::Sprite();
                 if(added_sprite.type == BASIC_PIG || added_sprite.type == ARMORED_PIG){
                     placingPig = true;
                 }
@@ -234,11 +235,13 @@ void EditorState::handleEvent(const sf::Event &e) {
 
     if((e.type == sf::Event::MouseButtonReleased || e.type == sf::Event::KeyReleased) && (placingBlock || movingEntity)){
         if((e.mouseButton.button == sf::Mouse::Middle || e.key.code == sf::Keyboard::R) && !placingPig){
-            selected_sprite.rotate(90);
-            if(rotated){
-                rotated = false;
-            } else {
+            if(selected_sprite.getRotation() == 0){
                 rotated = true;
+                selected_sprite.setRotation(90);
+            }
+            else{
+                rotated = false;
+                selected_sprite.setRotation(0);
             }
         }
     }
@@ -449,8 +452,6 @@ void EditorState::updateChangeSelectedSprite() {
     }
     else{
         placingBlock = false;
-        rotated = false;
-        this->selected_sprite.setRotation(0);
         this->selected_sprite.setTexture(entities_textures[selected_pig_type][0], true);
     }
     this->selected_sprite.setOrigin(selected_sprite.getTexture()->getSize().x/2.f, selected_sprite.getTexture()->getSize().y/2.f);
