@@ -38,7 +38,7 @@ private:
     void loadTextures();
     void updateDt();
     void updateEvents();
-    void update();
+    bool update();
     void render();
 public:
     Game();

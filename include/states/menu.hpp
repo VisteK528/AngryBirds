@@ -5,6 +5,7 @@
 #include "state.hpp"
 #include "editor_state.hpp"
 #include "lobby.hpp"
+#include "about.hpp"
 
 class Menu: public State {
 private:

@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 FILE(GLOB_RECURSE SRC "src/*.cpp")
 
 include(CTest)
-
 enable_testing()
 add_subdirectory(tests)
 

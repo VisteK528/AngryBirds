@@ -13,4 +13,4 @@ add_executable(main main_test.cpp ${SRC})
 target_link_libraries(main libbox2d.a)
 target_link_libraries(main sfml-graphics sfml-window sfml-system sfml-audio)
 
-add_test(MainTest main ${PARENT_DIR})
+add_test(MainTest main WORKING_DIRECTORY<${PARENT_DIR})

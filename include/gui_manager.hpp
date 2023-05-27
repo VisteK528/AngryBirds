@@ -4,7 +4,6 @@
 #include "widgets.hpp"
 #include <SFML/Graphics.hpp>
 
-// TODO Rename GuiManager to GuiFactory and add creating methods for TextureButton
 class GuiManager {
 private:
     sf::Font font;

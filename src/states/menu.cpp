@@ -54,7 +54,7 @@ void Menu::handleEvent(const sf::Event &e) {
     }
 
     if(this->about_btn->handleInput(position, e)){
-        // TODO Add about state
+        this->states->push(std::make_unique<About>(this->window, this->states, this->gui_manager, this->sound_manager));
     }
 
     if(this->exit_btn->handleInput(position, e)){
