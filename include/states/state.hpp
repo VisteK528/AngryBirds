@@ -24,6 +24,7 @@ protected:
 
     bool quit = false;
     bool return_to_first = false;
+    bool retry = false;
 public:
     State(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager);
     virtual ~State();
