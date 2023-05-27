@@ -16,11 +16,11 @@ class Pig: public Entity
         virtual ~Pig(){};
         Pig(std::shared_ptr<b2World> world);
 
+
     protected:
         typedef enum{INTACT, DAMAGED, DESTROYED} T_TYPE;
         std::unordered_map<T_TYPE, std::shared_ptr<sf::Texture>> textures;
         double base_health;
-        double health;
 
         float density;
         float friction;

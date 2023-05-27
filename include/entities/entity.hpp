@@ -40,7 +40,6 @@ protected:
     sf::Sprite sprite;
     std::shared_ptr<sf::Texture> texture;
     double health=0;
-
     int score=0;
 
     bool coliding;
@@ -52,10 +51,11 @@ public:
     b2Body* getBody();
     const TYPE_DATA &getType() const;
     bool getDestroyed() const;
-    double getHealth() const;
+    virtual double getHealth() const;
     virtual void startCollision(b2Body* body_b)=0;
     virtual void endCollision(b2Body* body_b)=0;
     virtual void update()=0;
+    void setDestroyed();
 
     int getScore();
 

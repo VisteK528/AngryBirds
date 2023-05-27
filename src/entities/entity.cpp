@@ -41,3 +41,7 @@ double Entity::getHealth() const {
 int Entity::getScore() {
     return score;
 }
+
+void Entity::setDestroyed() {
+    this->destroyed = true;
+}
