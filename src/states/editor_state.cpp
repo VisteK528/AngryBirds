@@ -13,69 +13,20 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_p
     this->change_bird_btn = nullptr;
     this->level_number_txt = nullptr;
     this->load_btn = nullptr;
-    loadTextures();
+    initTextures();
     initVariables();
 }
 
 EditorState::~EditorState() noexcept = default;
 
-void EditorState::loadTextures() {
-    // TODO Move load textures function into separate function because of the usage in multiple files
-    std::unordered_map<BACKGROUNDS, std::string> background_paths = {
-            {DEFAULT, "textures/background.png"},
-            {MOUNTAINS, "textures/background2.png"},
-            {OCEAN, "textures/background3.png"},
-            {SPACE, "textures/background4.png"},
-    };
-
-    for(const auto& pair: background_paths){
-        BACKGROUNDS type = pair.first;
-        sf::Texture t;
-        if(!t.loadFromFile(pair.second)){
-            throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
-        }
-        t.setSmooth(true);
-        background_textures_table[type] = t;
-    }
-
+void EditorState::initTextures() {
     environment_gravity = {
             {DEFAULT, 9.81f},
             {MOUNTAINS, 7.f},
             {OCEAN, 1.f},
-            {SPACE, 9.81f/6.f}};
-
-    // Paths for entities' textures to be loaded
-    std::unordered_map<TEXTURE_TYPE , std::vector<std::string>> textures_paths = {
-            {WOOD, {"textures/boxes/wood/wood_1x1.png", "textures/boxes/wood/wood_1x1_damaged.png", "textures/boxes/wood/wood_1x1_destroyed.png"}},
-            {WOOD3x1, {"textures/boxes/wood/wood_3x1.png", "textures/boxes/wood/wood_3x1_damaged.png", "textures/boxes/wood/wood_3x1_damaged.png"}},
-            {GLASS, {"textures/boxes/glass/glass_1x1.png", "textures/boxes/glass/glass_1x1_damaged.png", "textures/boxes/glass/glass_1x1_destroyed.png"}},
-            {GLASS3x1, {"textures/boxes/glass/glass_3x1.png", "textures/boxes/glass/glass_3x1_damaged.png", "textures/boxes/glass/glass_3x1_damaged.png"}},
-            {STONE, {"textures/boxes/stone/stone_1x1.png", "textures/boxes/stone/stone_1x1_damaged.png", "textures/boxes/stone/stone_1x1_destroyed.png"}},
-            {STONE3x1, {"textures/boxes/stone/stone_3x1.png", "textures/boxes/stone/stone_3x1_damaged.png", "textures/boxes/stone/stone_3x1_damaged.png"}},
-            {BASIC_PIG, {"textures/pigs/basic/basic_pig.png", "textures/pigs/basic/basic_pig_damaged.png", "textures/pigs/basic/basic_pig_destroyed.png"}},
-            {ARMORED_PIG, {"textures/pigs/armored/armored_pig.png", "textures/pigs/armored/armored_pig_damaged.png", "textures/pigs/armored/armored_pig_destroyed.png"}},
-            {RED_BIRD, {"textures/birds/bird_red.png"}},
-            {YELLOW_BIRD, {"textures/birds/bird_yellow.png"}},
-            {GREY_BIRD, {"textures/birds/grey_bird.png"}},
-            {FAT_RED_BIRD, {"textures/birds/big_bird.png"}},
+            {SPACE, 9.81f/6.f}
     };
-
-    for(const auto& pair: textures_paths){
-        TEXTURE_TYPE type = pair.first;
-        std::vector<sf::Texture> loaded_textures;
-        for(const std::string& path: pair.second){
-            sf::Texture t;
-            if(!t.loadFromFile(path)){
-                throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
-            }
-            loaded_textures.push_back(t);
-        }
-        // Smoothing the textures
-        for(auto &t: loaded_textures){
-            t.setSmooth(true);
-        }
-        entities_textures[type] = loaded_textures;
-    }
+    loadTextures(background_textures_table, entities_textures);
 }
 
 void EditorState::updateBackgroundTexture() {

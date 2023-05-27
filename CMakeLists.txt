@@ -4,6 +4,9 @@ project(angrybirds)
 set(CMAKE_CXX_STANDARD 20)
 FILE(GLOB_RECURSE SRC "src/*.cpp")
 
+enable_testing()
+add_subdirectory(tests)
+
 find_package(SFML COMPONENTS window graphics system audio REQUIRED)
 link_directories(box2d/build/bin)
 

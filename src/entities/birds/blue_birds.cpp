@@ -54,7 +54,7 @@ void BlueBirds::makeAction(){
     }
 };
 
-void BlueBirds::loadTextures() {
+void BlueBirds::initTextures() {
     this->texture = std::make_unique<sf::Texture>();
     this->texture->loadFromFile("textures/birds/bird_blue.png");
 }
