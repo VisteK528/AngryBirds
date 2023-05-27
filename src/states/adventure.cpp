@@ -50,6 +50,7 @@ void Adventure::initVariables() {
 }
 
 void Adventure::update(const float &) {
+    this->sound_manager->updateVolume();
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
     this->level1_btn->update(position);
     this->level2_btn->update(position);

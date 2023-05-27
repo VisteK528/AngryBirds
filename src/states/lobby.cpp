@@ -28,6 +28,7 @@ void Lobby::initVariables() {
 }
 
 void Lobby::update(const float &) {
+    this->sound_manager->updateVolume();
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
     this->adventure_mode_btn->update(position);
     this->custom_mode_btn->update(position);

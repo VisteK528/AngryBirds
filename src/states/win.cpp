@@ -15,7 +15,7 @@ void Win::init() {
     this->exit_btn = gui_manager->createButton("> Exit",20, sf::Vector2f(640, 500), sf::Vector2f(250, 60), ui::ORIGIN::C);
     this->score_widget = gui_manager->createText("Score: "+std::to_string(player_score), 20, sf::Vector2f(640, 350), ui::ORIGIN::C);
 
-    this->sound_manager->loadBackgroundMusic("sounds/Angry-Birds-Theme.wav");
+    this->sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
     this->sound_manager->getBackgroundMusic().setLoop(true);
     this->sound_manager->getBackgroundMusic().play();
 }

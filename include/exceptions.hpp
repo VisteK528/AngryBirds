@@ -7,6 +7,7 @@
 namespace exceptions{
     class BaseException;
     class TexturesLoadingError;
+    class MusicLoadingError;
 }
 
 
@@ -24,6 +25,13 @@ class exceptions::TexturesLoadingError: public exceptions::BaseException{
 public:
     TexturesLoadingError(const std::string &message): BaseException(message){};
 };
+
+class exceptions::MusicLoadingError: public exceptions::BaseException{
+public:
+    MusicLoadingError(const std::string& message): BaseException(message){};
+};
+
+
 
 
 

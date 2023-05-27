@@ -4,6 +4,19 @@ sf::Music& SoundManager::getBackgroundMusic() {
     return this->background_music;
 }
 
-void SoundManager::loadBackgroundMusic(std::string path) {
-    this->background_music.openFromFile(path);
+void SoundManager::setBackgroundMusic(std::string path) {
+    if(!this->background_music.openFromFile(path)){
+        throw exceptions::MusicLoadingError("Program couldn't load the music properly!");
+    }
+}
+
+void SoundManager::updateVolume() {
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) && background_music_volume > 0){
+        background_music_volume -= 0.5;
+    }
+
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && background_music_volume < 100){
+        background_music_volume += 0.5;
+    }
+    this->background_music.setVolume((float)background_music_volume);
 }
