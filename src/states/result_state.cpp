@@ -45,10 +45,12 @@ void ResultState::handleEvent(const sf::Event &e) {
 
         if(this->exit_btn->handleInput(position, e)){
             return_to_first = true;
+            quit = true;
         }
 
         if(this->retry_btn->handleInput(position, e)){
-            // retry = true;
+            ResultState::State::retry_level = true;
+            quit = true;
         }
     }
 }

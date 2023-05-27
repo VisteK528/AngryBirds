@@ -17,7 +17,7 @@ void About::initVariables() {
     this->title = gui_manager->createText("About", 70, sf::Vector2f(640, 125), ui::ORIGIN::C);
 
     this->about_text = gui_manager->createText("This is Angry Birds remake, a game made Piotr Patek and Jakub Wroblewski.\n"
-                                                "We are students of Automatics and Robotics at the Warsaw University of Technics.\n"
+                                                "We are students of Automatics and Robotics at the Warsaw University of Technology.\n"
                                                 "This game was made as a project for the subject 'Object Oriented Programming'.\n"
                                                 "We hope you will enjoy it!\n\n"
                                                 "There are two modes in this game: Adventure and Custom.\n"
@@ -38,7 +38,7 @@ void About::initVariables() {
 
     this->background_texture.loadFromFile("textures/menu_background.jpeg");
     this->background = sf::Sprite(background_texture);
-    this->background.setColor(sf::Color(255, 255, 255, 180));
+    this->background.setColor(sf::Color(255, 255, 255, 120));
     this->background.setPosition(0,0);
 }
 

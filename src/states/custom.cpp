@@ -44,6 +44,19 @@ void Custom::update(const float &) {
     this->level4_btn->update(position);
     this->level5_btn->update(position);
     this->back_btn->update(position);
+
+    if(load_next_level){
+        load_next_level = false;
+        if(current_level_number < 4){
+            current_level_number++;
+            this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_"+std::to_string(current_level_number)+".json"));
+        }
+    }
+
+    if(retry_level){
+        retry_level = false;
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_"+std::to_string(current_level_number)+".json"));
+    }
 }
 
 void Custom::handleEvent(const sf::Event &e) {
@@ -51,18 +64,23 @@ void Custom::handleEvent(const sf::Event &e) {
 
     if (this->level1_btn->handleInput(position, e)) {
         this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        current_level_number = 0;
     }
-    if (this->level2_btn->handleInput(position, e)) {
+    else if (this->level2_btn->handleInput(position, e)) {
         this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_1.json"));
+        current_level_number = 1;
     }
-    if (this->level3_btn->handleInput(position, e)) {
+    else if (this->level3_btn->handleInput(position, e)) {
         this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_2.json"));
+        current_level_number = 2;
     }
-    if (this->level4_btn->handleInput(position, e)) {
+    else if (this->level4_btn->handleInput(position, e)) {
         this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_3.json"));
+        current_level_number = 3;
     }
-    if (this->level5_btn->handleInput(position, e)) {
+    else if (this->level5_btn->handleInput(position, e)) {
         this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_4.json"));
+        current_level_number = 4;
     }
     if (this->back_btn->handleInput(position, e)) {
         quit = true;

@@ -45,11 +45,13 @@ void Win::handleEvent(const sf::Event &e) {
         }
 
         if(this->retry_btn->handleInput(position, e)){
-            // retry = true;
+            ResultState::State::retry_level = true;
+            quit = true;
         }
 
         if(this->next_lvl_btn->handleInput(position, e)){
-            // next_lvl = true;
+            ResultState::State::load_next_level = true;
+            quit = true;
         }
     }
 }
