@@ -72,13 +72,13 @@ void Adventure::update(const float &) {
         load_next_level = false;
         if(current_level_number < 14){
             current_level_number++;
-            this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_"+std::to_string(current_level_number)));
+            this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_"+std::to_string(current_level_number)+".json"));
         }
     }
 
     if(retry_level){
         retry_level = false;
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_"+std::to_string(current_level_number)));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_"+std::to_string(current_level_number)+".json"));
     }
 }
 
@@ -86,72 +86,72 @@ void Adventure::handleEvent(const sf::Event &e) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
 
     if(this->level1_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_1"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_1.json"));
         current_level_number = 1;
     }
 
     if(this->level2_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_2"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_2.json"));
         current_level_number = 2;
     }
 
     if(this->level3_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_3"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_3.json"));
         current_level_number = 3;
     }
 
     if(this->level4_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_4"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_4.json"));
         current_level_number = 4;
     }
 
     if(this->level5_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_5"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_5.json"));
         current_level_number = 5;
     }
 
     if(this->level6_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_6"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_6.json"));
         current_level_number = 6;
     }
 
     if(this->level7_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_7"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_7.json"));
         current_level_number = 7;
     }
 
     if(this->level8_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_8"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_8.json"));
         current_level_number = 8;
     }
 
     if(this->level9_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_9"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_9.json"));
         current_level_number = 9;
     }
 
     if(this->level10_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_10"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_10.json"));
         current_level_number = 10;
     }
 
     if(this->level11_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_11"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_11.json"));
         current_level_number = 11;
     }
 
     if(this->level12_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_12"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_12.json"));
         current_level_number = 12;
     }
 
     if(this->level13_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_13"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_13.json"));
         current_level_number = 13;
     }
 
     if(this->level14_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_14"));
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/adventure/adventure_level_14.json"));
         current_level_number = 14;
     }
 
