@@ -15,8 +15,8 @@ void Win::init() {
 
     this->next_lvl_btn = gui_manager->createButton("> Next level",20, sf::Vector2f(640, 320), sf::Vector2f(250, 60), ui::ORIGIN::C);
     this->retry_btn = gui_manager->createButton("> Retry",20, sf::Vector2f(640, 400), sf::Vector2f(250, 60), ui::ORIGIN::C);
-    this->menu_btn = gui_manager->createButton("> Menu", 20, sf::Vector2f(640, 480), sf::Vector2f(250, 60), ui::ORIGIN::C);
-    this->exit_btn = gui_manager->createButton("> Exit",20, sf::Vector2f(640, 560), sf::Vector2f(250, 60), ui::ORIGIN::C);
+    this->back_btn = gui_manager->createButton("> Back", 20, sf::Vector2f(640, 480), sf::Vector2f(250, 60), ui::ORIGIN::C);
+    this->menu_btn = gui_manager->createButton("> Menu",20, sf::Vector2f(640, 560), sf::Vector2f(250, 60), ui::ORIGIN::C);
 
     this->sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
     this->sound_manager->getBackgroundMusic().setLoop(true);
@@ -26,8 +26,8 @@ void Win::init() {
 void Win::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(this->background);
     target->draw(*this->title);
+    target->draw(*this->back_btn);
     target->draw(*this->menu_btn);
-    target->draw(*this->exit_btn);
     target->draw(*this->retry_btn);
     target->draw(*this->next_lvl_btn);
     target->draw(*this->score_widget);
@@ -35,12 +35,12 @@ void Win::render(std::shared_ptr<sf::RenderTarget> target) {
 
 void Win::handleEvent(const sf::Event &e) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
-    if(this->menu_btn != nullptr && this->exit_btn != nullptr && this-> retry_btn != nullptr){
-        if(this->menu_btn->handleInput(position, e)){
+    if(this->back_btn != nullptr && this->menu_btn != nullptr && this-> retry_btn != nullptr){
+        if(this->back_btn->handleInput(position, e)){
             quit = true;
         }
 
-        if(this->exit_btn->handleInput(position, e)){
+        if(this->menu_btn->handleInput(position, e)){
             return_to_first = true;
         }
 

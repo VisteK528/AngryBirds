@@ -23,16 +23,16 @@ void Loose::init() {
     this->title = gui_manager->createText("You lost!", 70, sf::Vector2f(640, 150), ui::ORIGIN::C);
     this->score_widget = gui_manager->createText("Score: "+std::to_string(player_score), 20, sf::Vector2f(640, 250), ui::ORIGIN::C);
     this->retry_btn = gui_manager->createButton("> Retry",20, sf::Vector2f(640, 320), sf::Vector2f(250, 60), ui::ORIGIN::C);
-    this->menu_btn = gui_manager->createButton("> Menu", 20, sf::Vector2f(640, 400), sf::Vector2f(250, 60), ui::ORIGIN::C);
-    this->exit_btn = gui_manager->createButton("> Exit",20, sf::Vector2f(640, 480), sf::Vector2f(250, 60), ui::ORIGIN::C);
+    this->back_btn = gui_manager->createButton("> Back", 20, sf::Vector2f(640, 400), sf::Vector2f(250, 60), ui::ORIGIN::C);
+    this->menu_btn = gui_manager->createButton("> Menu",20, sf::Vector2f(640, 480), sf::Vector2f(250, 60), ui::ORIGIN::C);
 }
 
 void Loose::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(this->background);
     target->draw(this->vignette_sprite);
     target->draw(*this->title);
+    target->draw(*this->back_btn);
     target->draw(*this->menu_btn);
-    target->draw(*this->exit_btn);
     target->draw(*this->retry_btn);
     target->draw(*this->score_widget);
 }

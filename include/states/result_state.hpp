@@ -8,8 +8,8 @@ class ResultState: public State {
 protected:
     std::unique_ptr<ui::Text> title;
     std::unique_ptr<ui::Text> score_widget;
+    std::unique_ptr<ui::Button> back_btn;
     std::unique_ptr<ui::Button> menu_btn;
-    std::unique_ptr<ui::Button> exit_btn;
     std::unique_ptr<ui::Button> retry_btn;
 
     sf::Image background_image;
