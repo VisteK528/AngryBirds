@@ -34,6 +34,7 @@ private:
     sf::Sprite cannon_sprite;
     sf::Sprite hull_sprite;
     sf::Vector2f cannon_position;
+    sf::Vector2f cannon_end_position;
 
     unsigned int bird_index = 0;
 

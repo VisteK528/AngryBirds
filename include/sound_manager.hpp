@@ -14,6 +14,7 @@ private:
 public:
     SoundManager()=default;
     void setBackgroundMusic(std::string path);
+    void setBackgroundMusicVolume(float volume);
     void updateVolume();
     sf::Music& getBackgroundMusic();
 

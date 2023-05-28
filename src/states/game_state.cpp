@@ -206,6 +206,12 @@ void GameState::update(const float &dt) {
 
 void GameState::handleEvent(const sf::Event &e) {
     cannon->handleInput(e);
+
+    if(e.type == sf::Event::KeyReleased){
+        if(e.key.code == sf::Keyboard::Escape){
+            quit = true;
+        }
+    }
 }
 
 void GameState::render(std::shared_ptr<sf::RenderTarget> target) {

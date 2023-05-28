@@ -18,6 +18,7 @@ public:
     virtual void makeAction(){};
     void setActive(bool active);
     void setPosition(b2Vec2 position);
+    void setRotation(float angle);
     void applyLinearVelocity(b2Vec2 velocity);
     void applyForce(b2Vec2 force);
     void startCollision(b2Body* body_b) override;

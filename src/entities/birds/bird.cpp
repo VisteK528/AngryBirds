@@ -125,8 +125,18 @@ void Bird::applyLinearVelocity(b2Vec2 velocity){
 
 void Bird::setPosition(b2Vec2 position) {
     this->m_body->SetTransform(position, this->m_body->GetAngle());
+
+    float angle = m_body->GetAngle();
+    b2Vec2 pos = m_body->GetPosition();
+
+    sprite.setRotation(angle*DEG);
+    sprite.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
 }
 
 void Bird::setActive(bool active) {
     this->m_body->SetEnabled(active);
+}
+
+void Bird::setRotation(float angle) {
+    sprite.setRotation(angle*DEG);
 }

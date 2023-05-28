@@ -403,6 +403,8 @@ void EditorState::updateChangeSelectedSprite() {
     }
     else{
         placingBlock = false;
+        rotated = false;
+        this->selected_sprite.setRotation(0);
         this->selected_sprite.setTexture(entities_textures[selected_pig_type][0], true);
     }
     this->selected_sprite.setOrigin(selected_sprite.getTexture()->getSize().x/2.f, selected_sprite.getTexture()->getSize().y/2.f);

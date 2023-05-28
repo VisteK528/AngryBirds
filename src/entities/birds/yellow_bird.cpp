@@ -20,7 +20,7 @@ void YellowBird::makeAction(){
         }
         if(action_clock.getElapsedTime().asSeconds() < 3 && !dash_ended && dash_started){
             float angle = std::atan2(m_body->GetLinearVelocity().y, m_body->GetLinearVelocity().x);
-            m_body->ApplyForceToCenter(b2Vec2(200000.f*std::cos(angle), 200000.f*std::sin(angle)), false);
+            m_body->ApplyForceToCenter(b2Vec2(800000.f*std::cos(angle), 800000.f*std::sin(angle)), false);
             dash_ended = true;
         }
     }
