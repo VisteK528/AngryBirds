@@ -1,8 +1,4 @@
-//
-// Created by piotr on 5/6/23.
-//
-
-#include "cannon.hpp"
+#include "include/cannon.hpp"
 
 Cannon::Cannon(sf::Vector2f position, std::shared_ptr<EntityManager> manager) {
     this->manager = std::move(manager);
@@ -29,6 +25,8 @@ void Cannon::update(sf::Vector2f mouse_position){
     angle = std::atan2(mouse_position.y - cannon_sprite.getPosition().y, mouse_position.x - cannon_sprite.getPosition().x);
     cannon_sprite.setRotation(angle * 57.29577);
 
+    cannon_end_position = {cannon_sprite.getPosition().x-20 + (cannon_texture.getSize().x / 2 + 20) * std::cos(angle), cannon_sprite.getPosition().y-20 + (cannon_texture.getSize().x / 2 + 20) * std::sin(angle)};
+
     if(!this->manager->isBirdActive()){
         active = true;
     }
@@ -43,6 +41,7 @@ void Cannon::update(sf::Vector2f mouse_position){
             power += power_gain;
         }
     }
+    setBirdsVisualPosition();
 }
 
 void Cannon::handleInput(const sf::Event e){
@@ -54,7 +53,7 @@ void Cannon::handleInput(const sf::Event e){
 
     if(e.type == sf::Event::MouseButtonReleased && active){
         if(e.mouseButton.button == sf::Mouse::Middle){
-            if(bird_index < 3){
+            if(bird_index < birds.size()-1){
                 bird_index++;
             }
             else{
@@ -64,12 +63,11 @@ void Cannon::handleInput(const sf::Event e){
 
         if(e.mouseButton.button == sf::Mouse::Left){
             loading = false;
-            sf::Vector2f position = {cannon_sprite.getPosition().x-20 + (cannon_texture.getSize().x / 2 + 20) * std::cos(angle), cannon_sprite.getPosition().y-20 + (cannon_texture.getSize().x / 2 + 20) * std::sin(angle)};
 
             if(!birds.empty()){
                 float SCALE = 10;
-                std::unique_ptr<Bird> bird = std::move(birds[0]);
-                bird->setPosition(b2Vec2(position.x/SCALE, position.y/SCALE));
+                std::unique_ptr<Bird> bird = std::move(birds[bird_index]);
+                bird->setPosition(b2Vec2(cannon_end_position.x/SCALE, cannon_end_position.y/SCALE));
                 bird->setActive(true);
                 if(bird->getType().sub_type == TYPE_DATA::FAT_RED_BIRD){
                     b2Vec2 velocity(0.5f*power*std::cos(angle), 0.5f*power*std::sin(angle));
@@ -81,8 +79,8 @@ void Cannon::handleInput(const sf::Event e){
                     bird->applyLinearVelocity(velocity);
                     this->manager->pushEntity(std::move(bird));
                 }
-                birds.erase(birds.begin());
-                setBirdsVisualPosition();
+                birds.erase(birds.begin()+bird_index);
+                bird_index = 0;
             }
             power = 0;
 
@@ -92,11 +90,18 @@ void Cannon::handleInput(const sf::Event e){
 }
 
 void Cannon::draw(sf::RenderTarget &target, sf::RenderStates states) const{
+    if(!birds.empty()){
+        target.draw(*birds[bird_index]);
+    }
     target.draw(cannon_sprite, states);
     target.draw(hull_sprite, states);
 
+    int i = 0;
     for(const auto& bird: birds){
-        target.draw(*bird);
+        if(i != bird_index){
+            target.draw(*bird);
+        }
+        i++;
     }
 }
 
@@ -108,10 +113,21 @@ void Cannon::setBirds(std::vector<std::unique_ptr<Bird>>& birds_vector) {
 
 void Cannon::setBirdsVisualPosition() {
     int i = 0;
+    int position_index = 0;
+    float SCALE = 10.f;
+
     for(const auto& bird: birds){
         float radius = bird->getBody()->GetFixtureList()->GetShape()->m_radius;
-        bird->setPosition(b2Vec2(20-i*7.f, 62-radius));
-        bird->update();
+        b2Vec2 position = b2Vec2(20-position_index*7.f, 62-radius);
+        if(i == bird_index){
+            position = b2Vec2(cannon_end_position.x/SCALE, cannon_end_position.y/SCALE);
+            bird->setPosition(position);
+            bird->setRotation(angle);
+        }
+        else{
+            position_index++;
+            bird->setPosition(position);
+        }
         i++;
     }
 }

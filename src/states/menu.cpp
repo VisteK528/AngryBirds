@@ -1,12 +1,9 @@
-//
-// Created by piotr on 5/4/23.
-//
+#include "include/states/menu.hpp"
 
-#include "menu.hpp"
-
-Menu::Menu(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(window, states){
-    this->gui_manager = std::move(gui_manager);
-    this->sound_manager = std::move(sound_manager);
+Menu::Menu(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
+           std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(
+                   std::move(window), std::move(states), std::move(gui_manager),
+                   std::move(sound_manager)){
     this->title = nullptr;
     this->start_btn = nullptr;
     this->editor_btn = nullptr;
@@ -26,7 +23,7 @@ void Menu::initVariables() {
     this->about_btn = gui_manager->createButton("> About", 20, sf::Vector2f(640, 560), sf::Vector2f(250, 60), ui::ORIGIN::C);
     this->exit_btn = gui_manager->createButton("> Exit",20, sf::Vector2f(640, 640), sf::Vector2f(250, 60), ui::ORIGIN::C);
 
-    this->sound_manager->loadBackgroundMusic("sounds/Angry-Birds-Theme.wav");
+    this->sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
     this->sound_manager->getBackgroundMusic().setLoop(true);
     this->sound_manager->getBackgroundMusic().play();
 
@@ -38,6 +35,7 @@ void Menu::initVariables() {
 
 void Menu::update(const float &) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
+    this->sound_manager->updateVolume();
     this->start_btn->update(position);
     this->editor_btn->update(position);
     this->about_btn->update(position);
@@ -48,11 +46,6 @@ void Menu::handleEvent(const sf::Event &e) {
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
 
     if(this->start_btn->handleInput(position, e)){
-        // TODO Create Lobby state as a intermediate state between menu and game state
-        /* Lobby state should provide user with two types of gameplay
-         *      1. Adventure - previously created levels with increasing level of difficulty
-         *      2. Custom    - levels created and saved to data directory by user
-         * */
         this->states->push(std::make_unique<Lobby>(this->window, this->states, this->gui_manager, this->sound_manager));
     }
 
@@ -61,7 +54,7 @@ void Menu::handleEvent(const sf::Event &e) {
     }
 
     if(this->about_btn->handleInput(position, e)){
-        // TODO Add about state
+        this->states->push(std::make_unique<About>(this->window, this->states, this->gui_manager, this->sound_manager));
     }
 
     if(this->exit_btn->handleInput(position, e)){
@@ -79,5 +72,9 @@ void Menu::render(std::shared_ptr<sf::RenderTarget> target) {
 }
 
 void Menu::init() {
-
+    if(this->sound_manager->getBackgroundMusic().getStatus() == sf::Music::Stopped){
+        this->sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
+        this->sound_manager->getBackgroundMusic().setLoop(true);
+        this->sound_manager->getBackgroundMusic().play();
+    }
 }

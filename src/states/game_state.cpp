@@ -1,9 +1,12 @@
-#include "game_state.hpp"
+#include "include/states/game_state.hpp"
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager, std::string level_path): State(window, states) {
+GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
+                     std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager,
+                     std::string level_path): State(std::move(window), std::move(states),
+                                                    std::move(gui_manager), std::move(sound_manager)) {
+
+    this->score_text = nullptr;
     this->level_path = level_path;
-    this->sound_manager = std::move(sound_manager);
-    this->gui_manager = std::move(gui_manager);
     init();
     initWorld();
 }
@@ -13,67 +16,14 @@ GameState::~GameState() {
 }
 
 void GameState::init() {
-    this->sound_manager->getBackgroundMusic().pause();
-    loadTextures();
+    this->sound_manager->getBackgroundMusic().stop();
+    this->sound_manager->setBackgroundMusic("sounds/ingame_music.wav");
+    this->sound_manager->getBackgroundMusic().setLoop(true);
+    this->sound_manager->getBackgroundMusic().play();
+    loadTextures(background_textures, entities_textures);
+
+    this->score_text = gui_manager->createText("Score: "+std::to_string(this->score), 15, sf::Vector2f(1100, 20), ui::ORIGIN::C);
 }
-
-// std::unordered_map<TEXTURE_TYPE, std::vector<sf::Texture>> table
-void GameState::loadTextures() {
-    // Paths for all textures
-    std::vector<std::string> other_textures_paths = {
-            "textures/background.png",
-            "textures/background2.png",
-            "textures/background3.png",
-            "textures/background4.png"
-    };
-
-    for(const std::string& path: other_textures_paths){
-        sf::Texture t;
-        if(!t.loadFromFile(path)){
-            throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
-        }
-        textures.push_back(t);
-    }
-
-    // Smoothing the textures
-    for(auto &t: textures){
-        t.setSmooth(true);
-    }
-
-    // Paths for entities' textures to be loaded
-    std::unordered_map<TEXTURE_TYPE, std::vector<std::string>> textures_paths = {
-            {WOOD, {"textures/boxes/wood/wood_1x1.png", "textures/boxes/wood/wood_1x1_damaged.png", "textures/boxes/wood/wood_1x1_destroyed.png"}},
-            {WOOD3x1, {"textures/boxes/wood/wood_3x1.png", "textures/boxes/wood/wood_3x1_damaged.png", "textures/boxes/wood/wood_3x1_damaged.png"}},
-            {GLASS, {"textures/boxes/glass/glass_1x1.png", "textures/boxes/glass/glass_1x1_damaged.png", "textures/boxes/glass/glass_1x1_destroyed.png"}},
-            {GLASS3x1, {"textures/boxes/glass/glass_3x1.png", "textures/boxes/glass/glass_3x1_damaged.png", "textures/boxes/glass/glass_3x1_damaged.png"}},
-            {STONE, {"textures/boxes/stone/stone_1x1.png", "textures/boxes/stone/stone_1x1_damaged.png", "textures/boxes/stone/stone_1x1_destroyed.png"}},
-            {STONE3x1, {"textures/boxes/stone/stone_3x1.png", "textures/boxes/stone/stone_3x1_damaged.png", "textures/boxes/stone/stone_3x1_damaged.png"}},
-            {BASIC_PIG, {"textures/pigs/basic/basic_pig.png", "textures/pigs/basic/basic_pig_damaged.png", "textures/pigs/basic/basic_pig_destroyed.png"}},
-            {ARMORED_PIG, {"textures/pigs/armored/armored_pig.png", "textures/pigs/armored/armored_pig_damaged.png", "textures/pigs/armored/armored_pig_destroyed.png"}},
-            {RED_BIRD, {"textures/birds/bird_red.png"}},
-            {YELLOW_BIRD, {"textures/birds/bird_yellow.png"}},
-            {GREY_BIRD, {"textures/birds/grey_bird.png"}},
-            {FAT_RED_BIRD, {"textures/birds/big_bird.png"}},
-            };
-
-    for(const auto& pair: textures_paths){
-        TEXTURE_TYPE type = pair.first;
-        std::vector<sf::Texture> loaded_textures;
-        for(const std::string& path: pair.second){
-            sf::Texture t;
-            if(!t.loadFromFile(path)){
-                throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
-            }
-            loaded_textures.push_back(t);
-        }
-        // Smoothing the textures
-        for(auto &t: loaded_textures){
-            t.setSmooth(true);
-        }
-        entities_textures[type] = loaded_textures;
-    }
-}
-
 
 std::vector<std::unique_ptr<Bird>> GameState::loadWorld(const std::string& level_path) {
     std::ifstream file;
@@ -102,7 +52,7 @@ std::vector<std::unique_ptr<Bird>> GameState::loadWorld(const std::string& level
     json j;
     file >> j;
 
-    background = sf::Sprite(textures[j["background"]]);
+    background = sf::Sprite(background_textures[j["background"]]);
     this->gravity = b2Vec2(0.f, j["gravity"]);
     this->world->SetGravity(gravity);
 
@@ -216,7 +166,9 @@ void GameState::initWorld() {
 }
 
 void GameState::update(const float &dt) {
+    this->sound_manager->updateVolume();
     if(running){
+        score = entity_manager->getCurrentScore();
         world->Step(dt, 8, 3);
         entity_manager->update();
         entity_manager->setBirds(cannon->getBirdsCount());
@@ -230,31 +182,39 @@ void GameState::update(const float &dt) {
         window->display();
         sf::Texture t;
         t.create(window->getSize().x, window->getSize().y);
-        t.update(*window);
         std::cout<<window->getSize().x<<" "<<window->getSize().y<<std::endl;
+        t.update(*window);
         if(result == WIN){
             this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
         }
         else if(result == LOOSE){
             this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
         }
+        this->states->top()->init();
     }
 
     if(entity_manager->CountPigs() == 0){
-        score = entity_manager->getCurrentScore();
         score += cannon->getBirdsCount()*5000;
+        std::cout<<"Birds left: "<<cannon->getBirdsCount()<<std::endl;
         running = false;
         result = WIN;
     }
     else if(cannon->getBirdsCount() == 0 && entity_manager->CountBirds() == 0){
-        score = entity_manager->getCurrentScore();
         running = false;
         result = LOOSE;
     }
+    this->score_text->setString("Score: "+std::to_string(score));
 }
 
 void GameState::handleEvent(const sf::Event &e) {
     cannon->handleInput(e);
+
+    if(e.type == sf::Event::KeyReleased){
+        if(e.key.code == sf::Keyboard::Escape){
+            quit = true;
+            this->sound_manager->getBackgroundMusic().stop();
+        }
+    }
 }
 
 void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
@@ -262,6 +222,7 @@ void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(*cannon);
     entity_manager->render(target);
     target->draw(cannon_power_widget);
+    target->draw(*score_text);
 }
 
 void GameState::setWall(int x, int y, int w, int h)

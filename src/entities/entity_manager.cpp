@@ -2,7 +2,7 @@
 // Created by piotr on 5/5/23.
 //
 
-#include "entity_manager.hpp"
+#include "include/entities/entity_manager.hpp"
 #include <iostream>
 
 EntityManager::EntityManager(std::shared_ptr<b2World> world) {
@@ -63,6 +63,10 @@ int EntityManager::getCurrentScore() const {
     return current_score;
 }
 
+std::vector<std::unique_ptr<Entity>> &EntityManager::getEntities() {
+    return entities;
+}
+
 void EntityManager::updateScore(int score) {
     current_score += score;
 }
@@ -73,6 +77,10 @@ int EntityManager::CountPigs() const {
 
 int EntityManager::CountBirds() const {
     return (int)std::count_if(entities.begin(), entities.end(), [](const std::unique_ptr<Entity>& e){return e->getType().main_type == TYPE_DATA::BIRD;});
+}
+
+int EntityManager::CountBlocks() const {
+    return (int)std::count_if(entities.begin(), entities.end(), [](const std::unique_ptr<Entity>& e){return e->getType().main_type == TYPE_DATA::BOX;});
 }
 
 void EntityManager::setBirds(int birds) {

@@ -2,7 +2,7 @@
 // Created by piotr on 5/9/23.
 //
 
-#include "grey_bird.hpp"
+#include "include/entities/birds/grey_bird.hpp"
 
 #include <utility>
 

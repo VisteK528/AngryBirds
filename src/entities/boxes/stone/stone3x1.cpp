@@ -1,4 +1,4 @@
-#include "stone3x1.hpp"
+#include "include/entities/boxes/stone/stone3x1.hpp"
 #include <utility>
 
 Stone3x1::Stone3x1(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Texture>> textures, float coord_x, float coord_y, bool rotated): Box(std::move(world)) {

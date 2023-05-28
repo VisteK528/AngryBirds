@@ -1,4 +1,4 @@
-#include "stone.hpp"
+#include "include/entities/boxes/stone/stone.hpp"
 
 #include <utility>
 

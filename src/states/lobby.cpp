@@ -1,8 +1,9 @@
-#include "lobby.hpp"
+#include "include/states/lobby.hpp"
 
-Lobby::Lobby(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(window, states){
-    this->gui_manager = std::move(gui_manager);
-    this->sound_manager = std::move(sound_manager);
+Lobby::Lobby(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
+             std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(
+                     std::move(window), std::move(states), std::move(gui_manager),
+                     std::move(sound_manager)){
     this->title = nullptr;
     this->adventure_mode_btn = nullptr;
     this->custom_mode_btn = nullptr;
@@ -27,6 +28,7 @@ void Lobby::initVariables() {
 }
 
 void Lobby::update(const float &) {
+    this->sound_manager->updateVolume();
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
     this->adventure_mode_btn->update(position);
     this->custom_mode_btn->update(position);

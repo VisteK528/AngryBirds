@@ -1,12 +1,9 @@
-//
-// Created by piotr on 5/13/23.
-//
+#include "include/states/editor_state.hpp"
 
-#include "editor_state.hpp"
-
-EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(window, states){
-    this->gui_manager = std::move(gui_manager);
-    this->sound_manager = std::move(sound_manager);
+EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
+                         std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(
+                                 std::move(window), std::move(states), std::move(gui_manager),
+                                 std::move(sound_manager)){
     this->title = nullptr;
     this->back_btn = nullptr;
     this->save_btn = nullptr;
@@ -16,69 +13,20 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_p
     this->change_bird_btn = nullptr;
     this->level_number_txt = nullptr;
     this->load_btn = nullptr;
-    loadTextures();
+    initTextures();
     initVariables();
 }
 
 EditorState::~EditorState() noexcept = default;
 
-void EditorState::loadTextures() {
-    // TODO Move load textures function into separate function because of the usage in multiple files
-    std::unordered_map<BACKGROUNDS, std::string> background_paths = {
-            {DEFAULT, "textures/background.png"},
-            {MOUNTAINS, "textures/background2.png"},
-            {OCEAN, "textures/background3.png"},
-            {SPACE, "textures/background4.png"},
-    };
-
-    for(const auto& pair: background_paths){
-        BACKGROUNDS type = pair.first;
-        sf::Texture t;
-        if(!t.loadFromFile(pair.second)){
-            throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
-        }
-        t.setSmooth(true);
-        background_textures_table[type] = t;
-    }
-
+void EditorState::initTextures() {
     environment_gravity = {
             {DEFAULT, 9.81f},
             {MOUNTAINS, 7.f},
             {OCEAN, 1.f},
-            {SPACE, 9.81f/6.f}};
-
-    // Paths for entities' textures to be loaded
-    std::unordered_map<TEXTURE_TYPE , std::vector<std::string>> textures_paths = {
-            {WOOD, {"textures/boxes/wood/wood_1x1.png", "textures/boxes/wood/wood_1x1_damaged.png", "textures/boxes/wood/wood_1x1_destroyed.png"}},
-            {WOOD3x1, {"textures/boxes/wood/wood_3x1.png", "textures/boxes/wood/wood_3x1_damaged.png", "textures/boxes/wood/wood_3x1_damaged.png"}},
-            {GLASS, {"textures/boxes/glass/glass_1x1.png", "textures/boxes/glass/glass_1x1_damaged.png", "textures/boxes/glass/glass_1x1_destroyed.png"}},
-            {GLASS3x1, {"textures/boxes/glass/glass_3x1.png", "textures/boxes/glass/glass_3x1_damaged.png", "textures/boxes/glass/glass_3x1_damaged.png"}},
-            {STONE, {"textures/boxes/stone/stone_1x1.png", "textures/boxes/stone/stone_1x1_damaged.png", "textures/boxes/stone/stone_1x1_destroyed.png"}},
-            {STONE3x1, {"textures/boxes/stone/stone_3x1.png", "textures/boxes/stone/stone_3x1_damaged.png", "textures/boxes/stone/stone_3x1_damaged.png"}},
-            {BASIC_PIG, {"textures/pigs/basic/basic_pig.png", "textures/pigs/basic/basic_pig_damaged.png", "textures/pigs/basic/basic_pig_destroyed.png"}},
-            {ARMORED_PIG, {"textures/pigs/armored/armored_pig.png", "textures/pigs/armored/armored_pig_damaged.png", "textures/pigs/armored/armored_pig_destroyed.png"}},
-            {RED_BIRD, {"textures/birds/bird_red.png"}},
-            {YELLOW_BIRD, {"textures/birds/bird_yellow.png"}},
-            {GREY_BIRD, {"textures/birds/grey_bird.png"}},
-            {FAT_RED_BIRD, {"textures/birds/big_bird.png"}},
+            {SPACE, 9.81f/6.f}
     };
-
-    for(const auto& pair: textures_paths){
-        TEXTURE_TYPE type = pair.first;
-        std::vector<sf::Texture> loaded_textures;
-        for(const std::string& path: pair.second){
-            sf::Texture t;
-            if(!t.loadFromFile(path)){
-                throw exceptions::TexturesLoadingError("Program couldn't load all graphics properly!");
-            }
-            loaded_textures.push_back(t);
-        }
-        // Smoothing the textures
-        for(auto &t: loaded_textures){
-            t.setSmooth(true);
-        }
-        entities_textures[type] = loaded_textures;
-    }
+    loadTextures(background_textures_table, entities_textures);
 }
 
 void EditorState::updateBackgroundTexture() {
@@ -87,6 +35,11 @@ void EditorState::updateBackgroundTexture() {
 }
 
 void EditorState::initVariables() {
+    this->sound_manager->getBackgroundMusic().stop();
+    this->sound_manager->setBackgroundMusic("sounds/editor_music.wav");
+    this->sound_manager->getBackgroundMusic().setLoop(true);
+    this->sound_manager->getBackgroundMusic().play();
+
     this->title = this->gui_manager->createText("Editor", 35, sf::Vector2f(20, 20), ui::ORIGIN::NW);
     this->back_btn = gui_manager->createButton("Back",15, sf::Vector2f(1195, 650), sf::Vector2f(160, 30), ui::ORIGIN::C);
     this->save_btn = gui_manager->createButton("Save", 15, sf::Vector2f(1237.5, 690), sf::Vector2f(75, 30), ui::ORIGIN::C);
@@ -116,6 +69,7 @@ void EditorState::init() {
 }
 
 void EditorState::update(const float &dt) {
+    this->sound_manager->updateVolume();
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
     save_btn->update(position);
     back_btn->update(position);
@@ -161,6 +115,7 @@ void EditorState::handleEvent(const sf::Event &e) {
 
     if(back_btn->handleInput(position, e)){
         quit = true;
+        this->sound_manager->getBackgroundMusic().stop();
     }
 
     // Changing level number, based on user input from keyboard
@@ -203,7 +158,7 @@ void EditorState::handleEvent(const sf::Event &e) {
         saveToFile("data/custom/custom_level_"+std::to_string(level_number)+".json");
     }
 
-    if(!placingBlock || !placingPig){
+    if(!placingBlock && !placingPig){
         added_entities.erase(std::remove_if(added_entities.begin(), added_entities.end(), [&](ENTITY& entity){return checkIfToDelete(entity, position, e);}), added_entities.end());
     }
 
@@ -237,11 +192,13 @@ void EditorState::handleEvent(const sf::Event &e) {
 
     if((e.type == sf::Event::MouseButtonReleased || e.type == sf::Event::KeyReleased) && (placingBlock || movingEntity)){
         if((e.mouseButton.button == sf::Mouse::Middle || e.key.code == sf::Keyboard::R) && !placingPig){
-            selected_sprite.rotate(90);
-            if(rotated){
-                rotated = false;
-            } else {
+            if(selected_sprite.getRotation() == 0){
                 rotated = true;
+                selected_sprite.setRotation(90);
+            }
+            else{
+                rotated = false;
+                selected_sprite.setRotation(0);
             }
         }
     }

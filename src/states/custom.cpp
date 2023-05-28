@@ -1,8 +1,9 @@
-#include "custom.hpp"
+#include "include/states/custom.hpp"
 
-Custom::Custom(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(window, states){
-    this->gui_manager = std::move(gui_manager);
-    this->sound_manager = std::move(sound_manager);
+Custom::Custom(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
+               std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(
+                       std::move(window), std::move(states), std::move(gui_manager),
+                       std::move(sound_manager)){
     this->title = nullptr;
     this->level1_btn = nullptr;
     this->level2_btn = nullptr;
@@ -35,6 +36,7 @@ void Custom::initVariables() {
 }
 
 void Custom::update(const float &) {
+    this->sound_manager->updateVolume();
     sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
     this->level1_btn->update(position);
     this->level2_btn->update(position);
@@ -42,6 +44,19 @@ void Custom::update(const float &) {
     this->level4_btn->update(position);
     this->level5_btn->update(position);
     this->back_btn->update(position);
+
+    if(load_next_level){
+        load_next_level = false;
+        if(current_level_number < 4){
+            current_level_number++;
+            this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_"+std::to_string(current_level_number)+".json"));
+        }
+    }
+
+    if(retry_level){
+        retry_level = false;
+        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_"+std::to_string(current_level_number)+".json"));
+    }
 }
 
 void Custom::handleEvent(const sf::Event &e) {
@@ -49,18 +64,23 @@ void Custom::handleEvent(const sf::Event &e) {
 
     if (this->level1_btn->handleInput(position, e)) {
         this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        current_level_number = 0;
     }
-    if (this->level2_btn->handleInput(position, e)) {
+    else if (this->level2_btn->handleInput(position, e)) {
         this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_1.json"));
+        current_level_number = 1;
     }
-    if (this->level3_btn->handleInput(position, e)) {
+    else if (this->level3_btn->handleInput(position, e)) {
         this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_2.json"));
+        current_level_number = 2;
     }
-    if (this->level4_btn->handleInput(position, e)) {
+    else if (this->level4_btn->handleInput(position, e)) {
         this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_3.json"));
+        current_level_number = 3;
     }
-    if (this->level5_btn->handleInput(position, e)) {
+    else if (this->level5_btn->handleInput(position, e)) {
         this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_4.json"));
+        current_level_number = 4;
     }
     if (this->back_btn->handleInput(position, e)) {
         quit = true;
@@ -79,5 +99,9 @@ void Custom::render(std::shared_ptr<sf::RenderTarget> target) {
 }
 
 void Custom::init() {
-
+    if(this->sound_manager->getBackgroundMusic().getStatus() == sf::Music::Stopped){
+        this->sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
+        this->sound_manager->getBackgroundMusic().setLoop(true);
+        this->sound_manager->getBackgroundMusic().play();
+    }
 }

@@ -2,7 +2,7 @@
 // Created by piotr on 5/4/23.
 //
 
-#include "entity.hpp"
+#include "include/entities/entity.hpp"
 
 #include <utility>
 
@@ -40,4 +40,8 @@ double Entity::getHealth() const {
 
 int Entity::getScore() {
     return score;
+}
+
+void Entity::setDestroyed() {
+    this->destroyed = true;
 }

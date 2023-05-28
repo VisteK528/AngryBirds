@@ -1,4 +1,4 @@
-#include "bird.hpp"
+#include "include/entities/birds/bird.hpp"
 
 
 
@@ -28,8 +28,8 @@ Bird::Bird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf
     this->m_body = world->CreateBody(&bdef);
     b2FixtureDef fdef;
     fdef.shape = &circle;
-    fdef.restitution = 0.5f;
-    fdef.density = 0.5f;
+    fdef.restitution = 0.2f;
+    fdef.density = 3.f;
     fdef.friction=1;
     m_body->CreateFixture(&fdef);
     m_body->SetEnabled(false);
@@ -125,8 +125,18 @@ void Bird::applyLinearVelocity(b2Vec2 velocity){
 
 void Bird::setPosition(b2Vec2 position) {
     this->m_body->SetTransform(position, this->m_body->GetAngle());
+
+    float angle = m_body->GetAngle();
+    b2Vec2 pos = m_body->GetPosition();
+
+    sprite.setRotation(angle*DEG);
+    sprite.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
 }
 
 void Bird::setActive(bool active) {
     this->m_body->SetEnabled(active);
+}
+
+void Bird::setRotation(float angle) {
+    sprite.setRotation(angle*DEG);
 }

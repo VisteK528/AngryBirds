@@ -1,4 +1,4 @@
-#include "basic_pig.hpp"
+#include "include/entities/pigs/basic_pig/basic_pig.hpp"
 #include <utility>
 
 BasicPig::BasicPig(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Texture>> textures, float coord_x, float coord_y): Pig(std::move(world))
@@ -7,8 +7,8 @@ BasicPig::BasicPig(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<s
     this->coliding = false;
     this->destroyed = false;
 
-    this->health = 1000;
-    this->base_health = 1000;
+    this->health = 800;
+    this->base_health = 800;
 
     this->score = 5000;
 

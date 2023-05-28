@@ -1,8 +1,4 @@
-//
-// Created by piotr on 5/4/23.
-//
-
-#include "game.hpp"
+#include "include/game.hpp"
 
 Game::Game() {
     sf::ContextSettings settings;
@@ -57,7 +53,9 @@ void Game::updateEvents() {
 void Game::run() {
     while(this->window->isOpen()){
         updateDt();
-        update();
+        if(update()){
+            continue;
+        }
         render();
     }
 }
@@ -78,7 +76,7 @@ void Game::setIcon() {
     this->window->setIcon(app_icon_image.getSize().x, app_icon_image.getSize().y, app_icon_image.getPixelsPtr());
 }
 
-void Game::update() {
+bool Game::update() {
     updateEvents();
     if(!this->states->empty()){
         this->states->top()->update(dt);
@@ -86,12 +84,17 @@ void Game::update() {
             while(this->states->size() > 1){
                 this->states->pop();
             }
+            this->states->top()->init();
+            return true;
         }
         else if(this->states->top()->getQuit()){
             this->states->pop();
+            this->states->top()->init();
+            return true;
         }
     }
     else{
         window->close();
     }
+    return false;
 }
