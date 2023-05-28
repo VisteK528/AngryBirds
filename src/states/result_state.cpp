@@ -54,7 +54,7 @@ void ResultState::handleEvent(const sf::Event &e) {
         }
     }
 
-    if(quit){
+    if(quit || return_to_first){
         this->sound_manager->getBackgroundMusic().stop();
     }
 }

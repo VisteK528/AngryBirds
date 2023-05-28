@@ -54,7 +54,7 @@ void Win::handleEvent(const sf::Event &e) {
             quit = true;
         }
 
-        if(quit){
+        if(quit || return_to_first){
             this->sound_manager->getBackgroundMusic().stop();
         }
     }
