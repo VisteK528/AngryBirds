@@ -182,5 +182,9 @@ void Adventure::render(std::shared_ptr<sf::RenderTarget> target) {
 }
 
 void Adventure::init() {
-
+    if(this->sound_manager->getBackgroundMusic().getStatus() == sf::Music::Stopped){
+        this->sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
+        this->sound_manager->getBackgroundMusic().setLoop(true);
+        this->sound_manager->getBackgroundMusic().play();
+    }
 }

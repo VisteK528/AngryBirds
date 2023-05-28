@@ -16,7 +16,10 @@ GameState::~GameState() {
 }
 
 void GameState::init() {
-    this->sound_manager->getBackgroundMusic().pause();
+    this->sound_manager->getBackgroundMusic().stop();
+    this->sound_manager->setBackgroundMusic("sounds/ingame_music.wav");
+    this->sound_manager->getBackgroundMusic().setLoop(true);
+    this->sound_manager->getBackgroundMusic().play();
     loadTextures(background_textures, entities_textures);
 
     this->score_text = gui_manager->createText("Score: "+std::to_string(this->score), 15, sf::Vector2f(1100, 20), ui::ORIGIN::C);
@@ -209,6 +212,7 @@ void GameState::handleEvent(const sf::Event &e) {
     if(e.type == sf::Event::KeyReleased){
         if(e.key.code == sf::Keyboard::Escape){
             quit = true;
+            this->sound_manager->getBackgroundMusic().stop();
         }
     }
 }

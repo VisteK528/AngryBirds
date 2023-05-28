@@ -88,6 +88,7 @@ bool Game::update() {
         }
         else if(this->states->top()->getQuit()){
             this->states->pop();
+            this->states->top()->init();
             return true;
         }
     }

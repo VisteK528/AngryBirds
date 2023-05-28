@@ -9,10 +9,12 @@
 
 class SoundManager {
 private:
+    sf::Music background_sound;
     sf::Music background_music;
-    float background_music_volume = 50;
+    float background_music_volume = 30.f;
 public:
     SoundManager()=default;
+    void playBackgroundSound(std::string path);
     void setBackgroundMusic(std::string path);
     void setBackgroundMusicVolume(float volume);
     void updateVolume();

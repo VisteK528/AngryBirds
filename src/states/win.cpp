@@ -18,8 +18,8 @@ void Win::init() {
     this->back_btn = gui_manager->createButton("> Back", 20, sf::Vector2f(640, 480), sf::Vector2f(250, 60), ui::ORIGIN::C);
     this->menu_btn = gui_manager->createButton("> Menu",20, sf::Vector2f(640, 560), sf::Vector2f(250, 60), ui::ORIGIN::C);
 
-    this->sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
-    this->sound_manager->getBackgroundMusic().setLoop(true);
+    this->sound_manager->setBackgroundMusic("sounds/win_sound.wav");
+    this->sound_manager->getBackgroundMusic().setLoop(false);
     this->sound_manager->getBackgroundMusic().play();
 }
 
@@ -52,6 +52,10 @@ void Win::handleEvent(const sf::Event &e) {
         if(this->next_lvl_btn->handleInput(position, e)){
             ResultState::State::load_next_level = true;
             quit = true;
+        }
+
+        if(quit){
+            this->sound_manager->getBackgroundMusic().stop();
         }
     }
 }

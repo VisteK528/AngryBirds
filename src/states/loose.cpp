@@ -11,8 +11,8 @@ Loose::~Loose()= default;
 void Loose::init() {
     ResultState::init();
 
-    this->sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
-    this->sound_manager->getBackgroundMusic().setLoop(true);
+    this->sound_manager->setBackgroundMusic("sounds/fail_sound.wav");
+    this->sound_manager->getBackgroundMusic().setLoop(false);
     this->sound_manager->getBackgroundMusic().play();
 
     this->vignette_texture.loadFromFile("textures/red_vignette.png");

@@ -53,6 +53,10 @@ void ResultState::handleEvent(const sf::Event &e) {
             quit = true;
         }
     }
+
+    if(quit){
+        this->sound_manager->getBackgroundMusic().stop();
+    }
 }
 
 void ResultState::render(std::shared_ptr<sf::RenderTarget> target) {

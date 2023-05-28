@@ -35,6 +35,11 @@ void EditorState::updateBackgroundTexture() {
 }
 
 void EditorState::initVariables() {
+    this->sound_manager->getBackgroundMusic().stop();
+    this->sound_manager->setBackgroundMusic("sounds/editor_music.wav");
+    this->sound_manager->getBackgroundMusic().setLoop(true);
+    this->sound_manager->getBackgroundMusic().play();
+
     this->title = this->gui_manager->createText("Editor", 35, sf::Vector2f(20, 20), ui::ORIGIN::NW);
     this->back_btn = gui_manager->createButton("Back",15, sf::Vector2f(1195, 650), sf::Vector2f(160, 30), ui::ORIGIN::C);
     this->save_btn = gui_manager->createButton("Save", 15, sf::Vector2f(1237.5, 690), sf::Vector2f(75, 30), ui::ORIGIN::C);
@@ -110,6 +115,7 @@ void EditorState::handleEvent(const sf::Event &e) {
 
     if(back_btn->handleInput(position, e)){
         quit = true;
+        this->sound_manager->getBackgroundMusic().stop();
     }
 
     // Changing level number, based on user input from keyboard
