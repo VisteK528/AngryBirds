@@ -1,4 +1,4 @@
-#include "basic_pig.hpp"
+#include "include/entities/pigs/basic_pig/basic_pig.hpp"
 #include <utility>
 
 BasicPig::BasicPig(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Texture>> textures, float coord_x, float coord_y): Pig(std::move(world))

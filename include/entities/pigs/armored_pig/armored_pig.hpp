@@ -1,7 +1,7 @@
 #ifndef ARMORED_PIG_HPP
 #define ARMORED_PIG_HPP
 
-#include "../pig.hpp"
+#include "include/entities/pigs/pig.hpp"
 
 class ArmoredPig: public Pig
 {

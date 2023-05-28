@@ -8,8 +8,8 @@
 #include "include/entities/boxes/wood/wood.hpp"
 #include "include/entities/boxes/stone/stone.hpp"
 #include "include/entities/boxes/glass/glass.hpp"
-#include "src/entities/pigs/pig.hpp"
-#include "src/entities/pigs/basic_pig/basic_pig.hpp"
+#include "include/entities/pigs/pig.hpp"
+#include "include/entities/pigs/basic_pig/basic_pig.hpp"
 #include <iostream>
 
 

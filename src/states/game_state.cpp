@@ -163,9 +163,9 @@ void GameState::initWorld() {
 }
 
 void GameState::update(const float &dt) {
-    this->score_text->setString("Score: "+std::to_string(entity_manager->getCurrentScore()));
     this->sound_manager->updateVolume();
     if(running){
+        score = entity_manager->getCurrentScore();
         world->Step(dt, 8, 3);
         entity_manager->update();
         entity_manager->setBirds(cannon->getBirdsCount());
@@ -180,8 +180,8 @@ void GameState::update(const float &dt) {
         sf::Texture t;
         t.create(window->getSize().x, window->getSize().y);
         std::cout<<window->getSize().x<<" "<<window->getSize().y<<std::endl;
+        t.update(*window);
         if(result == WIN){
-            t.update(*window);
             this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
         }
         else if(result == LOOSE){
@@ -191,17 +191,16 @@ void GameState::update(const float &dt) {
     }
 
     if(entity_manager->CountPigs() == 0){
-        score = entity_manager->getCurrentScore();
         score += cannon->getBirdsCount()*5000;
         std::cout<<"Birds left: "<<cannon->getBirdsCount()<<std::endl;
         running = false;
         result = WIN;
     }
     else if(cannon->getBirdsCount() == 0 && entity_manager->CountBirds() == 0){
-        score = entity_manager->getCurrentScore();
         running = false;
         result = LOOSE;
     }
+    this->score_text->setString("Score: "+std::to_string(score));
 }
 
 void GameState::handleEvent(const sf::Event &e) {

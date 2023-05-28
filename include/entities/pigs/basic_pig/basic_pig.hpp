@@ -1,7 +1,7 @@
 #ifndef BASIC_PIG_HPP
 #define BASIC_PIG_HPP
 
-#include "../pig.hpp"
+#include "include/entities/pigs/pig.hpp"
 
 class BasicPig: public Pig
 {

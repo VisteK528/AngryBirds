@@ -5,8 +5,8 @@
 #ifndef ANGRYBIRDS_PIG_FACTORY_HPP
 #define ANGRYBIRDS_PIG_FACTORY_HPP
 
-#include "src/entities/pigs/pig.hpp"
-#include "src/entities/pigs/basic_pig/basic_pig.hpp"
+#include "include/entities/pigs/pig.hpp"
+#include "include/entities/pigs/basic_pig/basic_pig.hpp"
 
 template<class T>
 class PigFactory{
