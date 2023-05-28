@@ -61,6 +61,8 @@ private:
     CannonPowerWidget cannon_power_widget;
     ContactListener contact_listener;
 
+    std::unique_ptr<ui::Text> score_text;
+
     sf::Sprite background;
     std::unordered_map<TEXTURE_TYPE, std::vector<sf::Texture>> entities_textures;
     std::unordered_map<BACKGROUNDS, sf::Texture> background_textures;

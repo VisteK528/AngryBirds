@@ -5,6 +5,7 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<s
                      std::string level_path): State(std::move(window), std::move(states),
                                                     std::move(gui_manager), std::move(sound_manager)) {
 
+    this->score_text = nullptr;
     this->level_path = level_path;
     init();
     initWorld();
@@ -17,6 +18,8 @@ GameState::~GameState() {
 void GameState::init() {
     this->sound_manager->getBackgroundMusic().pause();
     loadTextures(background_textures, entities_textures);
+
+    this->score_text = gui_manager->createText("Score: "+std::to_string(this->score), 15, sf::Vector2f(1100, 20), ui::ORIGIN::C);
 }
 
 std::vector<std::unique_ptr<Bird>> GameState::loadWorld(const std::string& level_path) {
@@ -160,6 +163,7 @@ void GameState::initWorld() {
 }
 
 void GameState::update(const float &dt) {
+    this->score_text->setString("Score: "+std::to_string(entity_manager->getCurrentScore()));
     this->sound_manager->updateVolume();
     if(running){
         world->Step(dt, 8, 3);
@@ -175,9 +179,9 @@ void GameState::update(const float &dt) {
         window->display();
         sf::Texture t;
         t.create(window->getSize().x, window->getSize().y);
-        t.update(*window);
         std::cout<<window->getSize().x<<" "<<window->getSize().y<<std::endl;
         if(result == WIN){
+            t.update(*window);
             this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
         }
         else if(result == LOOSE){
@@ -189,6 +193,7 @@ void GameState::update(const float &dt) {
     if(entity_manager->CountPigs() == 0){
         score = entity_manager->getCurrentScore();
         score += cannon->getBirdsCount()*5000;
+        std::cout<<"Birds left: "<<cannon->getBirdsCount()<<std::endl;
         running = false;
         result = WIN;
     }
@@ -208,6 +213,7 @@ void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(*cannon);
     entity_manager->render(target);
     target->draw(cannon_power_widget);
+    target->draw(*score_text);
 }
 
 void GameState::setWall(int x, int y, int w, int h)
