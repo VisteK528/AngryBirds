@@ -164,7 +164,7 @@ void EditorState::handleEvent(const sf::Event &e) {
                 added_sprite.position = position;
                 added_sprite.moving = true;
                 selected_sprite = added_sprite.sprite;
-                //added_sprite.sprite = sf::Sprite();
+                added_sprite.sprite = sf::Sprite();
                 if(added_sprite.type == BASIC_PIG || added_sprite.type == ARMORED_PIG){
                     placingPig = true;
                 }
