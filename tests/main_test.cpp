@@ -3,12 +3,8 @@
 #include "include/entities/factories/bird_factory.hpp"
 #include "include/entities/factories/pig_factory.hpp"
 #include "include/entities/factories/box_factory.hpp"
-#include "include/entities/factories/pig_factory.hpp"
-#include "include/entities/factories/box_factory.hpp"
 #include "include/entities/entity_manager.hpp"
 #include "include/textures.hpp"
-#include "include/game.hpp"
-#include "include/states/game_state.hpp"
 #include "include/game.hpp"
 #include "include/states/game_state.hpp"
 
@@ -34,12 +30,12 @@ TEST_CASE("Test entity manager", "[Entity Manager]"){
     EntityManager manager(world);
 
     std::vector<sf::Texture> textures = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::RED_BIRD));
+    std::vector<sf::Texture> textures2 = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::BASIC_PIG));
+    std::vector<sf::Texture> textures3 = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::WOOD));
 
     BirdFactory<Bird> birdFactory(world, makeShared(textures));
-    PigFactory<Pig> pigFactory(world, makeShared(textures));
-    BoxFactory<Box> boxFactory(world, makeShared(textures));
-    PigFactory<Pig> pigFactory(world, makeShared(textures));
-    BoxFactory<Box> boxFactory(world, makeShared(textures));
+    PigFactory<BasicPig> pigFactory(world, makeShared(textures2));
+    BoxFactory<Wood> boxFactory(world, makeShared(textures3));
 
     SECTION("Check birds number"){
         manager.pushEntity(birdFactory.createBird());
@@ -79,8 +75,11 @@ TEST_CASE("Test entity manager", "[Entity Manager]"){
 
     SECTION("Check win"){
         REQUIRE(manager.CheckForWin() == false);
-        manager.update();
         manager.setBirds(1);
+        manager.pushEntity(boxFactory.createBox(0,0));
+        manager.getEntities().at(0)->setDestroyed();
+        manager.update();
+        REQUIRE(manager.CountPigs() == 0);
         REQUIRE(manager.CheckForWin() == true);
     }
 
@@ -119,9 +118,9 @@ TEST_CASE("Test bird factory", "[Bird Factory]"){
 
 TEST_CASE("Test pig factory", "[Pig Factory]"){
     std::shared_ptr<b2World> world = std::make_shared<b2World>(b2Vec2(0, 9.81f));
-    std::vector<sf::Texture> textures = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::RED_BIRD));
+    std::vector<sf::Texture> textures = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::BASIC_PIG));
 
-    PigFactory<Pig> pigFactory(world, makeShared(textures));
+    PigFactory<BasicPig> pigFactory(world, makeShared(textures));
 
     SECTION("Check pig creation"){
         REQUIRE_NOTHROW(pigFactory.createPig(0,0));
@@ -134,9 +133,9 @@ TEST_CASE("Test pig factory", "[Pig Factory]"){
 
 TEST_CASE("Test box factory", "[Box Factory]"){
     std::shared_ptr<b2World> world = std::make_shared<b2World>(b2Vec2(0, 9.81f));
-    std::vector<sf::Texture> textures = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::RED_BIRD));
+    std::vector<sf::Texture> textures = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::WOOD));
 
-    BoxFactory<Box> boxFactory(world, makeShared(textures));
+    BoxFactory<Wood> boxFactory(world, makeShared(textures));
 
     SECTION("Check box creation"){
         REQUIRE_NOTHROW(boxFactory.createBox(0,0));
@@ -150,10 +149,12 @@ TEST_CASE("Test box factory", "[Box Factory]"){
 TEST_CASE("Test entity", "[Entity]"){
     std::shared_ptr<b2World> world = std::make_shared<b2World>(b2Vec2(0, 9.81f));
     std::vector<sf::Texture> textures = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::RED_BIRD));
+    std::vector<sf::Texture> textures2 = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::BASIC_PIG));
+    std::vector<sf::Texture> textures3 = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::WOOD));
 
     BirdFactory<Bird> birdFactory(world, makeShared(textures));
-    PigFactory<Pig> pigFactory(world, makeShared(textures));
-    BoxFactory<Box> boxFactory(world, makeShared(textures));
+    PigFactory<BasicPig> pigFactory(world, makeShared(textures2));
+    BoxFactory<Wood> boxFactory(world, makeShared(textures3));
 
     EntityManager manager(world);
 
@@ -172,24 +173,14 @@ TEST_CASE("Test entity", "[Entity]"){
         manager.pushEntity(pigFactory.createPig(0,0));
         manager.pushEntity(boxFactory.createBox(0,0));
 
-        REQUIRE(manager.getEntities().at(0)->getPosition().x == 0);
-        REQUIRE(manager.getEntities().at(0)->getPosition().y == 0);
+        REQUIRE(manager.getEntities().at(0)->getBody()->GetFixtureList()->GetBody()->GetPosition().x == 0);
+        REQUIRE(manager.getEntities().at(0)->getBody()->GetFixtureList()->GetBody()->GetPosition().y == 0);
 
-        REQUIRE(manager.getEntities().at(1)->getPosition().x == 0);
-        REQUIRE(manager.getEntities().at(1)->getPosition().y == 0);
+        REQUIRE(manager.getEntities().at(1)->getBody()->GetFixtureList()->GetBody()->GetPosition().x == 0);
+        REQUIRE(manager.getEntities().at(1)->getBody()->GetFixtureList()->GetBody()->GetPosition().y == 0);
 
-        REQUIRE(manager.getEntities().at(2)->getPosition().x == 0);
-        REQUIRE(manager.getEntities().at(2)->getPosition().y == 0);
-    }
-
-    SECTION("Check entity texture"){
-        manager.pushEntity(birdFactory.createBird());
-        manager.pushEntity(pigFactory.createPig(0,0));
-        manager.pushEntity(boxFactory.createBox(0,0));
-
-        REQUIRE(manager.getEntities().at(0)->getTexture() == textures.at(0));
-        REQUIRE(manager.getEntities().at(1)->getTexture() == textures.at(0));
-        REQUIRE(manager.getEntities().at(2)->getTexture() == textures.at(0));
+        REQUIRE(manager.getEntities().at(2)->getBody()->GetFixtureList()->GetBody()->GetPosition().x == 0);
+        REQUIRE(manager.getEntities().at(2)->getBody()->GetFixtureList()->GetBody()->GetPosition().y == 0);
     }
 }
 
@@ -204,75 +195,46 @@ TEST_CASE("Test bird", "[Bird]"){
     }
 
     SECTION("Check bird position"){
-        REQUIRE(birdFactory.createBird()->getPosition().x == 0);
-        REQUIRE(birdFactory.createBird()->getPosition().y == 0);
-    }
-
-    SECTION("Check bird texture"){
-        REQUIRE(birdFactory.createBird()->getTexture() == textures.at(0));
+        std::unique_ptr<Bird> bird = birdFactory.createBird();
+        REQUIRE(bird->getBody()->GetFixtureList()->GetBody()->GetPosition().x == 0);
+        REQUIRE(bird->getBody()->GetFixtureList()->GetBody()->GetPosition().y == 0);
     }
 }
 
 TEST_CASE("Test pig", "[Pig]"){
     std::shared_ptr<b2World> world = std::make_shared<b2World>(b2Vec2(0, 9.81f));
-    std::vector<sf::Texture> textures = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::RED_BIRD));
+    std::vector<sf::Texture> textures = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::BASIC_PIG));
 
-    PigFactory<Pig> pigFactory(world, makeShared(textures));
+    PigFactory<BasicPig> pigFactory(world, makeShared(textures));
 
     SECTION("Check pig type"){
         REQUIRE(pigFactory.createPig(0,0)->getType().main_type == TYPE_DATA::PIG);
     }
 
     SECTION("Check pig position"){
-        REQUIRE(pigFactory.createPig(0,0)->getPosition().x == 0);
-        REQUIRE(pigFactory.createPig(0,0)->getPosition().y == 0);
-    }
-
-    SECTION("Check pig texture"){
-        REQUIRE(pigFactory.createPig(0,0)->getTexture() == textures.at(0));
+        REQUIRE(pigFactory.createPig(0,0)->getBody()->GetFixtureList()->GetBody()->GetPosition().x == 0);
+        REQUIRE(pigFactory.createPig(0,0)->getBody()->GetFixtureList()->GetBody()->GetPosition().y == 0);
     }
 
     SECTION("Check pig health"){
-        REQUIRE(pigFactory.createPig(0,0)->getHealth() == 800);
+        std::unique_ptr<BasicPig> pig = pigFactory.createPig(0, 0);
+        REQUIRE(pig->getHealth() == 800);
     }
 }
 
 TEST_CASE("Test box", "[Box]"){
     std::shared_ptr<b2World> world = std::make_shared<b2World>(b2Vec2(0, 9.81f));
-    std::vector<sf::Texture> textures = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::RED_BIRD));
+    std::vector<sf::Texture> textures = loadTexturesFromPaths(textures_paths.at(TEXTURE_TYPE::WOOD));
 
-    BoxFactory<Box> boxFactory(world, makeShared(textures));
+    BoxFactory<Wood> boxFactory(world, makeShared(textures));
 
     SECTION("Check box type"){
         REQUIRE(boxFactory.createBox(0,0)->getType().main_type == TYPE_DATA::BOX);
     }
 
     SECTION("Check box position"){
-        REQUIRE(boxFactory.createBox(0,0)->getPosition().x == 0);
-        REQUIRE(boxFactory.createBox(0,0)->getPosition().y == 0);
-    }
-
-    SECTION("Check box texture"){
-        REQUIRE(boxFactory.createBox(0,0)->getTexture() == textures.at(0));
-    }
-}
-
-TEST_CASE("Test game", "[Game]"){
-    std::shared_ptr<b2World> world = std::make_shared<b2World>(b2Vec2(0, 9.81f));
-
-    Game game();
-
-    SECTION("Check game"){
-        REQUIRE_NOTHROW(game.run());
-    }
-}
-
-TEST_CASE("Test game state", "[Game State]"){
-    std::shared_ptr<b2World> world = std::make_shared<b2World>(b2Vec2(0, 9.81f));
-
-    Game game();
-
-    SECTION("Check game state"){
-        REQUIRE_NOTHROW(game.run());
+        std::unique_ptr<Wood> wood = boxFactory.createBox(0, 0);
+        REQUIRE(wood->getBody()->GetFixtureList()->GetBody()->GetPosition().x == 0);
+        REQUIRE(wood->getBody()->GetFixtureList()->GetBody()->GetPosition().y == 0);
     }
 }

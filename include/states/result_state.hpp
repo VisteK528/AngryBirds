@@ -10,6 +10,7 @@ protected:
     std::unique_ptr<ui::Text> score_widget;
     std::unique_ptr<ui::Button> menu_btn;
     std::unique_ptr<ui::Button> exit_btn;
+    std::unique_ptr<ui::Button> retry_btn;
 
     sf::Image background_image;
     sf::Texture background_texture;
