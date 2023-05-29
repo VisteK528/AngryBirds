@@ -1,23 +1,23 @@
 # PROI Project - "Angry Birds Remake":
 
 ## Table of Contents
-* [Last update](#last-update).
-* [About authors](#about authors).
-    * [Tools and libraries](#used-tools-and-libraries).
-* [Installation](#installation).
+* [Last update](#last-update)
+* [About authors](#about-authors)
+    * [Tools and libraries used](#tools-and-libraries-used)
+* [Installation](#installation)
     * [Linux](#linux)
-    * [macOS](#macos).
-* [General](#general).
-* [Game](#game).
-    * [How to play](#how-to-game).
-    * [Controls](#controls).
-* [Level editor](#level-editor).
-    * [How to edit](#how-edit).
-        * [Actions in toolbar](#actions-in-toolbar).
-        * [Actions in the game window](#actions-in-game-window).
-        * [Save and load](#save-and-load).
-* [Project structure](#project-structure).
-* [Credits and sources](#resources).
+    * [macOS](#macos)
+* [General](#general)
+* [Game](#game)
+    * [How to play?](#how-to-play)
+    * [Controls](#controls)
+* [Level editor](#level-editor)
+    * [How to edit?](#how-to-edit)
+        * [Toolbar Actions](#toolbar-actions)
+        * [Actions in the editor window](#actions-in-the-editor-window)
+        * [Saving and loading](#saving-and-loading)
+* [Project structure](#project-structure)
+* [Credits and sources](#credits-and-sources)
 
 ---
 ## Last update
@@ -153,7 +153,7 @@ The creative factory design pattern was implemented in the application. In addit
 - `box_factory` - is a factory that is responsible for creating blocks. All blocks inherit from the `Box` class, which is an abstract class.
 - `pig_factory` - is a factory that is responsible for creating pigs. All pigs inherit from the `Pig` class, which is an abstract class.
 
-## Sources:
+## Credits and sources:
 The font used in the project was made by Gangetsha Lyx and is licensed under CC BY-SA 3.0.
 
 Music and sounds are taken from the game "Angry Birds" by Rovio Entertainment Corporation and the game "Bad Piggies" by Rovio Entertainment Corporation.
