@@ -3,21 +3,22 @@
 ## Spis treści
 * [Ostatni update](#ostatni-update)
 * [Ogólne informacje](#ogólne-informacje)
+* [Instalacja](#instalacja)
+* [Ogólne założenia](#ogólne-założenia)
 * [Założenia gry](#założenia-gry)
+    * [Jak grać?](#jak-grać)
+    * [Sterowanie](#sterowanie)
 * [Założenia edytora poziomów](#założenia-edytora-poziomów)
-* [Główne klasy](#główne-klasy)
-* [Klasy poboczne](#klasy-poboczne)
+    * [Jak edytować?](#jak-edytować)
+        * [Akcje w pasku narzędziowym](#akcje-w-pasku-narzędziowym)
+        * [Akcje w oknie gry](#akcje-w-oknie-gry)
+        * [Zapisywanie i wczytywanie](#zapisywanie-i-wczytywanie)
 
 ---
 ## Ostatni update
 Ostatnie rzeczy, która została zmieniona w projekcie to:
-* dodanie do repo bibliotek Box2D i SFML
-* stworzenie pliku `Makefile` umożliwiającego kompilację kodu wraz z linkowaniem bibliotek (plik Makefile z domyślnymi ścieżkami do bibliotek Box2D i SFML w systemach Linux oraz macOS)
-* stworzenie prostej struktury z folderów na kod źródłowy, tekstury, testy itp.
-* stworzenie testowych klas dla "ptaków" (testy fizyki Box2D dla kół)
-* dodanie prostych tekstur do testowania fizyki
-* stworzenie pliku `main.cpp` z pętlą gry - wyświetlana jest plansza z trzema "ptakami", które odbijają się od siebie i od granic okna
-* [WAŻNE!] stworzenie pliku `README.m` z dokumentacją wstępną + skrypt pushujący i commitujący go
+* dodano ...
+* poprawiono ...
 
 
 ## Ogólne informacje
@@ -31,102 +32,75 @@ Autorzy:
     * gitlab: @jwroblew
 
 
-## Wykorzystywane narzędnia i biblioteki
+### Wykorzystywane narzędnia i biblioteki
 - SFML - interfejs graficzny oraz interfejs użytkownika + audio
 - Box2D - silnik fizyczny
 
 
-## Ogólne założenia:
-Stworzenie dwóch oddzielnych aplikacji:
-gra przypominająca swoją funkcjonalnością popularne “Angry Birds”
-edytor poziomów do powyższej gry
+## Instalacja
+Aby zainstalować projekt, należy sklonować repozytorium i zbudować projekt za pomocą CMake. Wymagane jest posiadanie biblioteki SFML w wersji 2.5.1 oraz Box2D w wersji 2.4.1. W przypadku problemów z kompilacją, należy sprawdzić czy ścieżki do bibliotek są poprawnie ustawione w pliku CMakeLists.txt.
 
+## Ogólne założenia:
+Stworzenie aplikacji przypominającej swoją funkcjonalnością popularne “Angry Birds”
+wraz z wbudowanym edytorem poziomów do powyższej gry.
+
+<img align="center" width="100%" src="textures/readme/ab_menu.png">
 
 ## Założenia gry:
-Gra przypominająca “Angry Birds” składająca się z kilkunastu poziomów z możliwością rozbudowy o nowe poziomy za pomocą edytora poziomów. Poziomy przy tworzeniu w edytorze zapisywane są do plików, a następnie, w trakcie działania gry, są odpowiednio do niej wczytywane. Plik zawiera informacje o rozmieszczeniu bloków, ich rodzaju oraz pozycji początkowej gracza.
+Gra “Angry Birds Remake” składa się z kilkunastu poziomów z możliwością rozbudowy o nowe poziomy za pomocą edytora poziomów. Poziomy przy tworzeniu w edytorze zapisywane są do plików `.json`, a następnie, w trakcie działania gry, są odpowiednio do niej wczytywane. Plik zawiera informacje o wybranej mapie, rozmieszczeniu bloków i świń oraz ich rodzaju, a także o puli dostępnych na tym poziomie ptaków.
 
-W oknie mieści się cały poziom, nie używamy przesuwającej się kamery.
-Możliwość zaprogramowania różnego rodzaju “ptaków”:
-Czerwony - podstawowy
-Żółty - szybki
-Czarny - bomba
-…
-Możliwość dodawania różnych “świń”, o różnych rozmiarach i zdrowiu,
-Możliwość dodawania różnych materiałów - drewno, kamień, szkło itp. Każdy materiał ma inną odporność na uderzenia,
-System przyznawania punktów na podstawie zniszczeń i ilości niewystrzelonych ptaków.
+### Jak grać?
+W grze mamy dostępne dwa tryby:
+- adventure - tryb przygodowy, w którym gracz ma do przejścia 14 predefiniownych poziomów, z których każdy jest trudniejszy od poprzedniego.
+- custom - tryb, w którym gracz może grać we własnoręcznie stworzone poziomy. Dostępnych jest 5 miejsc na zapisane poziomy.
+
+Zbijając bloki lub świnie przyznawane są punkty, których ilość jest widoczna w prawym górnym rogu gry, a także po przejściu poziomu w oknie z rezultatami. Po wystrzeleniu wszystkich ptaków, gracz może zrestartować poziom lub przejść do następnego. Warunkiem sukcesu jest pokonanie wszystkich świń na planszy. W przypadku przejścia wszystkich poziomów, gracz zostaje przeniesiony do menu głównego.
+
+<figure class="video_container">
+  <video controls="false" allowfullscreen="false" poster="textures/readme/ab_game.gif" width="100%" autoplay loop muted>
+    <source src="textures/readme/game.mp4" type="video/mp4">
+    <source src="textures/readme/game.webm" type="video/webm">
+    <img align="center" width="100%" src="textures/readme/ab_game.gif">
+  </video>
+</figure>
+
+### Sterowanie:
+- myszka - ustawienie kąta strzału
+- lewy przycisk myszy - wystrzelenie ptaka (przytrzymanie myszki powoduje zwiększenie siły strzału)
+- prawy przycisk myszy - aktywacja umiejętności specjalnej ptaka (jeśli jest dostępna)
+- środkowy przycisk myszy - zmiana ptaka (jeśli jest dostępny inny ptak)
+- klawisz ESC - powrót do menu
 
 ## Założenia edytora poziomów:
-Edytor poziomów będzie dostępny jako osobna aplikacja lub jako zintegrowana część głównej aplikacji. Będzie w nim możliwe tworzenie nowych poziomów lub edycja aktualnie istniejących poziomów. Całość będzie działała w graficznym interfejsie użytkownika. Planujemy dać możliwość wyboru kilku bazowych map na których będą uprzednio umieszczone elementy statyczne (skały, granice, itp.), natomiast użytkownik będzie miał możliwość ustawiania bloków i obiektów dynamicznych takich jak miejsce pojawiania się procy z ptakami, rozmieszczenie świń, rozmieszczenie bloków z różnych materiałów itd. Ponadto możliwe będzie ustawienie dostępnych ptaków na danej mapie. Całość ustawień będzie prawdopodobnie zapisywana do pliku z rozszerzeniem `.csv`.
+Edytor poziomów to część głównej aplikacji. Całość działa w graficznym interfejsie użytkownika. Możliwe jest w nim tworzenie nowych poziomów lub edycja aktualnie istniejących plansz. W te poziomy możemy grać w trybie "Custom".
 
-## Główne klasy:
-- `class Game` - główna klasa Gry
-    metody:
-    - `game.run(...)`
-    - `game.setup(...)`
-    - ...
+### Jak edytować?
+W edytorze mamy dostępnych kilka narzędzi:
+- blok - dodaje blok do planszy
+- świnia - dodaje świnie do planszy
+- ptak - dodaje ptaka do puli dostępnych ptaków
+- zmiana tła - zmienia tło planszy
 
-- `class LevelEditor` - główna klasa Edytora Poziomów
+<figure class="video_container">
+  <video controls="false" allowfullscreen="false" poster="textures/readme/ab_editor.gif" width="100%" autoplay loop muted>
+    <source src="textures/readme/editor.mp4" type="video/mp4">
+    <source src="textures/readme/editor.webm" type="video/webm">
+    <img align="center" width="100%" src="textures/readme/ab_editor.gif">
+  </video>
+</figure>
 
-## Klasy poboczne:
-- `class Interface` - obsługująca SFML, rendering, user I/O
+#### Akcje w pasku narzędziowym:
+- lewy przycisk myszy - wybór danego bloku, świnii lub ptaka
+- prawy przycisk myszy - zmiana typu bloku, świnii lub ptaka
 
-- `class UserIO` - klasa działająca w ramach interfejsu
+#### Akcje w oknie gry:
+- lewy przycisk myszy - dodanie bloku, świnii lub ptaka do planszy
+- przeciągnięcie myszy - przesunięcie bloku lub świnii po planszy
+- prawy przycisk myszy - usunięcie bloku, świnii lub ptaka z planszy
+- środkowy przycisk myszy - obrót bloku, świnii lub ptaka
 
-- `class Graphics` - klasa działająca w ramach interfejsu
-
-- `class File` - obsługuje zapis do pliku, odczyt z pliku (może będzie strukturą?)
-    metody:
-    - `file.load(...)`
-    - `file.write(...)`
-    - ...
-
-- `class Level` - logika gry i poziomu, Box2D, wczytywania z pliku
-    - funkcja `create_level(...)`
-    - metoda `calculate_damage(...)`
-    - ...
-
-- `class Bird` - ogólna klasa dla ptaków
-    parametry:
-    - `speed`
-    - `health`
-    - `mass`
-    - `size`
-    - ...
-
-
-Plus klasy dla innych typów ptaków, różniące się umiejętnościami specjalnymi
-
-- `class Pig` - ogólna klasa dla świń
-    parametry:
-    - `position`
-    - `health`
-    - `armor`
-    - `mass`
-    - `size`
-    - ...
-
-
-Plus klasy dla innych typów świń
-
-- `class DynamicBlock` - ogólne właściwości bloków dynamicznych (!)
-    parametry:
-    - `position`
-    - `material`
-    - `health`
-    - `mass`
-    - `size`
-    - ...
-
-- `class StaticBlock` - ogólne właściwości dla bloków statycznych
-    parametry:
-    - `position`
-    - `size`
-    - ...
-
-- `class Slingshot` - klasa dla procy (?)
-    parametry:
-    - `position`
-    - ...
-
-- `class/method ScoringSystem` (?)
-
+#### Zapisywanie i wczytywanie:
+- strzałka w górę - zwiekszenie numeru zapisanego poziomu
+- strzałka w dół - zmniejszenie numeru zapisanego poziomu
+- zapisywanie - po wybraniu opcji zapisz, poziom zostaje zapisany do pliku `.json`
+- wczytywanie - po wybraniu opcji wczytaj, poziom zostaje wczytany z pliku `.json`
