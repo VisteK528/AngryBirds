@@ -127,7 +127,7 @@ void EditorState::handleEvent(const sf::Event &e) {
         if(e.key.code == sf::Keyboard::Down && level_number > 0){
             level_number--;
         }
-        level_number_txt->setString("Selected level: "+std::to_string(level_number));
+        level_number_txt->setString("Selected level: "+std::to_string(level_number+1));
     }
 
     if(change_background_btn->handleInput(position, e)){
