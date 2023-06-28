@@ -31,11 +31,9 @@ The last things that was changed in the project are:
 Authors:
 - Piotr Patek
     * e-mail: piotr.patek.stud@pw.edu.pl
-    * gitlab: @ppatek
 
 - Jakub Wróblewski
     * e-mail: jakub.wroblewski4.stud@pw.edu.pl
-    * gitlab: @jwroblew
 
 
 ### Tools and libraries used
@@ -49,7 +47,7 @@ Authors:
 To install the project, clone the repository and build the project using `CMake`. It is required to have **SFML** library version 2.5.1 and **Box2D** version 2.4.1. In case of compilation problems, check if the paths to the libraries are set correctly in the `CMakeLists.txt` file.
 
 ```bash
-git clone --recurse-submodules -j8 https://gitlab-stud.elka.pw.edu.pl/ppatek/angrybirds.git
+git clone --recurse-submodules -j8 https://github.com/VisteK528/AngryBirds.git
 cd angrybirds
 mkdir build
 cd build
