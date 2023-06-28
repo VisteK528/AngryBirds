@@ -31,12 +31,9 @@ Ostatnie rzeczy, która została zmieniona w projekcie to:
 Autorzy:
 - Piotr Patek
     * e-mail: piotr.patek.stud@pw.edu.pl
-    * gitlab: @ppatek
 
 - Jakub Wróblewski
     * e-mail: jakub.wroblewski4.stud@pw.edu.pl
-    * gitlab: @jwroblew
-
 
 ### Wykorzystywane narzędnia i biblioteki
 - **SFML** - interfejs graficzny oraz interfejs użytkownika + audio
@@ -49,7 +46,7 @@ Autorzy:
 Aby zainstalować projekt, należy sklonować repozytorium i zbudować projekt za pomocą `CMake`. Wymagane jest posiadanie biblioteki **SFML** w wersji 2.5.1 oraz **Box2D** w wersji 2.4.1. W przypadku problemów z kompilacją, należy sprawdzić czy ścieżki do bibliotek są poprawnie ustawione w pliku `CMakeLists.txt`.
 
 ```bash
-git clone --recurse-submodules -j8 https://gitlab-stud.elka.pw.edu.pl/ppatek/angrybirds.git
+git clone --recurse-submodules -j8 https://github.com/VisteK528/AngryBirds.git
 cd angrybirds
 mkdir build
 cd build
