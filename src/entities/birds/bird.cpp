@@ -1,44 +1,53 @@
 #include "include/entities/birds/bird.hpp"
+#include "box2d/box2d.h"
 
 
+Bird::Bird(b2WorldId world,
+           std::vector<std::shared_ptr<sf::Texture>> bird_textures,
+           float coord_x, float coord_y)
+: Entity(world)
+{
+    this->bird_textures = std::move(bird_textures);
 
-Bird::Bird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x, float coord_y): Entity(world){
-    this->bird_textures = bird_textures;
+    score = 10000;
+    type.main_type = TYPE_DATA::BIRD;
 
-    // Score to be added when bird was not shot
-    this->score = 10000;
+    sprite = sf::Sprite(*this->bird_textures.at(0));
+    const auto sz = this->bird_textures.at(0)->getSize();
+    sprite.setOrigin(static_cast<float>(sz.x) * 0.5f,
+                     static_cast<float>(sz.y) * 0.5f);
 
-    //General information
-    this->type.main_type = TYPE_DATA::BIRD;
-    this->sprite = sf::Sprite(*bird_textures[0]);
-    this->sprite.setOrigin((float)(*bird_textures[0]).getSize().x/2, (float)(*bird_textures[0]).getSize().y/2);
+    // --- Body (v3) ---
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position = {coord_x, coord_y};
+    bodyDef.userData = this; // ok: void* in v3
+    bodyDef.name = "Entity";
 
-    b2BodyDef bdef;
-    bdef.userData.pointer = reinterpret_cast<uintptr_t>(this);
+    m_body = b2CreateBody(world, &bodyDef); // m_body: b2BodyId
 
-    b2PolygonShape shape;
-    shape.SetAsBox(20/SCALE, 20/SCALE);
+    // --- Shape/Material (v3) ---
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.density = 3.0f;
+    shapeDef.material.friction = 1.0f;
+    shapeDef.material.restitution = 0.2f;
+    shapeDef.enableContactEvents = true;
 
-    bdef.type=b2_dynamicBody;
-    ////ball///
-    bdef.position.Set(coord_x,coord_y);
-    b2CircleShape circle;
-    circle.m_radius=20/SCALE;
+    // Circle (local to body)
+    b2Circle circle;
+    circle.center = {0.0f, 0.0f};
+    circle.radius = 20.0f / SCALE;
 
-    this->m_body = world->CreateBody(&bdef);
-    b2FixtureDef fdef;
-    fdef.shape = &circle;
-    fdef.restitution = 0.2f;
-    fdef.density = 3.f;
-    fdef.friction=1;
-    m_body->CreateFixture(&fdef);
-    m_body->SetEnabled(false);
+    b2CreateCircleShape(m_body, &shapeDef, &circle);
+
+    // If you need it disabled initially (v3 keeps Enable/Disable helpers)
+    b2Body_Disable(m_body);
 }
 
 void Bird::update() {
     makeAction();
-    float angle = m_body->GetAngle();
-    b2Vec2 pos = m_body->GetPosition();
+    float angle = b2Rot_GetAngle(b2Body_GetRotation(m_body));
+    b2Vec2 pos = b2Body_GetPosition(m_body);
 
     sprite.setRotation(angle*DEG);
     sprite.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
@@ -50,7 +59,7 @@ void Bird::update() {
     }
 }
 
-void Bird::startCollision(b2Body*) {
+void Bird::startCollision(b2BodyId& body_b) {
     if(!countdown){
         despawn_clock.restart();
         countdown = true;
@@ -58,14 +67,15 @@ void Bird::startCollision(b2Body*) {
     this->action_available = false;
 }
 
-void Bird::endCollision(b2Body* body_b){
+void Bird::endCollision(b2BodyId& body_b){
 
     // Obliczenie prędkości początkowych obu obiektów
-    b2Vec2 v1_ini = this->m_body->GetLinearVelocity();
-    b2Vec2 v2_ini = body_b->GetLinearVelocity();
+    b2Vec2 v1_ini = b2Body_GetLinearVelocity(m_body);
+    b2Vec2 v2_ini = b2Body_GetLinearVelocity(body_b);
+
     // Obliczenie prędkości ostatecznych obu obiektów
-    float m1 = this->m_body->GetMass();
-    float m2 = body_b->GetMass();
+    float m1 = b2Body_GetMass(m_body);
+    float m2 = b2Body_GetMass(body_b);
 
     this->action_available = false;
 
@@ -77,19 +87,19 @@ void Bird::endCollision(b2Body* body_b){
         v2_ini = v1_ini;
     }
 
-    b2Vec2 v1 = this->m_body->GetLinearVelocity();
-    b2Vec2 v2 = body_b->GetLinearVelocity();
+    b2Vec2 v1 = b2Body_GetLinearVelocity(m_body);
+    b2Vec2 v2 = b2Body_GetLinearVelocity(body_b);
     b2Vec2 vel((m1*v1.x+m2*v2.x)/(m1+m2), (m1*v1.y+m2*v2.y)/(m1+m2));
     // Obliczenie wektorów zmiany prędkości dla obu obiektów
     b2Vec2 dv1 = vel - v1_ini;
     b2Vec2 dv2 = vel - v2_ini;
     // Obliczenie kąta zderzenia
     float angle = 0;
-    if (vel.LengthSquared() > 0) {
+    if (b2LengthSquared(vel) > 0) {
         angle = atan2f(vel.y, vel.x);
     }
     // Obliczenie siły uderzenia
-    float force = dv1.Length() * m1 + dv2.Length() * m2;
+    float force = b2Length(dv1) * m1 + b2Length(dv2) * m2;
     force *= 2; // korekta
     // Obliczenie impulsu dla obu obiektów
     float impulse = force / (m1 + m2);
@@ -97,17 +107,17 @@ void Bird::endCollision(b2Body* body_b){
 
     // Zastosowanie impulsu dla obu obiektów
 
-    uintptr_t dataB = body_b->GetUserData().pointer;
+    void* dataB = b2Body_GetUserData(body_b);
     if(dataB != 0){
         auto *i = reinterpret_cast<Entity *>(dataB);
         if(i->getDestroyed()){
-            this->m_body->ApplyLinearImpulse(impulseVector, this->m_body->GetWorldCenter(), true);
+            b2Body_ApplyLinearImpulse(m_body, impulseVector, b2Body_GetWorldCenterOfMass(m_body), true);
         }
     }
     else {
         // Zastosowanie impulsu dla obu obiektów
-        body_b->ApplyLinearImpulse(impulseVector, body_b->GetWorldCenter(), true);
-        this->m_body->ApplyLinearImpulse(-impulseVector, this->m_body->GetWorldCenter(), true);
+        b2Body_ApplyLinearImpulse(body_b, impulseVector, b2Body_GetWorldCenterOfMass(m_body), true);
+        b2Body_ApplyLinearImpulse(m_body, -impulseVector, b2Body_GetWorldCenterOfMass(m_body), true);
     }
 }
 
@@ -116,25 +126,24 @@ void Bird::draw(sf::RenderTarget &target, sf::RenderStates states) const{
 }
 
 void Bird::applyForce(b2Vec2 force) {
-    this->m_body->ApplyForceToCenter(force, true);
+    b2Body_ApplyForceToCenter(m_body, force, true);
 }
 
 void Bird::applyLinearVelocity(b2Vec2 velocity){
-    this->m_body->SetLinearVelocity(velocity);
+    b2Body_SetLinearVelocity(m_body, velocity);
 }
 
 void Bird::setPosition(b2Vec2 position) {
-    this->m_body->SetTransform(position, this->m_body->GetAngle());
+    b2Body_SetTransform(m_body, position, b2Body_GetRotation(m_body));
 
-    float angle = m_body->GetAngle();
-    b2Vec2 pos = m_body->GetPosition();
-
+    float angle = b2Rot_GetAngle(b2Body_GetRotation(m_body));
+    b2Vec2 pos = b2Body_GetPosition(m_body);
     sprite.setRotation(angle*DEG);
     sprite.setPosition(pos.x*SCALE+20, pos.y*SCALE+20);
 }
 
-void Bird::setActive(bool active) {
-    this->m_body->SetEnabled(active);
+void Bird::setActive() {
+    b2Body_Enable(m_body);
 }
 
 void Bird::setRotation(float angle) {

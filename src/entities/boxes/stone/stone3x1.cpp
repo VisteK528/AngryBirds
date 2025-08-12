@@ -1,7 +1,7 @@
 #include "include/entities/boxes/stone/stone3x1.hpp"
 #include <utility>
 
-Stone3x1::Stone3x1(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<sf::Texture>> textures, float coord_x, float coord_y, bool rotated): Box(std::move(world)) {
+Stone3x1::Stone3x1(b2WorldId world, std::vector<std::shared_ptr<sf::Texture>> textures, float coord_x, float coord_y, bool rotated): Box(world) {
     this->coliding = false;
     this->destroyed = false;
     this->type.sub_type = TYPE_DATA::STONE;
@@ -23,27 +23,26 @@ Stone3x1::Stone3x1(std::shared_ptr<b2World> world, std::vector<std::shared_ptr<s
     this->friction = 0.5f;
     this->restitution = 0.5f;
 
-    b2BodyDef bodyDef;
-    bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.userData = reinterpret_cast<void*>(this);
     bodyDef.type = b2_dynamicBody;
-    bodyDef.position.Set(coord_x, coord_y);
+    bodyDef.position = b2Vec2(coord_x, coord_y);
 
     // Ustawianie obrotu na podstawie parametru rotated
     if (rotated){
-        bodyDef.angle = 90 / DEG;
+        bodyDef.rotation = b2MakeRot(90 / DEG);
     }
 
-    this->m_body = this->world->CreateBody(&bodyDef);
+    m_body = b2CreateBody(world, &bodyDef);
 
-    b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox((this->sprite.getGlobalBounds().width/2)/SCALE, (this->sprite.getGlobalBounds().height/2)/SCALE);
+    b2Polygon dynamiBox = b2MakeBox((this->sprite.getGlobalBounds().width/2)/SCALE, (this->sprite.getGlobalBounds().height/2)/SCALE);
 
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &dynamicBox;
+    b2ShapeDef fixtureDef = b2DefaultShapeDef();
+
     fixtureDef.density = this->density;
-    fixtureDef.friction = this->friction;
-    fixtureDef.restitution = this->restitution;
-    this->m_body->CreateFixture(&fixtureDef);
+    fixtureDef.material.friction = this->friction;
+    fixtureDef.material.restitution = this->restitution;
+    b2CreatePolygonShape(m_body, &fixtureDef, &dynamiBox);
 }
 
 void Stone3x1::draw(sf::RenderTarget &target, sf::RenderStates states) const {

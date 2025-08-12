@@ -15,10 +15,10 @@
 template<class T>
 class BirdFactory {
 private:
-    std::shared_ptr<b2World> world;
+    b2WorldId world;
     std::vector<std::shared_ptr<sf::Texture>> bird_textures;
 public:
-    BirdFactory(std::shared_ptr<b2World> b2world, std::vector<std::shared_ptr<sf::Texture>> textures): world(std::move(b2world)), bird_textures(std::move(textures)){};
+    BirdFactory(b2WorldId b2world, std::vector<std::shared_ptr<sf::Texture>> textures): world(b2world), bird_textures(std::move(textures)){};
     std::unique_ptr<T> createBird(){
         return std::make_unique<T>(world, bird_textures);
     }

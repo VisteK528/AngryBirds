@@ -1,9 +1,10 @@
 #include "include/states/editor_state.hpp"
+#include "aether/exceptions.hpp"
+#include "aether/entities/entity.hpp"
+#include <iostream>
+#include <fstream>
 
-EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
-                         std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(
-                                 std::move(window), std::move(states), std::move(gui_manager),
-                                 std::move(sound_manager)){
+EditorState::EditorState(Game& game): AngryBirdsState(game){
     this->title = nullptr;
     this->back_btn = nullptr;
     this->save_btn = nullptr;
@@ -13,11 +14,10 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_p
     this->change_bird_btn = nullptr;
     this->level_number_txt = nullptr;
     this->load_btn = nullptr;
+    this->selected_background = BACKGROUNDS::DEFAULT;
     initTextures();
     initVariables();
 }
-
-EditorState::~EditorState() noexcept = default;
 
 void EditorState::initTextures() {
     environment_gravity = {
@@ -35,20 +35,20 @@ void EditorState::updateBackgroundTexture() {
 }
 
 void EditorState::initVariables() {
-    this->sound_manager->getBackgroundMusic().stop();
-    this->sound_manager->setBackgroundMusic("sounds/editor_music.wav");
-    this->sound_manager->getBackgroundMusic().setLoop(true);
-    this->sound_manager->getBackgroundMusic().play();
+    game_.sound_manager->getBackgroundMusic().stop();
+    game_.sound_manager->setBackgroundMusic("sounds/editor_music.wav");
+    game_.sound_manager->getBackgroundMusic().setLoop(true);
+    game_.sound_manager->getBackgroundMusic().play();
 
-    this->title = this->gui_manager->createText("Editor", 35, sf::Vector2f(20, 20), ui::ORIGIN::NW);
-    this->back_btn = gui_manager->createButton("Back",15, sf::Vector2f(1195, 650), sf::Vector2f(160, 30), ui::ORIGIN::C);
-    this->save_btn = gui_manager->createButton("Save", 15, sf::Vector2f(1237.5, 690), sf::Vector2f(75, 30), ui::ORIGIN::C);
-    this->load_btn = gui_manager->createButton("Load", 15, sf::Vector2f(1152.5, 690), sf::Vector2f(75, 30), ui::ORIGIN::C);
-    this->change_background_btn = gui_manager->createButton("Change background", 15, sf::Vector2f(400, 40), sf::Vector2f(300, 30), ui::ORIGIN::C);
+    this->title = game_.gui_manager->createText("Editor", 35, sf::Vector2f(20, 20), ui::ORIGIN::NW);
+    this->back_btn = game_.gui_manager->createButton("Back",15, sf::Vector2f(1195, 650), sf::Vector2f(160, 30), ui::ORIGIN::C);
+    this->save_btn = game_.gui_manager->createButton("Save", 15, sf::Vector2f(1237.5, 690), sf::Vector2f(75, 30), ui::ORIGIN::C);
+    this->load_btn = game_.gui_manager->createButton("Load", 15, sf::Vector2f(1152.5, 690), sf::Vector2f(75, 30), ui::ORIGIN::C);
+    this->change_background_btn = game_.gui_manager->createButton("Change background", 15, sf::Vector2f(400, 40), sf::Vector2f(300, 30), ui::ORIGIN::C);
     this->change_selected_block_btn = std::make_unique<ui::TextureButton>(entities_textures[WOOD][0], sf::Vector2f(700, 50), ui::ORIGIN::C);
     this->change_selected_pig_btn = std::make_unique<ui::TextureButton>(entities_textures[BASIC_PIG][0], sf::Vector2f(900, 50), ui::ORIGIN::C);
     this->change_bird_btn = std::make_unique<ui::TextureButton>(entities_textures[RED_BIRD][0], sf::Vector2f(1100, 50), ui::ORIGIN::C);
-    this->level_number_txt = gui_manager->createText("Selected level: 0", 10, sf::Vector2f(1190, 620), ui::ORIGIN::C);
+    this->level_number_txt = game_.gui_manager->createText("Selected level: 0", 10, sf::Vector2f(1190, 620), ui::ORIGIN::C);
 
     this->place_area = {
             sf::FloatRect(sf::Vector2f(0, 0), sf::Vector2f(1280, 120)),
@@ -64,13 +64,10 @@ void EditorState::initVariables() {
     updateBackgroundTexture();
 }
 
-void EditorState::init() {
-
-}
 
 void EditorState::update(const float &dt) {
-    this->sound_manager->updateVolume();
-    sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
+    game_.sound_manager->updateVolume();
+    sf::Vector2f position = game_.window->mapPixelToCoords(sf::Mouse::getPosition(*game_.window), game_.window->getView());
     save_btn->update(position);
     back_btn->update(position);
     change_background_btn->update(position);
@@ -111,11 +108,11 @@ void EditorState::update(const float &dt) {
 }
 
 void EditorState::handleEvent(const sf::Event &e) {
-    sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
+    sf::Vector2f position = game_.window->mapPixelToCoords(sf::Mouse::getPosition(*game_.window), game_.window->getView());
 
     if(back_btn->handleInput(position, e)){
         quit = true;
-        this->sound_manager->getBackgroundMusic().stop();
+        game_.sound_manager->getBackgroundMusic().stop();
     }
 
     // Changing level number, based on user input from keyboard

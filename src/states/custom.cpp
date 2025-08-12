@@ -1,33 +1,28 @@
 #include "include/states/custom.hpp"
+#include "include/states/game_state.hpp"
+#include <format>
 
-Custom::Custom(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
-               std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(
-                       std::move(window), std::move(states), std::move(gui_manager),
-                       std::move(sound_manager)){
-    this->title = nullptr;
-    this->level1_btn = nullptr;
-    this->level2_btn = nullptr;
-    this->level3_btn = nullptr;
-    this->level4_btn = nullptr;
-    this->level5_btn = nullptr;
-    this->back_btn = nullptr;
+Custom::Custom(Game& game): AngryBirdsState(game){
+    title = nullptr;
+    level1_btn = nullptr;
+    level2_btn = nullptr;
+    level3_btn = nullptr;
+    level4_btn = nullptr;
+    level5_btn = nullptr;
+    back_btn = nullptr;
     initVariables();
 }
 
-Custom::~Custom(){
-
-}
-
 void Custom::initVariables() {
-    this->title = gui_manager->createText("Select level:", 70, sf::Vector2f(640, 125), ui::ORIGIN::C);
+    this->title = game_.gui_manager->createText("Select level:", 70, sf::Vector2f(640, 125), ui::ORIGIN::C);
 
-    this->level1_btn = gui_manager->createButton("1", 20, sf::Vector2f(320, 400), sf::Vector2f(100, 100), ui::ORIGIN::C);
-    this->level2_btn = gui_manager->createButton("2", 20, sf::Vector2f(480, 400), sf::Vector2f(100, 100), ui::ORIGIN::C);
-    this->level3_btn = gui_manager->createButton("3", 20, sf::Vector2f(640, 400), sf::Vector2f(100, 100), ui::ORIGIN::C);
-    this->level4_btn = gui_manager->createButton("4", 20, sf::Vector2f(800, 400), sf::Vector2f(100, 100), ui::ORIGIN::C);
-    this->level5_btn = gui_manager->createButton("5", 20, sf::Vector2f(960, 400), sf::Vector2f(100, 100), ui::ORIGIN::C);
+    this->level1_btn = game_.gui_manager->createButton("1", 20, sf::Vector2f(320, 400), sf::Vector2f(100, 100), ui::ORIGIN::C);
+    this->level2_btn = game_.gui_manager->createButton("2", 20, sf::Vector2f(480, 400), sf::Vector2f(100, 100), ui::ORIGIN::C);
+    this->level3_btn = game_.gui_manager->createButton("3", 20, sf::Vector2f(640, 400), sf::Vector2f(100, 100), ui::ORIGIN::C);
+    this->level4_btn = game_.gui_manager->createButton("4", 20, sf::Vector2f(800, 400), sf::Vector2f(100, 100), ui::ORIGIN::C);
+    this->level5_btn = game_.gui_manager->createButton("5", 20, sf::Vector2f(960, 400), sf::Vector2f(100, 100), ui::ORIGIN::C);
 
-    this->back_btn = gui_manager->createButton("> Back", 20, sf::Vector2f(1180, 680), sf::Vector2f(160, 40), ui::ORIGIN::C);
+    this->back_btn = game_.gui_manager->createButton("> Back", 20, sf::Vector2f(1180, 680), sf::Vector2f(160, 40), ui::ORIGIN::C);
 
     this->background_texture.loadFromFile("textures/menu_background.jpeg");
     this->background = sf::Sprite(background_texture);
@@ -36,8 +31,8 @@ void Custom::initVariables() {
 }
 
 void Custom::update(const float &) {
-    this->sound_manager->updateVolume();
-    sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
+    game_.sound_manager->updateVolume();
+    sf::Vector2f position = game_.window->mapPixelToCoords(sf::Mouse::getPosition(*game_.window), game_.window->getView());
     this->level1_btn->update(position);
     this->level2_btn->update(position);
     this->level3_btn->update(position);
@@ -49,37 +44,37 @@ void Custom::update(const float &) {
         load_next_level = false;
         if(current_level_number < 4){
             current_level_number++;
-            this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_"+std::to_string(current_level_number)+".json"));
+            game_.addState(std::make_unique<GameState>(game_, std::format("data/custom/custom_level_{}.json", std::to_string(current_level_number))));
         }
     }
 
     if(retry_level){
         retry_level = false;
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_"+std::to_string(current_level_number)+".json"));
+        game_.addState(std::make_unique<GameState>(game_, std::format("data/custom/custom_level_{}.json", std::to_string(current_level_number))));
     }
 }
 
 void Custom::handleEvent(const sf::Event &e) {
-    sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
+    sf::Vector2f position = game_.window->mapPixelToCoords(sf::Mouse::getPosition(*game_.window), game_.window->getView());
 
     if (this->level1_btn->handleInput(position, e)) {
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_0.json"));
+        game_.addState(std::make_unique<GameState>(game_, std::format("data/custom/custom_level_{}.json", std::to_string(current_level_number))));
         current_level_number = 0;
     }
     else if (this->level2_btn->handleInput(position, e)) {
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_1.json"));
+        game_.addState(std::make_unique<GameState>(game_, std::format("data/custom/custom_level_{}.json", std::to_string(current_level_number))));
         current_level_number = 1;
     }
     else if (this->level3_btn->handleInput(position, e)) {
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_2.json"));
+        game_.addState(std::make_unique<GameState>(game_, std::format("data/custom/custom_level_{}.json", std::to_string(current_level_number))));
         current_level_number = 2;
     }
     else if (this->level4_btn->handleInput(position, e)) {
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_3.json"));
+        game_.addState(std::make_unique<GameState>(game_, std::format("data/custom/custom_level_{}.json", std::to_string(current_level_number))));
         current_level_number = 3;
     }
     else if (this->level5_btn->handleInput(position, e)) {
-        this->states->push(std::make_unique<GameState>(this->window, this->states, this->gui_manager, this->sound_manager,"data/custom/custom_level_4.json"));
+        game_.addState(std::make_unique<GameState>(game_, std::format("data/custom/custom_level_{}.json", std::to_string(current_level_number))));
         current_level_number = 4;
     }
     if (this->back_btn->handleInput(position, e)) {
@@ -98,10 +93,10 @@ void Custom::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(*this->back_btn);
 }
 
-void Custom::init() {
-    if(this->sound_manager->getBackgroundMusic().getStatus() == sf::Music::Stopped){
-        this->sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
-        this->sound_manager->getBackgroundMusic().setLoop(true);
-        this->sound_manager->getBackgroundMusic().play();
+void Custom::onEnter() {
+    if(game_.sound_manager->getBackgroundMusic().getStatus() == sf::Music::Stopped){
+        game_.sound_manager->setBackgroundMusic("sounds/Angry-Birds-Theme.wav");
+        game_.sound_manager->getBackgroundMusic().setLoop(true);
+        game_.sound_manager->getBackgroundMusic().play();
     }
 }

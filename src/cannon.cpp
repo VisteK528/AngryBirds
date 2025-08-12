@@ -68,7 +68,7 @@ void Cannon::handleInput(const sf::Event e){
                 float SCALE = 10;
                 std::unique_ptr<Bird> bird = std::move(birds[bird_index]);
                 bird->setPosition(b2Vec2(cannon_end_position.x/SCALE, cannon_end_position.y/SCALE));
-                bird->setActive(true);
+                bird->setActive();
                 if(bird->getType().sub_type == TYPE_DATA::FAT_RED_BIRD){
                     b2Vec2 velocity(0.5f*power*std::cos(angle), 0.5f*power*std::sin(angle));
                     bird->applyLinearVelocity(velocity);
@@ -117,7 +117,10 @@ void Cannon::setBirdsVisualPosition() {
     float SCALE = 10.f;
 
     for(const auto& bird: birds){
-        float radius = bird->getBody()->GetFixtureList()->GetShape()->m_radius;
+        b2BodyId bird_body = bird->getBody();
+        b2ShapeId shapes[5];
+        b2Body_GetShapes(bird_body, shapes, 5);
+        float radius = b2Shape_GetCircle(shapes[0]).radius;
         b2Vec2 position = b2Vec2(20-position_index*7.f, 62-radius);
         if(i == bird_index){
             position = b2Vec2(cannon_end_position.x/SCALE, cannon_end_position.y/SCALE);

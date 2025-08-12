@@ -11,10 +11,10 @@
 template<class T>
 class PigFactory{
 private:
-    std::shared_ptr<b2World> world;
+    b2WorldId world;
     std::vector<std::shared_ptr<sf::Texture>> pig_textures;
 public:
-    PigFactory(std::shared_ptr<b2World> b2world, std::vector<std::shared_ptr<sf::Texture>> textures): world(std::move(b2world)), pig_textures(std::move(textures)){};
+    PigFactory(b2WorldId b2world, std::vector<std::shared_ptr<sf::Texture>> textures): world(b2world), pig_textures(std::move(textures)){};
     std::unique_ptr<T> createPig(float coord_x, float coord_y){
         return std::make_unique<T>(this->world, pig_textures, coord_x, coord_y);
     }

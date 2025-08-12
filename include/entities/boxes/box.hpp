@@ -1,21 +1,21 @@
 #ifndef BOX_HPP
 #define BOX_HPP
 
-#include "include/entities/entity.hpp"
+#include "aether/entities/entity.hpp"
 #include "include/entities/birds/bird.hpp"
 #include <math.h>
-
+#include <unordered_map>
 
 class Box: public Entity
 {
     public:
         void update() override;
-        virtual void startCollision(b2Body* body_b) override;
-        virtual void endCollision(b2Body* body_b) override;
+        virtual void startCollision(b2BodyId& body_b) override;
+        virtual void endCollision(b2BodyId& body_b) override;
         virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
         Box()=default;
         virtual ~Box(){};
-        Box(std::shared_ptr<b2World> world);
+        Box(b2WorldId world);
 
     protected:
         typedef enum{INTACT, DAMAGED, DESTROYED} T_TYPE;

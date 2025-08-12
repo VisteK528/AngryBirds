@@ -3,16 +3,15 @@
 
 #include "result_state.hpp"
 
-class Win: public ResultState{
-
-private:
-    std::unique_ptr<ui::Button> next_lvl_btn;
+class Win final: public ResultState{
 public:
-    Win(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager, const sf::Image& background_image, int score);
-    ~Win();
-    void init() override;
+    Win(Game& game, const sf::Image& background_image, int score);
+    ~Win() override = default;
+    void onEnter() override;
     void render(std::shared_ptr<sf::RenderTarget> target) override;
     void handleEvent(const sf::Event& e) override;
+private:
+    std::unique_ptr<ui::Button> next_lvl_btn;
 };
 
 #endif //ANGRYBIRDS_WIN_HPP

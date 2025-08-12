@@ -4,7 +4,7 @@
 
 #include "include/entities/birds/fat_red_bird.hpp"
 
-FatRedBird::FatRedBird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x, float coord_y){
+FatRedBird::FatRedBird(b2WorldId world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x, float coord_y){
     this->bird_textures = bird_textures;
     this->world = world;
 
@@ -15,24 +15,24 @@ FatRedBird::FatRedBird(const std::shared_ptr<b2World>& world, std::vector<std::s
     this->sprite = sf::Sprite(*bird_textures[0]);
     this->sprite.setOrigin((float)(*bird_textures[0]).getSize().x/2, (float)(*bird_textures[0]).getSize().y/2);
 
-    b2BodyDef bdef;
-    bdef.userData.pointer = reinterpret_cast<uintptr_t>(this);
-
-    b2PolygonShape shape;
-    shape.SetAsBox(40/SCALE, 40/SCALE);
-
+    b2BodyDef bdef = b2DefaultBodyDef();
+    bdef.userData = reinterpret_cast<void*>(this);
     bdef.type=b2_dynamicBody;
-    ////ball///
-    bdef.position.Set(coord_x,coord_y);
-    b2CircleShape circle;
-    circle.m_radius=40/SCALE;
+    bdef.position = b2Vec2(coord_x,coord_y);
+    bdef.name = "Entity";
 
-    this->m_body = world->CreateBody(&bdef);
-    b2FixtureDef fdef;
-    fdef.shape = &circle;
-    fdef.restitution = 0.3f;
-    fdef.density = 2.f;
-    fdef.friction=1;
-    m_body->CreateFixture(&fdef);
-    m_body->SetEnabled(false);
+    b2Circle circle;
+    circle.radius = 40/SCALE;
+
+    m_body = b2CreateBody(world, &bdef);
+
+    b2ShapeDef fixtureDef = b2DefaultShapeDef();
+
+    fixtureDef.density = 2.f;
+    fixtureDef.material.friction = 1;
+    fixtureDef.material.restitution =  0.3f;
+    fixtureDef.enableContactEvents = true;
+
+    b2CreateCircleShape(m_body, &fixtureDef, &circle);
+    b2Body_Disable(m_body);
 }

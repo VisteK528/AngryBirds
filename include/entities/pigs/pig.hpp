@@ -1,31 +1,31 @@
 #ifndef PIG_HPP
 #define PIG_HPP
 
-#include "include/entities/entity.hpp"
-#include "include/entities/birds/bird.hpp"
-#include <math.h>
+#include "aether/entities/entity.hpp"
+#include <unordered_map>
+
 
 class Pig: public Entity
 {
     public:
-        void update() override;
-        virtual void startCollision(b2Body* body_b) override;
-        virtual void endCollision(b2Body* body_b) override;
-        virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
         Pig()=default;
-        virtual ~Pig(){};
-        Pig(std::shared_ptr<b2World> world);
+        ~Pig() override = default;
+        Pig(b2WorldId world, const std::vector<std::shared_ptr<sf::Texture>>& textures, float coord_x, float coord_y);
 
-
+        void update() override;
+        void startCollision(b2BodyId& body_b) override;
+        void endCollision(b2BodyId& body_b) override;
+        void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     protected:
         typedef enum{INTACT, DAMAGED, DESTROYED} T_TYPE;
         std::unordered_map<T_TYPE, std::shared_ptr<sf::Texture>> textures;
-        double base_health;
+        double base_health{};
 
-        float density;
-        float friction;
-        float restitution;
+        float density{};
+        float friction{};
+        float restitution{};
 
+        b2ShapeId shape_id_;
         virtual void setTexture();
 };
 

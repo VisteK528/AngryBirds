@@ -1,30 +1,31 @@
 #ifndef ANGRYBIRDS_RESULT_STATE_HPP
 #define ANGRYBIRDS_RESULT_STATE_HPP
 
-#include "include/widgets.hpp"
-#include "state.hpp"
+#include "aether/widgets.hpp"
+#include "angry_birds_state.hpp"
 
-class ResultState: public State {
-protected:
-    std::unique_ptr<ui::Text> title;
-    std::unique_ptr<ui::Text> score_widget;
-    std::unique_ptr<ui::Button> back_btn;
-    std::unique_ptr<ui::Button> menu_btn;
-    std::unique_ptr<ui::Button> retry_btn;
+class ResultState: public AngryBirdsState {
+    public:
+        ResultState(Game& game, const sf::Image& background_image, int score);
+        ~ResultState() override = default;
+        void onEnter() override;
+        void onExit() override {};
+        void update(const float& dt) override;
+        void handleEvent(const sf::Event& e) override;
+        void render(std::shared_ptr<sf::RenderTarget> target) override;
+    protected:
+        std::unique_ptr<ui::Text> title_;
+        std::unique_ptr<ui::Text> score_widget_;
+        std::unique_ptr<ui::Button> back_btn_;
+        std::unique_ptr<ui::Button> menu_btn_;
+        std::unique_ptr<ui::Button> retry_btn_;
 
-    sf::Image background_image;
-    sf::Texture background_texture;
-    sf::Sprite background;
+        sf::Image background_image_;
+        sf::Texture background_texture_;
+        sf::Sprite background_;
 
-    int player_score = 0;
-    void initVariables();
-public:
-    ResultState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager, const sf::Image& background_image, int score);
-    ~ResultState(){};
-    void init() override;
-    void update(const float& dt) override;
-    void handleEvent(const sf::Event& e) override;
-    void render(std::shared_ptr<sf::RenderTarget> target) override;
+        int player_score_ = 0;
+        void initVariables();
 };
 
 

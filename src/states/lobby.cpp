@@ -1,64 +1,55 @@
 #include "include/states/lobby.hpp"
+#include "include/states/adventure.hpp"
+#include "include/states/custom.hpp"
 
-Lobby::Lobby(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
-             std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager): State(
-                     std::move(window), std::move(states), std::move(gui_manager),
-                     std::move(sound_manager)){
-    this->title = nullptr;
-    this->adventure_mode_btn = nullptr;
-    this->custom_mode_btn = nullptr;
-    this->back_btn = nullptr;
+Lobby::Lobby(Game& game): AngryBirdsState(game){
+    title_ = nullptr;
+    adventure_mode_btn_ = nullptr;
+    custom_mode_btn_ = nullptr;
+    back_btn_ = nullptr;
     initVariables();
 }
 
-Lobby::~Lobby(){
-
-}
-
 void Lobby::initVariables() {
-    this->title = gui_manager->createText("Select mode:", 70, sf::Vector2f(640, 250), ui::ORIGIN::C);
-    this->adventure_mode_btn = gui_manager->createButton("> Adventure", 20, sf::Vector2f(640, 400), sf::Vector2f(250, 60), ui::ORIGIN::C);
-    this->custom_mode_btn = gui_manager->createButton("> Custom",20, sf::Vector2f(640, 480), sf::Vector2f(250, 60), ui::ORIGIN::C);
-    this->back_btn = gui_manager->createButton("> Back", 20, sf::Vector2f(640, 560), sf::Vector2f(250, 60), ui::ORIGIN::C);
+    title_ = game_.gui_manager->createText("Select mode:", 70, sf::Vector2f(640, 250), ui::ORIGIN::C);
+    adventure_mode_btn_ = game_.gui_manager->createButton("> Adventure", 20, sf::Vector2f(640, 400), sf::Vector2f(250, 60), ui::ORIGIN::C);
+    custom_mode_btn_ = game_.gui_manager->createButton("> Custom",20, sf::Vector2f(640, 480), sf::Vector2f(250, 60), ui::ORIGIN::C);
+    back_btn_ = game_.gui_manager->createButton("> Back", 20, sf::Vector2f(640, 560), sf::Vector2f(250, 60), ui::ORIGIN::C);
 
-    this->background_texture.loadFromFile("textures/menu_background.jpeg");
-    this->background = sf::Sprite(background_texture);
-    this->background.setColor(sf::Color(255, 255, 255, 180));
-    this->background.setPosition(0,0);
+    background_texture_.loadFromFile("textures/menu_background.jpeg");
+    background_ = sf::Sprite(background_texture_);
+    background_.setColor(sf::Color(255, 255, 255, 180));
+    background_.setPosition(0,0);
 }
 
 void Lobby::update(const float &) {
-    this->sound_manager->updateVolume();
-    sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
-    this->adventure_mode_btn->update(position);
-    this->custom_mode_btn->update(position);
-    this->back_btn->update(position);
+    game_.sound_manager->updateVolume();
+    sf::Vector2f position = game_.window->mapPixelToCoords(sf::Mouse::getPosition(*game_.window), game_.window->getView());
+    this->adventure_mode_btn_->update(position);
+    this->custom_mode_btn_->update(position);
+    this->back_btn_->update(position);
 }
 
 void Lobby::handleEvent(const sf::Event &e) {
-    sf::Vector2f position = window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), window->getView());
+    sf::Vector2f position = game_.window->mapPixelToCoords(sf::Mouse::getPosition(*game_.window), game_.window->getView());
 
-    if(this->adventure_mode_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<Adventure>(this->window, this->states, this->gui_manager, this->sound_manager));
+    if(this->adventure_mode_btn_->handleInput(position, e)){
+        game_.addState(std::make_unique<Adventure>(game_), false);
     }
 
-    if(this->custom_mode_btn->handleInput(position, e)){
-        this->states->push(std::make_unique<Custom>(this->window, this->states, this->gui_manager, this->sound_manager));
+    if(this->custom_mode_btn_->handleInput(position, e)){
+        game_.addState(std::make_unique<Custom>(game_), false);
     }
 
-    if(this->back_btn->handleInput(position, e)){
+    if(this->back_btn_->handleInput(position, e)){
         quit = true;
     }
 }
 
 void Lobby::render(std::shared_ptr<sf::RenderTarget> target) {
-    target->draw(background);
-    target->draw(*this->title);
-    target->draw(*this->adventure_mode_btn);
-    target->draw(*this->custom_mode_btn);
-    target->draw(*this->back_btn);
-}
-
-void Lobby::init() {
-
+    target->draw(background_);
+    target->draw(*this->title_);
+    target->draw(*this->adventure_mode_btn_);
+    target->draw(*this->custom_mode_btn_);
+    target->draw(*this->back_btn_);
 }

@@ -1,11 +1,20 @@
 #ifndef ANGRYBIRDS_ADVENTURE_HPP
 #define ANGRYBIRDS_ADVENTURE_HPP
 
-#include "include/widgets.hpp"
-#include "state.hpp"
-#include "game_state.hpp"
+#include "angry_birds_state.hpp"
+#include "aether/widgets.hpp"
 
-class Adventure: public State {
+class Adventure final: public AngryBirdsState {
+public:
+    explicit Adventure(Game& game);
+    ~Adventure() override = default;
+    void onEnter() override;
+    void onExit() override {};
+
+    void update(const float& dt) override;
+    void handleEvent(const sf::Event& e) override;
+    void render(std::shared_ptr<sf::RenderTarget> target) override;
+
 private:
     std::unique_ptr<ui::Text> title;
     std::unique_ptr<ui::Button> level1_btn;
@@ -30,13 +39,6 @@ private:
 
     void initVariables();
 
-public:
-    Adventure(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager);
-    ~Adventure();
-    void init() override;
-    void update(const float& dt) override;
-    void handleEvent(const sf::Event& e) override;
-    void render(std::shared_ptr<sf::RenderTarget> target) override;
 };
 
 

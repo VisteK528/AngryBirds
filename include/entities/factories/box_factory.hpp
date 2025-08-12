@@ -7,7 +7,7 @@
 
 #include <utility>
 
-#include "include/entities/entity.hpp"
+#include "aether/entities/entity.hpp"
 
 #include "include/entities/boxes/box.hpp"
 #include "include/entities/boxes/wood/wood.hpp"
@@ -20,10 +20,10 @@
 template<class T>
 class BoxFactory{
 private:
-    std::shared_ptr<b2World> world;
+    b2WorldId world;
     std::vector<std::shared_ptr<sf::Texture>> box_textures;
 public:
-    BoxFactory(std::shared_ptr<b2World> b2world, std::vector<std::shared_ptr<sf::Texture>> textures): world(std::move(b2world)), box_textures(std::move(textures)){};
+    BoxFactory(b2WorldId b2world, std::vector<std::shared_ptr<sf::Texture>> textures): world(b2world), box_textures(std::move(textures)){};
     std::unique_ptr<T> createBox(float coord_x, float coord_y){
         return std::make_unique<T>(this->world, box_textures, coord_x, coord_y);
     }

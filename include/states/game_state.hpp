@@ -7,11 +7,11 @@
 #include <fstream>
 
 // Box2D
-#include "box2d/include/box2d/box2d.h"
-#include "include/contact_listener.hpp"
+#include "box2d/box2d.h"
+#include "aether/contact_listener.hpp"
 
 // States
-#include "state.hpp"
+#include "angry_birds_state.hpp"
 #include "win.hpp"
 #include "loose.hpp"
 
@@ -27,7 +27,7 @@
 #include "include/entities/pigs/pig.hpp"
 #include "include/entities/pigs/basic_pig/basic_pig.hpp"
 #include "include/entities/pigs/armored_pig/armored_pig.hpp"
-#include "include/entities/entity_manager.hpp"
+#include "aether/entities/entity_manager.hpp"
 #include "include/cannon.hpp"
 #include "include/entities/birds/yellow_bird.hpp"
 #include "include/entities/birds/fat_red_bird.hpp"
@@ -39,48 +39,49 @@
 #include "include/entities/factories/pig_factory.hpp"
 
 // Utilities
-#include "include/textures.hpp"
+#include "angry_birds_state.hpp"
+#include "aether/textures.hpp"
 #include "include/json.hpp"
-#include "include/exceptions.hpp"
+#include "aether/exceptions.hpp"
 
 using json = nlohmann::json;
 
-class GameState: public State {
-private:
-    typedef enum{WIN, LOOSE} RESULT;
+class GameState final: public AngryBirdsState {
+    public:
+        GameState(Game& game, std::string level_path);
+        ~GameState() override = default;
 
-    RESULT result;
-    bool running = false;
-    int score = 0;
+        void onEnter() override;
+        void onExit() override;
+        void update(const float& dt) override;
+        void handleEvent(const sf::Event& e) override;
+        void render(std::shared_ptr<sf::RenderTarget> target) override;
+    private:
+        enum class RESULT{WIN, LOOSE};
 
-    std::string level_path;
-    b2Vec2 gravity;
-    std::shared_ptr<b2World> world;
-    std::shared_ptr<EntityManager> entity_manager;
-    std::unique_ptr<Cannon> cannon;
-    CannonPowerWidget cannon_power_widget;
-    ContactListener contact_listener;
+        RESULT result;
+        bool running = false;
+        int score = 0;
 
-    std::unique_ptr<ui::Text> score_text;
+        std::string level_path;
+        b2Vec2 gravity;
+        b2WorldId world;
+        std::shared_ptr<EntityManager> entity_manager;
+        std::unique_ptr<Cannon> cannon;
+        CannonPowerWidget cannon_power_widget;
+        ContactListener contact_listener;
 
-    sf::Sprite background;
-    std::unordered_map<TEXTURE_TYPE, std::vector<sf::Texture>> entities_textures;
-    std::unordered_map<BACKGROUNDS, sf::Texture> background_textures;
+        std::unique_ptr<ui::Text> score_text;
 
-    const float SCALE = 10.0f;
+        sf::Sprite background;
+        std::unordered_map<TEXTURE_TYPE, std::vector<sf::Texture>> entities_textures;
+        std::unordered_map<BACKGROUNDS, sf::Texture> background_textures;
 
-    std::vector<std::unique_ptr<Bird>> loadWorld(const std::string& level_path);
-    void setWall(int x, int y, int w, int h);
-    void initWorld();
+        const float SCALE = 10.0f;
 
-public:
-    GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager, std::string level_path);
-    ~GameState();
-
-    void init() override;
-    void update(const float& dt) override;
-    void handleEvent(const sf::Event& e) override;
-    void render(std::shared_ptr<sf::RenderTarget> target) override;
+        std::vector<std::unique_ptr<Bird>> loadWorld(const std::string& level_path);
+        void setWall(int x, int y, int w, int h);
+        void initWorld();
 };
 
 

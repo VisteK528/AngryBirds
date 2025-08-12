@@ -1,28 +1,23 @@
 #include "include/states/game_state.hpp"
 
-GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states,
-                     std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager,
-                     std::string level_path): State(std::move(window), std::move(states),
-                                                    std::move(gui_manager), std::move(sound_manager)) {
+GameState::GameState(Game& game,std::string level_path): AngryBirdsState(game), contact_listener(world) {
 
     this->score_text = nullptr;
     this->level_path = level_path;
-    init();
+    onEnter();
     initWorld();
+    this->contact_listener.setWorld(world);
 }
 
-GameState::~GameState() {
+void GameState::onEnter() {
+    game_.sound_manager->getBackgroundMusic().stop();
+    game_.sound_manager->setBackgroundMusic("sounds/ingame_music.wav");
+    game_.sound_manager->getBackgroundMusic().setLoop(true);
+    game_.sound_manager->getBackgroundMusic().play();
 
-}
-
-void GameState::init() {
-    this->sound_manager->getBackgroundMusic().stop();
-    this->sound_manager->setBackgroundMusic("sounds/ingame_music.wav");
-    this->sound_manager->getBackgroundMusic().setLoop(true);
-    this->sound_manager->getBackgroundMusic().play();
     loadTextures(background_textures, entities_textures);
 
-    this->score_text = gui_manager->createText("Score: "+std::to_string(this->score), 15, sf::Vector2f(1100, 20), ui::ORIGIN::C);
+    this->score_text = game_.gui_manager->createText("Score: "+std::to_string(this->score), 15, sf::Vector2f(1100, 20), ui::ORIGIN::C);
 }
 
 std::vector<std::unique_ptr<Bird>> GameState::loadWorld(const std::string& level_path) {
@@ -54,7 +49,7 @@ std::vector<std::unique_ptr<Bird>> GameState::loadWorld(const std::string& level
 
     background = sf::Sprite(background_textures[j["background"]]);
     this->gravity = b2Vec2(0.f, j["gravity"]);
-    this->world->SetGravity(gravity);
+    b2World_SetGravity(world, gravity);
 
     std::vector<std::unique_ptr<Bird>> birds = {};
     for(const auto& bird: j["birds"].items()){
@@ -133,12 +128,13 @@ std::vector<std::unique_ptr<Bird>> GameState::loadWorld(const std::string& level
 void GameState::initWorld() {
     // Initialize the world
     this->gravity = b2Vec2(0.0f, 9.81f);
-    this->world = std::make_shared<b2World>(this->gravity);
+    b2WorldDef def = b2DefaultWorldDef();
+    this->world = b2CreateWorld(&def);
+    b2World_SetGravity(world, gravity);
     this->entity_manager = std::make_shared<EntityManager>(this->world);
 
     // Create contact listener and add it to the world object
-    this->contact_listener = ContactListener();
-    this->world->SetContactListener(&contact_listener);
+    // this->world->SetContactListener(&contact_listener);
 
     // Load world data from file
     std::vector<std::unique_ptr<Bird>> birds = loadWorld(level_path);
@@ -166,42 +162,43 @@ void GameState::initWorld() {
 }
 
 void GameState::update(const float &dt) {
-    this->sound_manager->updateVolume();
+    game_.sound_manager->updateVolume();
     if(running){
         score = entity_manager->getCurrentScore();
-        world->Step(dt, 8, 3);
+        b2World_Step(world, dt, 3);
+        contact_listener.poll();
+
         entity_manager->update();
         entity_manager->setBirds(cannon->getBirdsCount());
 
-        sf::Vector2f mouse_position = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window), this->window->getView());
+        sf::Vector2f mouse_position = game_.window->mapPixelToCoords(sf::Mouse::getPosition(*game_.window), game_.window->getView());
         cannon->update(mouse_position);
         cannon_power_widget.update(cannon->getPower(), cannon->isActive());
     }
     else if(!running && !quit){
         quit = true;
-        window->display();
+        game_.window->display();
         sf::Texture t;
-        t.create(window->getSize().x, window->getSize().y);
-        std::cout<<window->getSize().x<<" "<<window->getSize().y<<std::endl;
-        t.update(*window);
-        if(result == WIN){
-            this->states->push(std::make_unique<Win>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
+        t.create(game_.window->getSize().x, game_.window->getSize().y);
+        std::cout<<game_.window->getSize().x<<" "<<game_.window->getSize().y<<std::endl;
+        t.update(*game_.window);
+        if(result == RESULT::WIN){
+            game_.addState(std::make_unique<Win>(game_, t.copyToImage(), score), true);
         }
-        else if(result == LOOSE){
-            this->states->push(std::make_unique<Loose>(this->window, this->states, this->gui_manager, this->sound_manager, t.copyToImage(), score));
+        else if(result == RESULT::LOOSE){
+            game_.addState(std::make_unique<Loose>(game_, t.copyToImage(), score), true);
         }
-        this->states->top()->init();
     }
 
     if(entity_manager->CountPigs() == 0){
         score += cannon->getBirdsCount()*5000;
         std::cout<<"Birds left: "<<cannon->getBirdsCount()<<std::endl;
         running = false;
-        result = WIN;
+        result = RESULT::WIN;
     }
     else if(cannon->getBirdsCount() == 0 && entity_manager->CountBirds() == 0){
         running = false;
-        result = LOOSE;
+        result = RESULT::LOOSE;
     }
     this->score_text->setString("Score: "+std::to_string(score));
 }
@@ -212,10 +209,15 @@ void GameState::handleEvent(const sf::Event &e) {
     if(e.type == sf::Event::KeyReleased){
         if(e.key.code == sf::Keyboard::Escape){
             quit = true;
-            this->sound_manager->getBackgroundMusic().stop();
+            game_.sound_manager->getBackgroundMusic().stop();
         }
     }
 }
+
+void GameState::onExit() {
+    entity_manager->clearPhysicsAndEraseAll();
+}
+
 
 void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
     target->draw(background);
@@ -227,18 +229,20 @@ void GameState::render(std::shared_ptr<sf::RenderTarget> target) {
 
 void GameState::setWall(int x, int y, int w, int h)
 {
-    b2PolygonShape gr;
-    gr.SetAsBox(w/SCALE, h/SCALE);
 
-    b2BodyDef bdef;
-    bdef.position.Set(x/SCALE, y/SCALE);
-    bdef.type=b2_staticBody;
-    b2Body *b_ground = this->world->CreateBody(&bdef);
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.userData = reinterpret_cast<void*>(this);
+    bodyDef.type = b2_staticBody;
+    bodyDef.position = b2Vec2(x/SCALE, y/SCALE);;
+    b2BodyId b_ground = b2CreateBody(world, &bodyDef);
 
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &gr;
-    fixtureDef.density = 1000;
-    fixtureDef.friction = 0.5;
-    fixtureDef.restitution = 0.5;
-    b_ground->CreateFixture(&fixtureDef);
+    b2Polygon gr = b2MakeBox(w/SCALE, h/SCALE);
+
+    b2ShapeDef fixtureDef = b2DefaultShapeDef();
+
+    fixtureDef.density = 1000.0f;
+    fixtureDef.material.friction = 0.5f;
+    fixtureDef.material.restitution = 0.5f;
+    fixtureDef.enableContactEvents = true;
+    b2CreatePolygonShape(b_ground, &fixtureDef, &gr);
 }

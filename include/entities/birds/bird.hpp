@@ -1,7 +1,7 @@
 #ifndef BIRD_HPP
 #define BIRD_HPP
 
-#include "include/entities/entity.hpp"
+#include "aether/entities/entity.hpp"
 #include <iostream>
 #include <math.h>
 
@@ -16,16 +16,16 @@ protected:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 public:
     virtual void makeAction(){};
-    void setActive(bool active);
+    void setActive();
     void setPosition(b2Vec2 position);
     void setRotation(float angle);
     void applyLinearVelocity(b2Vec2 velocity);
     void applyForce(b2Vec2 force);
-    void startCollision(b2Body* body_b) override;
-    void endCollision(b2Body* body_b) override;
+    void startCollision(b2BodyId& body_b) override;
+    void endCollision(b2BodyId& body_b) override;
     void update() override;
     Bird()=default;
-    Bird(const std::shared_ptr<b2World>& world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x=0, float coord_y=0);
+    Bird(b2WorldId world, std::vector<std::shared_ptr<sf::Texture>> bird_textures, float coord_x=0, float coord_y=0);
 };
 
 #endif

@@ -1,27 +1,27 @@
 #ifndef ANGRYBIRDS_ABOUT_HPP
 #define ANGRYBIRDS_ABOUT_HPP
 
-#include "include/widgets.hpp"
-#include "state.hpp"
+#include "aether/widgets.hpp"
+#include "angry_birds_state.hpp"
 
-class About: public State {
-private:
-    std::unique_ptr<ui::Text> title;
-    std::unique_ptr<ui::Text> about_text;
-    std::unique_ptr<ui::Button> back_btn;
+class About final: public AngryBirdsState {
+    public:
+        explicit About(Game& game);
+        ~About() override = default;
+        void onEnter() override {};
+        void onExit() override {};
+        void update(const float& dt) override;
+        void handleEvent(const sf::Event& e) override;
+        void render(std::shared_ptr<sf::RenderTarget> target) override;
+    private:
+        std::unique_ptr<ui::Text> title_;
+        std::unique_ptr<ui::Text> about_text_;
+        std::unique_ptr<ui::Button> back_btn_;
 
-    sf::Texture background_texture;
-    sf::Sprite background;
+        sf::Texture background_texture_;
+        sf::Sprite background_;
 
-    void initVariables();
-
-public:
-    About(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<std::stack<std::unique_ptr<State>>> states, std::shared_ptr<GuiManager> gui_manager, std::shared_ptr<SoundManager> sound_manager);
-    ~About();
-    void init() override;
-    void update(const float& dt) override;
-    void handleEvent(const sf::Event& e) override;
-    void render(std::shared_ptr<sf::RenderTarget> target) override;
+        void initVariables();
 };
 
 
